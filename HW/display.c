@@ -213,12 +213,12 @@ Private void LCD_Init(void)
     LCD_Data_Byte(0x05);
 
     LCD_Command(0x2C);//Display on
-    LCD_Rectangle(0,0,128,160,0); // black it out
+    LCD_Rectangle(0,0,132,162,0x0000u); // black it out
     LCD_Command(0x29);//Display on
 
     //LCD_Rectangle(10,10,80,80,COLOR_RED);
     //LCD_Rectangle(10,10,80,80,COLOR_GREEN);
-    LCD_RectangleRainbow(10,10,80,80);
+    LCD_RectangleRainbow(10,10,80,100);
     setBL(1u);
 }
 
@@ -248,12 +248,14 @@ void LCD_Rectangle(unsigned short x1, unsigned short y1, unsigned short x2, unsi
     //setRS(1);
     setCS(0);
 
-    for (x=x1; x<x2; x++)
-        for (y=y1; y<y2; y++)
+    for (y=y1; y <= y2; y++)
+    {
+        for (x=x1; x <= x2; x++)
         {
             LCD_Data_Byte(colour >> 8);
             LCD_Data_Byte(colour & 0xFF);
         }
+    }
 
     setCS(1);
 }
@@ -273,7 +275,7 @@ void LCD_RectangleRainbow(unsigned short x1, unsigned short y1, unsigned short x
     //setRS(1);
     setCS(0);
 
-    for (x=x1; x<x2; x++)
+    for (y=y1; y <= y2; y++)
     {
         colour = colors[colour_index];
         colour_index++;
@@ -282,7 +284,7 @@ void LCD_RectangleRainbow(unsigned short x1, unsigned short y1, unsigned short x
             colour_index = 0u;
         }
 
-        for (y=y1; y<y2; y++)
+        for (x=x1; x <= x2; x++)
         {
             LCD_Data_Byte(colour >> 8);
             LCD_Data_Byte(colour & 0xFF);
