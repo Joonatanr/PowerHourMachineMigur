@@ -141,7 +141,7 @@ Private void LCD_Init(void)
     LCD_Command(0xC5);//VCOM
     LCD_Data_Byte(0x0E);
     LCD_Command(0x36);//MX, MY, RGB mode
-    LCD_Data_Byte(0xC8);
+    LCD_Data_Byte(0xC0);
     //------------------------------------ST7735R Gamma Sequence-----------------------------------------//
     LCD_Command(0xe0);
     U8 gamma_cmd1[16] = {0x02u, 0x1cu, 0x07u, 0x12u, 0x37u, 0x32u, 0x29u, 0x2du, 0x29u, 0x25u, 0x2bu, 0x39u, 0x00u, 0x01u, 0x03u, 0x10u};
@@ -201,11 +201,9 @@ Private void LCD_Init(void)
    //LCD_Data(0xA0);
     //------------------------------------End ST7735R Gamma Sequence-----------------------------------------//
 
-    LCD_Command(0x3A);
+    LCD_Command(0x3A); //65k mode
     LCD_Data_Byte(0x05);
 
-    //LCD_Command(0x3A);//65k mode
-    //LCD_Data(0x05);
     LCD_Command(0x2C);//Display on
     LCD_Rectangle(0,0,128,160,0); // black it out
     LCD_Command(0x29);//Display on
