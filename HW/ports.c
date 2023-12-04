@@ -83,7 +83,7 @@ Public void ports_set_led_two_blue(U8 state)
 
 Public void ports_set_disp_reset(U8 state)
 {
-    if (state == 1u)
+    if (state)
     {
         GPIO_setOutputHighOnPin(GPIO_PORT_P6, GPIO_PIN1);
     }

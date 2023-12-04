@@ -16,8 +16,8 @@ const eUSCI_SPI_MasterConfig spiMasterConfig =
         24000000,                                  // SMCLK = DCO = 24MHZ
         3000000,                                   // SPICLK = 3MHz
         EUSCI_B_SPI_MSB_FIRST,                     // MSB First
-        EUSCI_B_SPI_PHASE_DATA_CHANGED_ONFIRST_CAPTURED_ON_NEXT,    // Phase
-        EUSCI_B_SPI_CLOCKPOLARITY_INACTIVITY_HIGH, // High polarity
+        EUSCI_B_SPI_PHASE_DATA_CAPTURED_ONFIRST_CHANGED_ON_NEXT,    // Phase
+        EUSCI_B_SPI_CLOCKPOLARITY_INACTIVITY_LOW, // High polarity
         EUSCI_B_SPI_3PIN                           // 3Wire SPI Mode
 };
 
@@ -103,6 +103,7 @@ Public void spi_transmit_byte(U8 byte, Boolean reg_select)
     isReadyToTransmit = FALSE;
     //Transmit data to slave.
     SPI_transmitData(EUSCI_B0_BASE, byte);
+    while(!isReadyToTransmit);
 }
 
 
