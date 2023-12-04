@@ -4,6 +4,7 @@
 #include "ports.h"
 #include "driverlib.h"
 #include "timer.h"
+#include "display.h"
 
 /**
  * main.c
@@ -14,10 +15,12 @@ Private U16 priv_msec_counter = 0u;
 
 void main(void)
 {
-	hwmain_init();
+    hwmain_init();
+
+	/* Test sequence for TFT display. */
+	display_init();
 
     /* Sleeping when not in use */
-
 	for(;;)
 	{
 	    /* Trap CPU... */
@@ -30,13 +33,13 @@ void main(void)
 }
 
 
-Public void timer_10msec_callback(void)
+Public void timer_1msec_callback(void)
 {
     ports_set_led_one(ports_isBtnOne());
     ports_set_led_two_green(ports_isBtnTwo());
 
     priv_msec_counter++;
-    if (priv_msec_counter >= 100u)
+    if (priv_msec_counter >= 1000u)
     {
         priv_msec_counter = 0u;
         priv_1sec_flag = 1u;

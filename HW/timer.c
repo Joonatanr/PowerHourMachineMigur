@@ -23,17 +23,17 @@ Private void TA0_0_IRQHandler(void);
  *
  *****************************************************************************************************/
 
-Public volatile U16 priv_delay_counter = 0u;
+Public volatile U32 priv_delay_counter = 0u;
 
 //Hi priority timer runs at 10msec interval (might need to be faster)
 Private const Timer_A_UpModeConfig hi_prio_timer_config =
 {
      .captureCompareInterruptEnable_CCR0_CCIE = TIMER_A_CCIE_CCR0_INTERRUPT_ENABLE, /* We enable capture compare, since this is a periodic timer. */
      .clockSource = TIMER_A_CLOCKSOURCE_SMCLK,
-     .clockSourceDivider = TIMER_A_CLOCKSOURCE_DIVIDER_16, //Currently divided by 16.
+     .clockSourceDivider = TIMER_A_CLOCKSOURCE_DIVIDER_8,
      .timerClear = TIMER_A_DO_CLEAR,
      .timerInterruptEnable_TAIE = TIMER_A_TAIE_INTERRUPT_DISABLE, //Disable general interrupt.
-     .timerPeriod = 7500u
+     .timerPeriod = 3000u /* 24MHz / 8 / 3000 = 1msec */
 };
 
 
@@ -49,6 +49,15 @@ Public void timer_init(void)
     Interrupt_enableInterrupt(INT_TA0_0);
 }
 
+
+#pragma FUNCTION_OPTIONS(timer_delay_msec, "--opt_level=off")
+Public void timer_delay_msec(U32 msec)
+{
+    priv_delay_counter = msec;
+    while(priv_delay_counter > 0u);
+}
+
+
 /* This should be fired every 10 msec */
 //Hi priority interrupt handler.
 Private void TA0_0_IRQHandler(void)
@@ -59,6 +68,6 @@ Private void TA0_0_IRQHandler(void)
         priv_delay_counter--;
     }
 
-    timer_10msec_callback();
+    timer_1msec_callback();
 }
 

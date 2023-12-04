@@ -17,7 +17,13 @@ extern void ports_set_led_two_red(U8 state);
 extern void ports_set_led_two_green(U8 state);
 extern void ports_set_led_two_blue(U8 state);
 
+extern void ports_set_disp_reset(U8 state);
+
 extern U8 ports_isBtnOne(void);
 extern U8 ports_isBtnTwo(void);
+
+extern void setRS(U8 state);
+extern void setCS(U8 state);
+extern void setBL(U8 state);
 
 #endif /* HW_PORTS_H_ */

@@ -10,10 +10,10 @@
 
 #include "typedefs.h"
 
-Public void timer_init(void);
+extern void timer_init(void);
+extern void timer_delay_msec(U32 msec);
 
-
-extern void timer_10msec_callback(void);
+extern void timer_1msec_callback(void);
 extern void timer_1sec_callback(void);
 
 #endif /* HW_TIMER_H_ */
