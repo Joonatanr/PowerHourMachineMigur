@@ -11,6 +11,13 @@
 #include "spidrv.h"
 #include "timer.h"
 
+
+#define CONVERT_888RGB_TO_565BGR(r, g, b) ((r >> 3) | ((g >> 2) << 5) | ((b >> 3) << 11))
+
+#define COLOR_BLUE (U16)(CONVERT_888RGB_TO_565BGR(0x00u, 0x00u, 0xFFu))
+#define COLOR_RED (U16)(CONVERT_888RGB_TO_565BGR(0xFFu, 0x00u, 0x00u))
+#define COLOR_GREEN (U16)(CONVERT_888RGB_TO_565BGR(0x00u, 0xFFu, 0x00u))
+
 /*
  * Current ports :
  * RESET : 6.1
@@ -31,6 +38,7 @@ Private void LCD_Data(U8 * data_ptr, U16 len);
 
 void LCD_SetArea(unsigned short x1, unsigned short y1, unsigned short x2, unsigned short y2);
 void LCD_Rectangle(unsigned short x1, unsigned short y1, unsigned short x2, unsigned short y2, unsigned short colour);
+void LCD_RectangleRainbow(unsigned short x1, unsigned short y1, unsigned short x2, unsigned short y2);
 
 Public void display_init(void)
 {
@@ -141,7 +149,7 @@ Private void LCD_Init(void)
     LCD_Command(0xC5);//VCOM
     LCD_Data_Byte(0x0E);
     LCD_Command(0x36);//MX, MY, RGB mode
-    LCD_Data_Byte(0xC0);
+    LCD_Data_Byte(0xC8);
     //------------------------------------ST7735R Gamma Sequence-----------------------------------------//
     LCD_Command(0xe0);
     U8 gamma_cmd1[16] = {0x02u, 0x1cu, 0x07u, 0x12u, 0x37u, 0x32u, 0x29u, 0x2du, 0x29u, 0x25u, 0x2bu, 0x39u, 0x00u, 0x01u, 0x03u, 0x10u};
@@ -208,7 +216,9 @@ Private void LCD_Init(void)
     LCD_Rectangle(0,0,128,160,0); // black it out
     LCD_Command(0x29);//Display on
 
-    LCD_Rectangle(10,10,60,40,0x00EF);
+    //LCD_Rectangle(10,10,80,80,COLOR_RED);
+    //LCD_Rectangle(10,10,80,80,COLOR_GREEN);
+    LCD_RectangleRainbow(10,10,80,80);
     setBL(1u);
 }
 
@@ -245,5 +255,38 @@ void LCD_Rectangle(unsigned short x1, unsigned short y1, unsigned short x2, unsi
             LCD_Data_Byte(colour & 0xFF);
         }
 
+    setCS(1);
+}
+
+
+void LCD_RectangleRainbow(unsigned short x1, unsigned short y1, unsigned short x2, unsigned short y2)
+{
+    int x, y;
+    U16 colour;
+    U8 colour_index = 0u;
+
+    U16 colors[6] = {COLOR_BLUE,COLOR_BLUE, COLOR_GREEN,COLOR_GREEN, COLOR_RED,COLOR_RED};
+
+    LCD_SetArea(x1,y1,x2,y2);
+    LCD_Command(0x2C);
+
+    //setRS(1);
+    setCS(0);
+
+    for (x=x1; x<x2; x++)
+    {
+        colour = colors[colour_index];
+        colour_index++;
+        if (colour_index == 6u)
+        {
+            colour_index = 0u;
+        }
+
+        for (y=y1; y<y2; y++)
+        {
+            LCD_Data_Byte(colour >> 8);
+            LCD_Data_Byte(colour & 0xFF);
+        }
+    }
     setCS(1);
 }
