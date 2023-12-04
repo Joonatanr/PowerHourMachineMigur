@@ -58,7 +58,7 @@ Public void timer_delay_msec(U32 msec)
 }
 
 
-/* This should be fired every 10 msec */
+/* This should be fired every 1 msec */
 //Hi priority interrupt handler.
 Private void TA0_0_IRQHandler(void)
 {

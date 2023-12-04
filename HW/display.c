@@ -203,6 +203,7 @@ Private void LCD_Init(void)
 
     LCD_Command(0x3A);
     LCD_Data_Byte(0x05);
+
     //LCD_Command(0x3A);//65k mode
     //LCD_Data(0x05);
     LCD_Command(0x2C);//Display on
