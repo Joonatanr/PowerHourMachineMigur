@@ -51,6 +51,23 @@ Public void spidrv_transmit(U8 * data, U16 data_len)
     }
 }
 
+
+Public void spidrv_transmitU16(U16 * data, U32 data_len)
+{
+    U16 * data_ptr = data;
+    SplitU16 tx;
+    while (data_len > 0)
+    {
+        tx.value = *data_ptr;
+
+        spi_transmit_byte(tx.bytes.msb, FALSE);
+        spi_transmit_byte(tx.bytes.lsb, FALSE);
+
+        data_ptr++;
+        data_len--;
+    }
+}
+
 volatile Boolean isReadyToTransmit = TRUE;
 
 

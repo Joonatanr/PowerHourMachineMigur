@@ -34,6 +34,15 @@ typedef struct
     Size  size;
 } Rectangle;
 
+typedef union
+{
+    struct
+    {
+        U8 msb;
+        U8 lsb;
+    } bytes;
+    U16 value;
+} SplitU16;
 
 typedef enum { FALSE, TRUE } Boolean;
 

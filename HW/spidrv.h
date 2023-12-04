@@ -14,6 +14,7 @@
 Public void spidrv_init(void);
 Public void spidrv_transmit(U8 * data, U16 data_len);
 Public void spi_transmit_byte(U8 byte, Boolean reg_select);
+Public void spidrv_transmitU16(U16 * data, U32 data_len);
 
 
 #endif /* HW_SPI_DRV_H_ */

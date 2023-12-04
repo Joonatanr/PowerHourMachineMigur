@@ -18,6 +18,9 @@
 #define COLOR_RED (U16)(CONVERT_888RGB_TO_565BGR(0xFFu, 0x00u, 0x00u))
 #define COLOR_GREEN (U16)(CONVERT_888RGB_TO_565BGR(0x00u, 0xFFu, 0x00u))
 
+
+//Private U16 priv_frame_buf[132][162];
+Private U16 priv_frame_buf[162][132];
 /*
  * Current ports :
  * RESET : 6.1
@@ -39,6 +42,7 @@ Private void LCD_Data(U8 * data_ptr, U16 len);
 void LCD_SetArea(unsigned short x1, unsigned short y1, unsigned short x2, unsigned short y2);
 void LCD_Rectangle(unsigned short x1, unsigned short y1, unsigned short x2, unsigned short y2, unsigned short colour);
 void LCD_RectangleRainbow(unsigned short x1, unsigned short y1, unsigned short x2, unsigned short y2);
+void LCD_DrawBuffer(void);
 
 Public void display_init(void)
 {
@@ -218,7 +222,29 @@ Private void LCD_Init(void)
 
     //LCD_Rectangle(10,10,80,80,COLOR_RED);
     //LCD_Rectangle(10,10,80,80,COLOR_GREEN);
-    LCD_RectangleRainbow(10,10,80,100);
+    //LCD_RectangleRainbow(10,10,80,100);
+
+
+    //Test Drawing a frame buffer.
+    memset(priv_frame_buf, 0xAAu, sizeof(U16) * 162u * 132u);
+
+
+    //Lets set some lines to a different color.
+    int x;
+    for (x = 0; x < 162; x++)
+    {
+        priv_frame_buf[x][5] = COLOR_BLUE;
+        priv_frame_buf[x][6] = COLOR_BLUE;
+        priv_frame_buf[x][7] = COLOR_RED;
+        priv_frame_buf[x][8] = COLOR_RED;
+        priv_frame_buf[x][9]= COLOR_GREEN;
+        priv_frame_buf[x][10] = COLOR_GREEN;
+    }
+
+    priv_frame_buf[50][50] = COLOR_GREEN;
+
+    LCD_DrawBuffer();
+
     setBL(1u);
 }
 
@@ -290,5 +316,19 @@ void LCD_RectangleRainbow(unsigned short x1, unsigned short y1, unsigned short x
             LCD_Data_Byte(colour & 0xFF);
         }
     }
+    setCS(1);
+}
+
+
+void LCD_DrawBuffer(void)
+{
+    LCD_SetArea(0,0,132u,162u);
+    LCD_Command(0x2C);
+
+
+    setCS(0);
+
+    spidrv_transmitU16(&priv_frame_buf[0][0], 132u * 162u);
+
     setCS(1);
 }
