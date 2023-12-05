@@ -36,10 +36,7 @@ Public void clocks_init(void)
      *      SMCLK = DCO/2  =    24MHz
      *      BCLK  = REFO = 32kHz    --- TODO Not used, should remove.
      */
-    //MAP_CS_initClockSignal(CS_MCLK,     CS_DCOCLK_SELECT,   CS_CLOCK_DIVIDER_1); /* 48MHz */
-    //CS_initClockSignal(CS_MCLK, CS_DCOCLK_SELECT, CS_CLOCK_DIVIDER_1);
-    //MAP_CS_initClockSignal(CS_MCLK, CS_HFXTCLK_SELECT, CS_CLOCK_DIVIDER_1);
-    //CS_initClockSignal(CS_MCLK, CS_MODOSC_SELECT, CS_CLOCK_DIVIDER_1);
+
     CS_initClockSignal(CS_MCLK, CS_DCOCLK_SELECT, CS_CLOCK_DIVIDER_1);
     MAP_CS_initClockSignal(CS_ACLK,     CS_REFOCLK_SELECT,  CS_CLOCK_DIVIDER_2);
     MAP_CS_initClockSignal(CS_HSMCLK,   CS_DCOCLK_SELECT,   CS_CLOCK_DIVIDER_4); /* 12MHz */

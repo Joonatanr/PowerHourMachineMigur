@@ -11,8 +11,22 @@
 #include "timer.h"
 #include "driverlib.h"
 #include "spidrv.h"
+#include "UART_Driver.h"
 
 //#define MAIN_CLK_TEST
+
+eUSCI_UART_Config UART0Config =
+{
+     EUSCI_A_UART_CLOCKSOURCE_SMCLK,
+     13,
+     0,
+     0,
+     EUSCI_A_UART_NO_PARITY,
+     EUSCI_A_UART_LSB_FIRST,
+     EUSCI_A_UART_ONE_STOP_BIT,
+     EUSCI_A_UART_MODE,
+     EUSCI_A_UART_OVERSAMPLING_BAUDRATE_GENERATION
+};
 
 Public void hwmain_init(void)
 {
@@ -32,6 +46,8 @@ Public void hwmain_init(void)
     timer_init();
 
     spidrv_init();
+
+    UART_Init(EUSCI_A0_BASE, UART0Config);
 
 #ifdef MAIN_CLK_TEST
     setBL(0);

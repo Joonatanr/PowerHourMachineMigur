@@ -5,6 +5,7 @@
 #include "driverlib.h"
 #include "timer.h"
 #include "display.h"
+#include "MSPIO.h"
 
 /**
  * main.c
@@ -16,6 +17,8 @@ Private U16 priv_msec_counter = 0u;
 void main(void)
 {
     hwmain_init();
+
+    MSPrintf(EUSCI_A0_BASE, "Hello World!\n");
 
 	/* Test sequence for TFT display. */
 	display_init();

@@ -45,6 +45,7 @@
 									<listOptionValue builtIn="false" value="${CCS_BASE_ROOT}/arm/include"/>
 									<listOptionValue builtIn="false" value="${PROJECT_ROOT}/driverlib/MSP432P4xx"/>
 									<listOptionValue builtIn="false" value="${PROJECT_ROOT}/HW"/>
+									<listOptionValue builtIn="false" value="${PROJECT_ROOT}/LOGIC"/>
 									<listOptionValue builtIn="false" value="${PROJECT_ROOT}/MISC"/>
 									<listOptionValue builtIn="false" value="${CCS_BASE_ROOT}/arm/include/CMSIS"/>
 									<listOptionValue builtIn="false" value="${PROJECT_ROOT}"/>
