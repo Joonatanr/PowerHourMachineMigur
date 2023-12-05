@@ -11,8 +11,9 @@
 #include "spidrv.h"
 #include "timer.h"
 
-
-#define CONVERT_888RGB_TO_565BGR(r, g, b) ((r >> 3) | ((g >> 2) << 5) | ((b >> 3) << 11))
+//#define CONVERT_888RGB_TO_565BGR(r, g, b) ((r >> 3) | ((g >> 2) << 5) | ((b >> 3) << 11))
+/* The problem here is that we shall be accessing memory via DMA, 1 byte at a time. So we also need to switch the MSB and LSB of the resulting U16 here. */
+#define CONVERT_888RGB_TO_565BGR(r, g, b) ((r >> 3) << 8 | ((g >> 5) << 13) | ((b >> 3) << 3) | ((g >> 2) & 0x0005u))
 
 #define COLOR_BLUE (U16)(CONVERT_888RGB_TO_565BGR(0x00u, 0x00u, 0xFFu))
 #define COLOR_RED (U16)(CONVERT_888RGB_TO_565BGR(0xFFu, 0x00u, 0x00u))
@@ -227,15 +228,15 @@ Private void LCD_Init(void)
 
 
     //Test Drawing a frame buffer.
-    memset(priv_frame_buf, 0xAAu, sizeof(U16) * 162u * 132u);
+    memset(priv_frame_buf, 0x00u, sizeof(U16) * 162u * 132u);
 
 
     //Lets set some lines to a different color.
     int x;
     for (x = 0; x < 162; x++)
     {
-        priv_frame_buf[x][5] = COLOR_RED;
-        priv_frame_buf[x][6] = COLOR_RED;
+        priv_frame_buf[x][5] = COLOR_BLUE;
+        priv_frame_buf[x][6] = COLOR_BLUE;
         priv_frame_buf[x][7] = COLOR_RED;
         priv_frame_buf[x][8] = COLOR_RED;
         priv_frame_buf[x][9]= COLOR_GREEN;

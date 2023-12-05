@@ -14,7 +14,7 @@ const eUSCI_SPI_MasterConfig spiMasterConfig =
 {
         EUSCI_B_SPI_CLOCKSOURCE_SMCLK,             // SMCLK Clock Source
         24000000,                                  // SMCLK = DCO = 24MHZ
-        3000000,                                   // SPICLK = 3MHz
+        8000000,                                   // SPICLK = 3MHz
         EUSCI_B_SPI_MSB_FIRST,                     // MSB First
         EUSCI_B_SPI_PHASE_DATA_CAPTURED_ONFIRST_CHANGED_ON_NEXT,    // Phase
         EUSCI_B_SPI_CLOCKPOLARITY_INACTIVITY_LOW, // High polarity
@@ -54,6 +54,7 @@ Public void spidrv_transmit(U8 * data, U16 data_len)
 
 Public void spidrv_transmitU16(U16 * data, U32 data_len)
 {
+#if 0
     U16 * data_ptr = data;
     SplitU16 tx;
     while (data_len > 0)
@@ -70,6 +71,25 @@ Public void spidrv_transmitU16(U16 * data, U32 data_len)
         data_ptr++;
         data_len--;
     }
+#else
+    U8 * data_ptr = (U8*)data;
+    U32 buf_len = data_len *2u;
+
+    SPI_disableInterrupt(EUSCI_B0_BASE, EUSCI_B_SPI_RECEIVE_INTERRUPT);
+
+    while (buf_len > 0)
+    {
+        //while (!(SPI_getInterruptStatus(EUSCI_B0_BASE, EUSCI_B_SPI_TRANSMIT_INTERRUPT)));
+        //while(SPI_isBusy(EUSCI_B0_BASE));
+        while(BITBAND_PERI(EUSCI_B_CMSIS(EUSCI_B0_BASE)->STATW, EUSCI_B_STATW_BBUSY_OFS));
+        //SPI_transmitData(EUSCI_B0_BASE, *data_ptr++);
+        __delay_cycles(10);
+        EUSCI_B_CMSIS(EUSCI_B0_BASE)->TXBUF = *data_ptr++;
+        buf_len--;
+    }
+
+    SPI_enableInterrupt(EUSCI_B0_BASE, EUSCI_B_SPI_RECEIVE_INTERRUPT);
+#endif
 }
 
 volatile Boolean isReadyToTransmit = TRUE;

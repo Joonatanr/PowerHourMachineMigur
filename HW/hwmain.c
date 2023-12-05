@@ -12,11 +12,13 @@
 #include "driverlib.h"
 #include "spidrv.h"
 
+//#define MAIN_CLK_TEST
 
 Public void hwmain_init(void)
 {
     /* Stop WDT  */
     MAP_WDT_A_holdTimer();
+    Interrupt_disableMaster();
 
     clocks_init();
 
@@ -30,6 +32,12 @@ Public void hwmain_init(void)
     timer_init();
 
     spidrv_init();
+
+#ifdef MAIN_CLK_TEST
+    setBL(0);
+    __delay_cycles(250000);
+    setBL(1);
+#endif
 
     //Enable interrupts in general.
     Interrupt_enableMaster();
