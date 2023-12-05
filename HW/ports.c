@@ -24,6 +24,9 @@ Public void ports_init(void)
     /* Setup display chip select pin. */
     GPIO_setAsOutputPin(GPIO_PORT_P4, GPIO_PIN3);
 
+    /* Setup SD card chip select pin. */
+    GPIO_setAsOutputPin(GPIO_PORT_P5, GPIO_PIN1);
+
     /* Set up the display BL pin. */
     GPIO_setAsOutputPin(GPIO_PORT_P5, GPIO_PIN0);
 }
@@ -130,7 +133,7 @@ Public void setRS(U8 state)
 }
 
 /* Set function for Chip Select pin. */
-Public void setCS(U8 state)
+Public void setDisplayCS(U8 state)
 {
     if (state)
     {
@@ -141,6 +144,20 @@ Public void setCS(U8 state)
         GPIO_setOutputLowOnPin(GPIO_PORT_P4, GPIO_PIN3);
     }
 }
+
+
+Public void setSdCardCS(U8 state)
+{
+    if (state)
+    {
+        GPIO_setOutputHighOnPin(GPIO_PORT_P5, GPIO_PIN1);
+    }
+    else
+    {
+        GPIO_setOutputLowOnPin(GPIO_PORT_P5, GPIO_PIN1);
+    }
+}
+
 
 Public void setBL(U8 state)
 {

@@ -46,6 +46,20 @@ typedef union
 
 typedef enum { FALSE, TRUE } Boolean;
 
+#if 0
+#ifndef bool
+#define bool Boolean
+#endif
+
+#ifndef true
+#define true TRUE
+#endif
+
+#ifndef false
+#define false FALSE
+#endif
+#endif
+
 //////// masking
 #define ISBIT(p,b)    (p & b)
 #define SETBIT(p,b)   p |= b

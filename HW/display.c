@@ -87,7 +87,7 @@ Private void LCD_Init(void)
     setReset(1);
     DelayMs(500);
 
-    setCS(0);
+    setDisplayCS(0);
     LCD_Command(0x11);//Sleep out
     DelayMs(120);
     //ST7735R Frame Rate
@@ -238,7 +238,7 @@ Private void LCD_Init(void)
 
     LCD_DrawBuffer();
 
-    setCS(1);
+    setDisplayCS(1);
     setBL(1u);
 }
 
