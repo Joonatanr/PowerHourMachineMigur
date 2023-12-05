@@ -10,7 +10,7 @@
 #include "ports.h"
 
 /* SPI Master Configuration Parameter */
-const eUSCI_SPI_MasterConfig spiMasterConfig =
+const eUSCI_SPI_MasterConfig spiMasterConfigLCD =
 {
         EUSCI_B_SPI_CLOCKSOURCE_SMCLK,             // SMCLK Clock Source
         24000000,                                  // SMCLK = DCO = 24MHZ
@@ -24,30 +24,21 @@ const eUSCI_SPI_MasterConfig spiMasterConfig =
 
 Public void spidrv_init(void)
 {
+    /* Set the main display to work on EUSCI_B0 */
     /* Selecting P1.5 and P1.6 in SPI mode */
     GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P1,
             GPIO_PIN5 | GPIO_PIN6 , GPIO_PRIMARY_MODULE_FUNCTION);
 
     /* Configuring SPI in 3wire master mode */
-    SPI_initMaster(EUSCI_B0_BASE, &spiMasterConfig);
+    SPI_initMaster(EUSCI_B0_BASE, &spiMasterConfigLCD);
 
     /* Enable SPI module */
     SPI_enableModule(EUSCI_B0_BASE);
+
+    /* TODO : Set the SD card to work on EUSCI_B2 */
 }
 
-Public void spidrv_transmit(U8 * data, U16 data_len)
-{
-    U8 * data_ptr = data;
-
-    while (data_len > 0)
-    {
-        spi_transmit_byte(*data_ptr);
-        data_ptr++;
-        data_len--;
-    }
-}
-
-
+/* This function is used to transmit the frame buffer, so we need to be pretty efficient... */
 Public void spidrv_transmitU16(U16 * data, U32 data_len)
 {
     U8 * data_ptr = (U8*)data;
@@ -67,11 +58,29 @@ Public void spidrv_transmitU16(U16 * data, U32 data_len)
 }
 
 
-Public void spi_transmit_byte(U8 byte)
+Public void SPI_Write_Byte(uint32_t SPI, U8 byte)
 {
     //Transmit data to slave.
-    while(BITBAND_PERI(EUSCI_B_CMSIS(EUSCI_B0_BASE)->STATW, EUSCI_B_STATW_BBUSY_OFS));
-    SPI_transmitData(EUSCI_B0_BASE, byte);
-    __delay_cycles(50); /* TODO : Check if this is actually necessary ! */
+    //while(BITBAND_PERI(EUSCI_B_CMSIS(EUSCI_B0_BASE)->STATW, EUSCI_B_STATW_BBUSY_OFS));
+    MAP_SPI_transmitData(SPI, byte);
+}
+
+
+void SPI_Write(uint32_t SPI, uint8_t *Data, uint32_t Size)
+{
+    uint32_t i;
+    for(i = 0; i < Size; i++)
+    {
+        MAP_SPI_transmitData(SPI, Data[i]);
+    }
+}
+
+void SPI_Read(uint32_t SPI, uint8_t *Data, uint32_t Size)
+{
+    uint32_t i;
+    for(i = 0; i < Size; i++)
+    {
+        Data[i] = MAP_SPI_receiveData(SPI);
+    }
 }
 

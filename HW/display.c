@@ -10,6 +10,7 @@
 #include "ports.h"
 #include "spidrv.h"
 #include "timer.h"
+#include "driverlib.h"
 
 //#define CONVERT_888RGB_TO_565BGR(r, g, b) ((r >> 3) | ((g >> 2) << 5) | ((b >> 3) << 11))
 /* The problem here is that we shall be accessing memory via DMA, 1 byte at a time. So we also need to switch the MSB and LSB of the resulting U16 here. */
@@ -64,18 +65,18 @@ Private inline void DelayMs(U32 period)
 Private void LCD_Command(unsigned char cmd)
 {
     setRS(0u);
-    spi_transmit_byte(cmd);
+    SPI_Write_Byte(EUSCI_B0_BASE, cmd);
     setRS(1u);
 }
 
 Private void LCD_Data(U8 * data_ptr, U16 len)
 {
-    spidrv_transmit(data_ptr, len);
+    SPI_Write(EUSCI_B0_BASE ,data_ptr, len);
 }
 
 Private void LCD_Data_Byte(U8 data)
 {
-    spi_transmit_byte(data);
+    SPI_Write_Byte(EUSCI_B0_BASE, data);
 }
 
 
