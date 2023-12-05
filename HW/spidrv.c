@@ -33,10 +33,6 @@ Public void spidrv_init(void)
 
     /* Enable SPI module */
     SPI_enableModule(EUSCI_B0_BASE);
-
-    /* Enabling interrupts */
-    SPI_enableInterrupt(EUSCI_B0_BASE, EUSCI_B_SPI_RECEIVE_INTERRUPT);
-    Interrupt_enableInterrupt(INT_EUSCIB0);
 }
 
 Public void spidrv_transmit(U8 * data, U16 data_len)
@@ -45,7 +41,7 @@ Public void spidrv_transmit(U8 * data, U16 data_len)
 
     while (data_len > 0)
     {
-        spi_transmit_byte(*data_ptr, FALSE);
+        spi_transmit_byte(*data_ptr);
         data_ptr++;
         data_len--;
     }
@@ -54,24 +50,6 @@ Public void spidrv_transmit(U8 * data, U16 data_len)
 
 Public void spidrv_transmitU16(U16 * data, U32 data_len)
 {
-#if 0
-    U16 * data_ptr = data;
-    SplitU16 tx;
-    while (data_len > 0)
-    {
-        tx.value = *data_ptr;
-
-        //spi_transmit_byte(tx.bytes.msb, FALSE);
-        //spi_transmit_byte(tx.bytes.lsb, FALSE);
-        while (!(SPI_getInterruptStatus(EUSCI_B0_BASE, EUSCI_B_SPI_TRANSMIT_INTERRUPT)));
-        SPI_transmitData(EUSCI_B0_BASE, tx.bytes.lsb);
-        while (!(SPI_getInterruptStatus(EUSCI_B0_BASE, EUSCI_B_SPI_TRANSMIT_INTERRUPT)));
-        SPI_transmitData(EUSCI_B0_BASE, tx.bytes.msb);
-
-        data_ptr++;
-        data_len--;
-    }
-#else
     U8 * data_ptr = (U8*)data;
     U32 buf_len = data_len *2u;
 
@@ -79,78 +57,21 @@ Public void spidrv_transmitU16(U16 * data, U32 data_len)
 
     while (buf_len > 0)
     {
-        //while (!(SPI_getInterruptStatus(EUSCI_B0_BASE, EUSCI_B_SPI_TRANSMIT_INTERRUPT)));
-        //while(SPI_isBusy(EUSCI_B0_BASE));
         while(BITBAND_PERI(EUSCI_B_CMSIS(EUSCI_B0_BASE)->STATW, EUSCI_B_STATW_BBUSY_OFS));
-        //SPI_transmitData(EUSCI_B0_BASE, *data_ptr++);
         __delay_cycles(10);
         EUSCI_B_CMSIS(EUSCI_B0_BASE)->TXBUF = *data_ptr++;
         buf_len--;
     }
 
     SPI_enableInterrupt(EUSCI_B0_BASE, EUSCI_B_SPI_RECEIVE_INTERRUPT);
-#endif
-}
-
-volatile Boolean isReadyToTransmit = TRUE;
-
-
-//******************************************************************************
-//
-//This is the EUSCI_B0 interrupt vector service routine.
-//
-//******************************************************************************
-void EUSCIB0_IRQHandler(void)
-{
-    uint32_t status = SPI_getEnabledInterruptStatus(EUSCI_B0_BASE);
-
-    SPI_clearInterruptFlag(EUSCI_B0_BASE, status);
-
-    if (status & EUSCI_B_SPI_RECEIVE_INTERRUPT)
-    {
-        isReadyToTransmit = TRUE;
-    }
 }
 
 
-Public void spi_transmit_byte(U8 byte, Boolean reg_select)
+Public void spi_transmit_byte(U8 byte)
 {
-    static Boolean reg_select_state = FALSE;
-
-    //Set A0 pin to proper state.
-    if(reg_select != reg_select_state)
-    {
-        //We need to change A0 pin.
-        while(!isReadyToTransmit);
-    }
-    else
-    {
-        /* USCI_B0 TX buffer ready? */
-        /* We don't need for previous transmission to finish, we just need to make sure that register is ready. */
-        while (!(SPI_getInterruptStatus(EUSCI_B0_BASE, EUSCI_B_SPI_TRANSMIT_INTERRUPT)));
-    }
-
-    if (reg_select)
-    {
-        reg_select_state = TRUE;
-        setRS(0u);
-    }
-    else
-    {
-        reg_select_state = FALSE;
-        setRS(1u);
-    }
-
-    isReadyToTransmit = FALSE;
     //Transmit data to slave.
+    while(BITBAND_PERI(EUSCI_B_CMSIS(EUSCI_B0_BASE)->STATW, EUSCI_B_STATW_BBUSY_OFS));
     SPI_transmitData(EUSCI_B0_BASE, byte);
-    while(!isReadyToTransmit);
+    __delay_cycles(50); /* TODO : Check if this is actually necessary ! */
 }
-
-
-
-
-
-
-
 

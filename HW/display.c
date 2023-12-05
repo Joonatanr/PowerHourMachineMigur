@@ -63,29 +63,19 @@ Private inline void DelayMs(U32 period)
 
 Private void LCD_Command(unsigned char cmd)
 {
-    // Clear CS pin
-    //setCS(0);
-    spi_transmit_byte(cmd, TRUE);
-    // Set CS pin
-    //setCS(1);
+    setRS(0u);
+    spi_transmit_byte(cmd);
+    setRS(1u);
 }
 
 Private void LCD_Data(U8 * data_ptr, U16 len)
 {
-    // Clear CS pin
-    //setCS(0);
     spidrv_transmit(data_ptr, len);
-    // Set CS pin
-    //setCS(1);
 }
 
 Private void LCD_Data_Byte(U8 data)
 {
-    // Clear CS pin
-    //setCS(0);
-    spi_transmit_byte(data, FALSE);
-    // Set CS pin
-    //setCS(1);
+    spi_transmit_byte(data);
 }
 
 
@@ -235,8 +225,8 @@ Private void LCD_Init(void)
     int x;
     for (x = 0; x < 162; x++)
     {
-        priv_frame_buf[x][5] = COLOR_BLUE;
-        priv_frame_buf[x][6] = COLOR_BLUE;
+        priv_frame_buf[x][5] = COLOR_RED;
+        priv_frame_buf[x][6] = COLOR_RED;
         priv_frame_buf[x][7] = COLOR_RED;
         priv_frame_buf[x][8] = COLOR_RED;
         priv_frame_buf[x][9]= COLOR_GREEN;
