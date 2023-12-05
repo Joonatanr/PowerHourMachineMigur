@@ -63,28 +63,28 @@ Private inline void DelayMs(U32 period)
 Private void LCD_Command(unsigned char cmd)
 {
     // Clear CS pin
-    setCS(0);
+    //setCS(0);
     spi_transmit_byte(cmd, TRUE);
     // Set CS pin
-    setCS(1);
+    //setCS(1);
 }
 
 Private void LCD_Data(U8 * data_ptr, U16 len)
 {
     // Clear CS pin
-    setCS(0);
+    //setCS(0);
     spidrv_transmit(data_ptr, len);
     // Set CS pin
-    setCS(1);
+    //setCS(1);
 }
 
 Private void LCD_Data_Byte(U8 data)
 {
     // Clear CS pin
-    setCS(0);
+    //setCS(0);
     spi_transmit_byte(data, FALSE);
     // Set CS pin
-    setCS(1);
+    //setCS(1);
 }
 
 
@@ -95,6 +95,7 @@ Private void LCD_Init(void)
     setReset(1);
     DelayMs(500);
 
+    setCS(0);
     LCD_Command(0x11);//Sleep out
     DelayMs(120);
     //ST7735R Frame Rate
@@ -153,7 +154,7 @@ Private void LCD_Init(void)
     LCD_Command(0xC5);//VCOM
     LCD_Data_Byte(0x0E);
     LCD_Command(0x36);//MX, MY, RGB mode
-    LCD_Data_Byte(0xC8);
+    LCD_Data_Byte(0x88);
     //------------------------------------ST7735R Gamma Sequence-----------------------------------------//
     LCD_Command(0xe0);
     U8 gamma_cmd1[16] = {0x02u, 0x1cu, 0x07u, 0x12u, 0x37u, 0x32u, 0x29u, 0x2du, 0x29u, 0x25u, 0x2bu, 0x39u, 0x00u, 0x01u, 0x03u, 0x10u};
@@ -233,8 +234,8 @@ Private void LCD_Init(void)
     int x;
     for (x = 0; x < 162; x++)
     {
-        priv_frame_buf[x][5] = COLOR_BLUE;
-        priv_frame_buf[x][6] = COLOR_BLUE;
+        priv_frame_buf[x][5] = COLOR_RED;
+        priv_frame_buf[x][6] = COLOR_RED;
         priv_frame_buf[x][7] = COLOR_RED;
         priv_frame_buf[x][8] = COLOR_RED;
         priv_frame_buf[x][9]= COLOR_GREEN;
@@ -245,6 +246,7 @@ Private void LCD_Init(void)
 
     LCD_DrawBuffer();
 
+    setCS(1);
     setBL(1u);
 }
 
@@ -272,7 +274,7 @@ void LCD_Rectangle(unsigned short x1, unsigned short y1, unsigned short x2, unsi
     LCD_Command(0x2C);
 
     //setRS(1);
-    setCS(0);
+    //setCS(0);
 
     for (y=y1; y <= y2; y++)
     {
@@ -283,7 +285,7 @@ void LCD_Rectangle(unsigned short x1, unsigned short y1, unsigned short x2, unsi
         }
     }
 
-    setCS(1);
+    //setCS(1);
 }
 
 
@@ -299,7 +301,7 @@ void LCD_RectangleRainbow(unsigned short x1, unsigned short y1, unsigned short x
     LCD_Command(0x2C);
 
     //setRS(1);
-    setCS(0);
+    //setCS(0);
 
     for (y=y1; y <= y2; y++)
     {
@@ -316,7 +318,7 @@ void LCD_RectangleRainbow(unsigned short x1, unsigned short y1, unsigned short x
             LCD_Data_Byte(colour & 0xFF);
         }
     }
-    setCS(1);
+    //setCS(1);
 }
 
 
@@ -325,10 +327,10 @@ void LCD_DrawBuffer(void)
     LCD_SetArea(0,0,132u,162u);
     LCD_Command(0x2C);
 
-
-    setCS(0);
+    setRS(1);
+    //setCS(0);
 
     spidrv_transmitU16(&priv_frame_buf[0][0], 132u * 162u);
 
-    setCS(1);
+    //setCS(1);
 }

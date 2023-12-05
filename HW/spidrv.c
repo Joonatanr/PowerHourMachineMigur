@@ -60,8 +60,12 @@ Public void spidrv_transmitU16(U16 * data, U32 data_len)
     {
         tx.value = *data_ptr;
 
-        spi_transmit_byte(tx.bytes.msb, FALSE);
-        spi_transmit_byte(tx.bytes.lsb, FALSE);
+        //spi_transmit_byte(tx.bytes.msb, FALSE);
+        //spi_transmit_byte(tx.bytes.lsb, FALSE);
+        while (!(SPI_getInterruptStatus(EUSCI_B0_BASE, EUSCI_B_SPI_TRANSMIT_INTERRUPT)));
+        SPI_transmitData(EUSCI_B0_BASE, tx.bytes.lsb);
+        while (!(SPI_getInterruptStatus(EUSCI_B0_BASE, EUSCI_B_SPI_TRANSMIT_INTERRUPT)));
+        SPI_transmitData(EUSCI_B0_BASE, tx.bytes.msb);
 
         data_ptr++;
         data_len--;
