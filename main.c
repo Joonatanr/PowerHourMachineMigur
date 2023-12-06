@@ -8,6 +8,7 @@
 #include "MSPIO.h"
 #include "SdCardHandler.h"
 #include "fatfs/diskio.h"
+#include "BitmapHandler.h"
 
 /**
  * main.c
@@ -16,18 +17,20 @@
 Private U8 priv_1sec_flag = 0u;
 Private U16 priv_msec_counter = 0u;
 
+Private void display_test(void);
+
 void main(void)
 {
     hwmain_init();
-
-    /* TODO : Remove */
-    MSPrintf(EUSCI_A0_BASE, "Hello World!\n");
 
 	/* Test sequence for TFT display. */
 	display_init();
 
     /* Initialize the SD Card reader*/
     SdCardHandlerInit();
+
+    /* Load a bitmap and display it on the screen. */
+    display_test();
 
     /* Sleeping when not in use */
 	for(;;)
@@ -70,5 +73,23 @@ Public void timer_1sec_callback(void)
     {
         GPIO_setOutputLowOnPin(GPIO_PORT_P3, GPIO_PIN6);
         GPIO_setOutputLowOnPin(GPIO_PORT_P3, GPIO_PIN7);
+    }
+}
+
+
+Private void display_test(void)
+{
+    U16 * disp_buffer_ptr = display_get_frame_buffer();
+
+    if (LoadBitmap("/color_test.bmp", disp_buffer_ptr) == TRUE)
+    {
+        display_flushBuffer();
+    }
+
+    timer_delay_msec(3000u);
+
+    if (LoadBitmap("/Lena.bmp", disp_buffer_ptr) == TRUE)
+    {
+        display_flushBuffer();
     }
 }
