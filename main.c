@@ -9,6 +9,7 @@
 #include "SdCardHandler.h"
 #include "fatfs/diskio.h"
 #include "BitmapHandler.h"
+#include "Fonts/Fonts.h"
 
 /**
  * main.c
@@ -114,5 +115,8 @@ Private void display_test(void)
     }
     timer_delay_msec(1000u);
 
-    display_drawImage(0u, 0u, 10u, 10u, &priv_test_image[0][0]);
+    //display_drawImage(0u, 0u, 10u, 10u, &priv_test_image[0][0]);
+    U16 A_index = 'A' - 0x20;
+    display_drawImage(10u, 10u, PowerHourFont.chars[A_index].image->width, PowerHourFont.chars[A_index].image->height, PowerHourFont.chars[A_index].image->data);
+
 }
