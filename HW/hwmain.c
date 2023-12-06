@@ -6,10 +6,11 @@
  */
 
 #include "hwmain.h"
+#include "driverlib.h"
 #include "clocks.h"
 #include "ports.h"
 #include "timer.h"
-#include "driverlib.h"
+
 #include "spidrv.h"
 #include "UART_Driver.h"
 
@@ -17,10 +18,10 @@
 
 eUSCI_UART_Config UART0Config =
 {
-     EUSCI_A_UART_CLOCKSOURCE_SMCLK,
+     EUSCI_A_UART_CLOCKSOURCE_SMCLK, /* 24MHz */
      13,
      0,
-     0,
+     37,
      EUSCI_A_UART_NO_PARITY,
      EUSCI_A_UART_LSB_FIRST,
      EUSCI_A_UART_ONE_STOP_BIT,
@@ -28,8 +29,10 @@ eUSCI_UART_Config UART0Config =
      EUSCI_A_UART_OVERSAMPLING_BAUDRATE_GENERATION
 };
 
+
 Public void hwmain_init(void)
 {
+
     /* Stop WDT  */
     MAP_WDT_A_holdTimer();
     Interrupt_disableMaster();

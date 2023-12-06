@@ -13,6 +13,7 @@ void error(void);
 
 Public void clocks_init(void)
 {
+#if 1
     WDT_A_holdTimer();
     /* This should be set in case of higher frequency. */
     MAP_PCM_setCoreVoltageLevel(PCM_VCORE1);
@@ -42,4 +43,11 @@ Public void clocks_init(void)
     MAP_CS_initClockSignal(CS_HSMCLK,   CS_DCOCLK_SELECT,   CS_CLOCK_DIVIDER_4); /* 12MHz */
     MAP_CS_initClockSignal(CS_SMCLK,    CS_DCOCLK_SELECT,   CS_CLOCK_DIVIDER_2); /* 24MHz */
     MAP_CS_initClockSignal(CS_BCLK,     CS_REFOCLK_SELECT,  CS_CLOCK_DIVIDER_1);
+#else
+    FlashCtl_setWaitState(FLASH_BANK0, 2);
+    FlashCtl_setWaitState(FLASH_BANK1, 2);
+    PCM_setCoreVoltageLevel(PCM_VCORE1);
+    CS_setDCOCenteredFrequency(CS_DCO_FREQUENCY_24);
+    MAP_CS_initClockSignal(CS_SMCLK,    CS_DCOCLK_SELECT,   CS_CLOCK_DIVIDER_1); /* Try configuring this to 3MHz. */
+#endif
 }

@@ -19,7 +19,7 @@
 
 
 //#define SPI_BASE    EUSCI_B0_BASE
-#define SPI_BASE    EUSCI_B2_BASE
+#define SPI_BASE    EUSCI_B1_BASE
 //#define GPIO_PORT   GPIO_PORT_P5
 //#define DESELECT    GPIO_High(GPIO_PORT_P5, GPIO_PIN1);
 //#define SELECT      GPIO_Low(GPIO_PORT_P5, GPIO_PIN1);

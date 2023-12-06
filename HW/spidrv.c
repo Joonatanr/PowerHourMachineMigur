@@ -27,8 +27,8 @@ const eUSCI_SPI_MasterConfig spiMasterConfigLCD =
 const eUSCI_SPI_MasterConfig spiMasterConfigSdCard =
 {
      EUSCI_B_SPI_CLOCKSOURCE_SMCLK,
-     24000000,
-     500000,
+     24000000, /* 24MHz SMCLK */
+     4000000,  /* 4MHz SPI */
      EUSCI_B_SPI_MSB_FIRST,
      EUSCI_B_SPI_PHASE_DATA_CHANGED_ONFIRST_CAPTURED_ON_NEXT,
      EUSCI_B_SPI_CLOCKPOLARITY_INACTIVITY_HIGH,
@@ -48,11 +48,12 @@ Public void spidrv_init(void)
     /* Enable SPI module */
     SPI_enableModule(EUSCI_B0_BASE);
 
-    /* Set the SD card to work on EUSCI_B2 */
-    MAP_GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P3,
-            GPIO_PIN5 | GPIO_PIN6 | GPIO_PIN7, GPIO_PRIMARY_MODULE_FUNCTION);
-    MAP_SPI_initMaster(EUSCI_B2_BASE, &spiMasterConfigSdCard);
-    MAP_SPI_enableModule(EUSCI_B2_BASE);
+    /* Set the SD card to work on EUSCI_B1 */
+    MAP_GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P6, GPIO_PIN3, GPIO_PRIMARY_MODULE_FUNCTION);
+    MAP_GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P6, GPIO_PIN4, GPIO_PRIMARY_MODULE_FUNCTION);
+    MAP_GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P6, GPIO_PIN5, GPIO_PRIMARY_MODULE_FUNCTION);
+    MAP_SPI_initMaster(EUSCI_B1_BASE, &spiMasterConfigSdCard);
+    MAP_SPI_enableModule(EUSCI_B1_BASE);
 }
 
 /* This function is used to transmit the frame buffer, so we need to be pretty efficient... */

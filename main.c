@@ -24,7 +24,7 @@ void main(void)
     MSPrintf(EUSCI_A0_BASE, "Hello World!\n");
 
     /* Initialize the SD Card reader*/
-    //SdCardHandlerInit();
+    SdCardHandlerInit();
 
 	/* Test sequence for TFT display. */
 	display_init();

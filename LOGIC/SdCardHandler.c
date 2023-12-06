@@ -17,6 +17,14 @@
  * CS   = 5.1
  * */
 
+/* Lets try with EUSCI_B1 alternative outputs, after the EUSCI_B2 pin burned down... :
+ *
+ * MISO = 6.5
+ * MOSI = 6.4
+ * SCK  = 6.3
+ * CS   = 5.1
+ * */
+
 
 FATFS FS;
 DIR DI;
