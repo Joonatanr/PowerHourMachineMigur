@@ -272,8 +272,8 @@ Public void display_drawImage(U8 x, U8 y, U8 width, U8 height, const U16 * src_p
     x2 = MIN(x2, DISPLAY_WIDTH);
     y2 = MIN(y2, DISPLAY_HEIGHT);
 
-    drawWidth = x2 - x;
-    drawHeight = y2 - y;
+    drawWidth = x2 - x + 1u;
+    drawHeight = y2 - y + 1u;
 
     setDisplayCS(0);
 
