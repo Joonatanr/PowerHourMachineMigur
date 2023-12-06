@@ -22,6 +22,7 @@ extern void display_init(void);
 
 extern U16 * display_get_frame_buffer(void);
 extern void display_flushBuffer(U8 x, U8 y, U8 width, U8 height);
+extern void display_drawImage(U8 x, U8 y, U8 width, U8 height, const U16 * src_ptr);
 
 
 #endif /* HW_DISPLAY_H_ */

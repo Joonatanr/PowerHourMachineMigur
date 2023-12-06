@@ -57,9 +57,9 @@ Public void spidrv_init(void)
 }
 
 /* This function is used to transmit the frame buffer, so we need to be pretty efficient... */
-Public void spidrv_transmitU16(U16 * data, U32 data_len)
+Public void spidrv_transmitU16(const U16 * data, U32 data_len)
 {
-    U16 * data_ptr = data;
+    const U16 * data_ptr = data;
     U32 buf_len = data_len;
 
     SPI_disableInterrupt(EUSCI_B0_BASE, EUSCI_B_SPI_RECEIVE_INTERRUPT);
