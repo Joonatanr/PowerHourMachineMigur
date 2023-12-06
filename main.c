@@ -23,11 +23,11 @@ void main(void)
     /* TODO : Remove */
     MSPrintf(EUSCI_A0_BASE, "Hello World!\n");
 
-    /* Initialize the SD Card reader*/
-    SdCardHandlerInit();
-
 	/* Test sequence for TFT display. */
 	display_init();
+
+    /* Initialize the SD Card reader*/
+    SdCardHandlerInit();
 
     /* Sleeping when not in use */
 	for(;;)

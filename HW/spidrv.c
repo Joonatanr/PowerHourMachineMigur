@@ -59,8 +59,8 @@ Public void spidrv_init(void)
 /* This function is used to transmit the frame buffer, so we need to be pretty efficient... */
 Public void spidrv_transmitU16(U16 * data, U32 data_len)
 {
-    U8 * data_ptr = (U8*)data;
-    U32 buf_len = data_len *2u;
+    U16 * data_ptr = data;
+    U32 buf_len = data_len;
 
     SPI_disableInterrupt(EUSCI_B0_BASE, EUSCI_B_SPI_RECEIVE_INTERRUPT);
 
@@ -68,7 +68,11 @@ Public void spidrv_transmitU16(U16 * data, U32 data_len)
     {
         while(BITBAND_PERI(EUSCI_B_CMSIS(EUSCI_B0_BASE)->STATW, EUSCI_B_STATW_BBUSY_OFS));
         __delay_cycles(10);
-        EUSCI_B_CMSIS(EUSCI_B0_BASE)->TXBUF = *data_ptr++;
+        EUSCI_B_CMSIS(EUSCI_B0_BASE)->TXBUF = *(data_ptr) >> 8u;
+        while(BITBAND_PERI(EUSCI_B_CMSIS(EUSCI_B0_BASE)->STATW, EUSCI_B_STATW_BBUSY_OFS));
+        __delay_cycles(10);
+        EUSCI_B_CMSIS(EUSCI_B0_BASE)->TXBUF = *(data_ptr) & 0xffu;
+        data_ptr++;
         buf_len--;
     }
 

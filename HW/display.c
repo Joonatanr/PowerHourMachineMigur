@@ -12,17 +12,11 @@
 #include "timer.h"
 #include "driverlib.h"
 
-//#define CONVERT_888RGB_TO_565BGR(r, g, b) ((r >> 3) | ((g >> 2) << 5) | ((b >> 3) << 11))
-/* The problem here is that we shall be accessing memory via DMA, 1 byte at a time. So we also need to switch the MSB and LSB of the resulting U16 here. */
-#define CONVERT_888RGB_TO_565BGR(r, g, b) ((r >> 3) << 8 | ((g >> 5) << 13) | ((b >> 3) << 3) | ((g >> 2) & 0x0005u))
-
-#define COLOR_BLUE (U16)(CONVERT_888RGB_TO_565BGR(0x00u, 0x00u, 0xFFu))
-#define COLOR_RED (U16)(CONVERT_888RGB_TO_565BGR(0xFFu, 0x00u, 0x00u))
-#define COLOR_GREEN (U16)(CONVERT_888RGB_TO_565BGR(0x00u, 0xFFu, 0x00u))
 
 
-//Private U16 priv_frame_buf[132][162];
-Private U16 priv_frame_buf[162][132];
+
+Private U16 priv_frame_buf[132][162];
+//Private U16 priv_frame_buf[162][132];
 /*
  * Current ports :
  * RESET : 6.1
@@ -45,6 +39,7 @@ void LCD_SetArea(unsigned short x1, unsigned short y1, unsigned short x2, unsign
 void LCD_Rectangle(unsigned short x1, unsigned short y1, unsigned short x2, unsigned short y2, unsigned short colour);
 void LCD_RectangleRainbow(unsigned short x1, unsigned short y1, unsigned short x2, unsigned short y2);
 void LCD_DrawBuffer(void);
+
 
 Public void display_init(void)
 {
@@ -146,7 +141,7 @@ Private void LCD_Init(void)
     LCD_Command(0xC5);//VCOM
     LCD_Data_Byte(0x0E);
     LCD_Command(0x36);//MX, MY, RGB mode
-    LCD_Data_Byte(0x88);
+    LCD_Data_Byte(0x28);
     //------------------------------------ST7735R Gamma Sequence-----------------------------------------//
     LCD_Command(0xe0);
     U8 gamma_cmd1[16] = {0x02u, 0x1cu, 0x07u, 0x12u, 0x37u, 0x32u, 0x29u, 0x2du, 0x29u, 0x25u, 0x2bu, 0x39u, 0x00u, 0x01u, 0x03u, 0x10u};
@@ -210,10 +205,10 @@ Private void LCD_Init(void)
     LCD_Data_Byte(0x05);
 
     LCD_Command(0x2C);//Display on
-    LCD_Rectangle(0,0,132,162,0x0000u); // black it out
+    LCD_Rectangle(0,0,162,132,COLOR_RED); // black it out
     LCD_Command(0x29);//Display on
 
-    //LCD_Rectangle(10,10,80,80,COLOR_RED);
+    //LCD_Rectangle(10,10,80,100,COLOR_BLUE);
     //LCD_Rectangle(10,10,80,80,COLOR_GREEN);
     //LCD_RectangleRainbow(10,10,80,100);
 
@@ -226,12 +221,12 @@ Private void LCD_Init(void)
     int x;
     for (x = 0; x < 162; x++)
     {
-        priv_frame_buf[x][5] = COLOR_RED;
-        priv_frame_buf[x][6] = COLOR_RED;
-        priv_frame_buf[x][7] = COLOR_RED;
-        priv_frame_buf[x][8] = COLOR_RED;
-        priv_frame_buf[x][9]= COLOR_GREEN;
-        priv_frame_buf[x][10] = COLOR_GREEN;
+        priv_frame_buf[5][x] = COLOR_RED;
+        priv_frame_buf[6][x] = COLOR_RED;
+        priv_frame_buf[7][x] = COLOR_BLUE;
+        priv_frame_buf[8][x] = COLOR_BLUE;
+        priv_frame_buf[9][x]= COLOR_GREEN;
+        priv_frame_buf[10][x] = COLOR_GREEN;
     }
 
     priv_frame_buf[50][50] = COLOR_GREEN;
@@ -316,7 +311,7 @@ void LCD_RectangleRainbow(unsigned short x1, unsigned short y1, unsigned short x
 
 void LCD_DrawBuffer(void)
 {
-    LCD_SetArea(0,0,132u,162u);
+    LCD_SetArea(0,0,162u,132u);
     LCD_Command(0x2C);
 
     setRS(1);
@@ -325,4 +320,19 @@ void LCD_DrawBuffer(void)
     spidrv_transmitU16(&priv_frame_buf[0][0], 132u * 162u);
 
     //setCS(1);
+}
+
+/* TODO : This is currently a placeholder API. */
+Public U16 * display_get_frame_buffer(void)
+{
+    return &priv_frame_buf[0][0];
+}
+
+/* TODO : This is currently a placeholder API. Should be able specify things like location, width, etc.
+ * For now lets write the whole buffer. */
+Public void display_flushBuffer(void)
+{
+    setDisplayCS(0);
+    LCD_DrawBuffer();
+    setDisplayCS(1);
 }
