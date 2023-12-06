@@ -83,13 +83,19 @@ Private void display_test(void)
 
     if (LoadBitmap("/color_test.bmp", disp_buffer_ptr) == TRUE)
     {
-        display_flushBuffer();
+        display_flushBuffer(0u, 0u, 162u, 132u);
     }
 
     timer_delay_msec(3000u);
 
     if (LoadBitmap("/Lena.bmp", disp_buffer_ptr) == TRUE)
     {
-        display_flushBuffer();
+        display_flushBuffer(0u, 0u, 162u, 132u);
+    }
+
+    timer_delay_msec(3000u);
+    if (LoadBitmap("/laudur.bmp", disp_buffer_ptr) == TRUE)
+    {
+        display_flushBuffer(10u, 20u, 30u, 101u);
     }
 }

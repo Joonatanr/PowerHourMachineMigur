@@ -21,7 +21,7 @@
 extern void display_init(void);
 
 extern U16 * display_get_frame_buffer(void);
-extern void display_flushBuffer(void);
+extern void display_flushBuffer(U8 x, U8 y, U8 width, U8 height);
 
 
 #endif /* HW_DISPLAY_H_ */

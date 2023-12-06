@@ -13,6 +13,8 @@
 #include "driverlib.h"
 
 
+#define DISPLAY_WIDTH 162
+#define DISPLAY_HEIGHT 132
 
 
 Private U16 priv_frame_buf[132][162];
@@ -38,7 +40,7 @@ Private void LCD_Data(U8 * data_ptr, U16 len);
 void LCD_SetArea(unsigned short x1, unsigned short y1, unsigned short x2, unsigned short y2);
 void LCD_Rectangle(unsigned short x1, unsigned short y1, unsigned short x2, unsigned short y2, unsigned short colour);
 void LCD_RectangleRainbow(unsigned short x1, unsigned short y1, unsigned short x2, unsigned short y2);
-void LCD_DrawBuffer(void);
+void LCD_DrawBuffer(U8 xOffset, U8 yOffset, U8 width, U8 height);
 
 
 Public void display_init(void)
@@ -231,7 +233,7 @@ Private void LCD_Init(void)
 
     priv_frame_buf[50][50] = COLOR_GREEN;
 
-    LCD_DrawBuffer();
+    LCD_DrawBuffer(0u, 0u, 162u, 132u);
 
     setDisplayCS(1);
     setBL(1u);
@@ -309,15 +311,26 @@ void LCD_RectangleRainbow(unsigned short x1, unsigned short y1, unsigned short x
 }
 
 
-void LCD_DrawBuffer(void)
+void LCD_DrawBuffer(U8 xOffset, U8 yOffset, U8 width, U8 height)
 {
-    LCD_SetArea(0,0,162u,132u);
+    U16 x2 = xOffset + width - 1u;
+    U16 y2 = yOffset + height - 1u;
+    U16 drawWidth;
+    U16 drawHeight;
+
+    x2 = MIN(x2, DISPLAY_WIDTH);
+    y2 = MIN(y2, DISPLAY_HEIGHT);
+
+    drawWidth = x2 - xOffset;
+    drawHeight = y2 - yOffset;
+
+    LCD_SetArea(xOffset,yOffset,x2, y2);
     LCD_Command(0x2C);
 
     setRS(1);
     //setCS(0);
 
-    spidrv_transmitU16(&priv_frame_buf[0][0], 132u * 162u);
+    spidrv_transmitU16(&priv_frame_buf[0][0], drawWidth * drawHeight);
 
     //setCS(1);
 }
@@ -330,9 +343,9 @@ Public U16 * display_get_frame_buffer(void)
 
 /* TODO : This is currently a placeholder API. Should be able specify things like location, width, etc.
  * For now lets write the whole buffer. */
-Public void display_flushBuffer(void)
+Public void display_flushBuffer(U8 x, U8 y, U8 width, U8 height)
 {
     setDisplayCS(0);
-    LCD_DrawBuffer();
+    LCD_DrawBuffer(x, y, width, height);
     setDisplayCS(1);
 }
