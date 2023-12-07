@@ -81,6 +81,7 @@ Public Boolean LoadBitmap(const char * path, U16 * dest)
 
                 for(y = 0u; y < BitmapHeader.height_px; y++)
                 {
+                    file_res = f_lseek(&f_obj, ((BitmapHeader.height_px - (y + 1)) * line_stride) + BitmapHeader.offset);
                     file_res = f_read(&f_obj, priv_bmp_line_buffer, line_stride, &bytes_read);
 
                     if (file_res == FR_OK)
