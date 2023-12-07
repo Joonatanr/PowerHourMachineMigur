@@ -152,7 +152,7 @@ Private void LCD_Init(void)
     LCD_Data_Byte(0x05);
 
     LCD_Command(0x2C);//Display on
-    LCD_Rectangle(0,0,162,132,COLOR_RED); // black it out
+    //LCD_Rectangle(0,0,162,132,COLOR_RED); // black it out
     LCD_Command(0x29);//Display on
 
 

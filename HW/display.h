@@ -14,9 +14,20 @@
 /* The problem here is that we shall be accessing memory via DMA, 1 byte at a time. So we also need to switch the MSB and LSB of the resulting U16 here. */
 //#define CONVERT_888RGB_TO_565BGR(r, g, b) ((r >> 3) << 8 | ((g >> 5) << 13) | ((b >> 3) << 3) | ((g >> 2) & 0x0007u))
 
-#define COLOR_BLUE (U16)(CONVERT_888RGB_TO_565BGR(0x00u, 0x00u, 0xFFu))
-#define COLOR_RED (U16)(CONVERT_888RGB_TO_565BGR(0xFFu, 0x00u, 0x00u))
-#define COLOR_GREEN (U16)(CONVERT_888RGB_TO_565BGR(0x00u, 0xFFu, 0x00u))
+//#define COLOR_BLUE (U16)(CONVERT_888RGB_TO_565BGR(0x00u, 0x00u, 0xFFu))
+//#define COLOR_RED (U16)(CONVERT_888RGB_TO_565BGR(0xFFu, 0x00u, 0x00u))
+//#define COLOR_GREEN (U16)(CONVERT_888RGB_TO_565BGR(0x00u, 0xFFu, 0x00u))
+
+#define COLOR_BLACK    CONVERT_888RGB_TO_565BGR(0,  0,  0   )
+#define COLOR_BLUE     CONVERT_888RGB_TO_565BGR(0,  0,  255 )
+#define COLOR_RED      CONVERT_888RGB_TO_565BGR(255,0,  0   )
+#define COLOR_GREEN    CONVERT_888RGB_TO_565BGR(0,  255,0   )
+#define COLOR_CYAN     CONVERT_888RGB_TO_565BGR(0,  255,255 )
+#define COLOR_MAGENTA  CONVERT_888RGB_TO_565BGR(255,  0,255 )
+#define COLOR_YELLOW   CONVERT_888RGB_TO_565BGR(255,255,0   )
+#define COLOR_WHITE    CONVERT_888RGB_TO_565BGR(255,255,255 )
+
+
 
 extern void display_init(void);
 

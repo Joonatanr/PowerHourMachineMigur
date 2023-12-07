@@ -107,4 +107,7 @@ Private void display_test(void)
     //LcdWriter_drawChar('B', 20, 10, FONT_COURIER_14);
     //LcdWriter_drawChar('C', 30, 10, FONT_COURIER_14);
     LcdWriter_drawString("Hello World!", 10, 10, FONT_COURIER_14);
+    //LcdWriter_drawString("First\nSecond", 10, 40, FONT_COURIER_14);
+    //LcdWriter_drawCharColored('A', 5, 70, FONT_COURIER_14, 0xF000, 0xFFFFu);
+    LcdWriter_drawColoredString("First\nSecond", 10, 40, FONT_COURIER_14, COLOR_RED, COLOR_YELLOW);
 }

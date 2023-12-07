@@ -14,5 +14,7 @@
 
 extern U8 LcdWriter_drawChar(char c, int x, int y, FontType_t font);
 extern void LcdWriter_drawString(char * str, int x, int y, FontType_t font);
+extern U8 LcdWriter_drawCharColored(char c, int x, int y, FontType_t font, U16 foreground, U16 background);
+extern void LcdWriter_drawColoredString(char * str, int x, int y, FontType_t font, U16 foreground, U16 background);
 
 #endif /* LOGIC_LCDWRITER_H_ */
