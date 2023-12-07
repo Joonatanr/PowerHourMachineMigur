@@ -25,6 +25,14 @@
      const tChar *chars;
      } tFont;
 
+
+typedef enum
+{
+    FONT_COURIER_14,
+    NUMBER_OF_FONTS
+} FontType_t;
+
 extern const tFont PowerHourFont;
+
 
 #endif /* LOGIC_FONTS_FONTS_H_ */

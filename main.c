@@ -9,7 +9,7 @@
 #include "SdCardHandler.h"
 #include "fatfs/diskio.h"
 #include "BitmapHandler.h"
-#include "Fonts/Fonts.h"
+#include "LcdWriter.h"
 
 /**
  * main.c
@@ -77,46 +77,34 @@ Public void timer_1sec_callback(void)
     }
 }
 
-Private const U16 priv_test_image[10][10] =
-{
-     0xF800u, 0x0000u, 0x0000u, 0x0000u, 0x0000u, 0x0000u, 0x0000u, 0x0000u, 0x0000u, 0xF800u, //Line 0
-     0x0000u, 0xF800u, 0x0000u, 0x0000u, 0x0000u, 0x0000u, 0x0000u, 0x0000u, 0xF800u, 0x0000u, //Line 1
-     0x0000u, 0x0000u, 0xF800u, 0x0000u, 0x0000u, 0x0000u, 0x0000u, 0xF800u, 0x0000u, 0x0000u, //Line 2
-     0x0000u, 0x0000u, 0x0000u, 0xF800u, 0x0000u, 0x0000u, 0xF800u, 0x0000u, 0x0000u, 0x0000u, //Line 3
-     0x0000u, 0x0000u, 0x0000u, 0x0000u, 0xF800u, 0xF800u, 0x0000u, 0x0000u, 0x0000u, 0x0000u, //Line 4
-     0x0000u, 0x0000u, 0x0000u, 0x0000u, 0xF800u, 0xF800u, 0x0000u, 0x0000u, 0x0000u, 0x0000u, //Line 5
-     0x0000u, 0x0000u, 0x0000u, 0xF800u, 0x0000u, 0x0000u, 0xF800u, 0x0000u, 0x0000u, 0x0000u, //Line 6
-     0x0000u, 0x0000u, 0xF800u, 0x0000u, 0x0000u, 0x0000u, 0x0000u, 0xF800u, 0x0000u, 0x0000u, //Line 7
-     0x0000u, 0xF800u, 0x0000u, 0x0000u, 0x0000u, 0x0000u, 0x0000u, 0x0000u, 0xF800u, 0x0000u, //Line 8
-     0xF800u, 0x0000u, 0x0000u, 0x0000u, 0x0000u, 0x0000u, 0x0000u, 0x0000u, 0x0000u, 0xF800u, //Line 9
-};
-
 
 Private void display_test(void)
 {
     U16 * disp_buffer_ptr = display_get_frame_buffer();
 
+    /*
     if (LoadBitmap("/color_test.bmp", disp_buffer_ptr) == TRUE)
     {
         display_flushBuffer(0u, 0u, 162u, 132u);
     }
-
-    timer_delay_msec(3000u);
+    */
+    timer_delay_msec(1000u);
 
     if (LoadBitmap("/Lena.bmp", disp_buffer_ptr) == TRUE)
     {
         display_flushBuffer(0u, 0u, 162u, 132u);
     }
 
+    /*
     timer_delay_msec(3000u);
     if (LoadBitmap("/laudur.bmp", disp_buffer_ptr) == TRUE)
     {
         display_flushBuffer(10u, 20u, 30u, 101u);
     }
+    */
     timer_delay_msec(1000u);
-
-    //display_drawImage(0u, 0u, 10u, 10u, &priv_test_image[0][0]);
-    U16 A_index = 'A' - 0x20;
-    display_drawImage(10u, 10u, PowerHourFont.chars[A_index].image->width, PowerHourFont.chars[A_index].image->height, PowerHourFont.chars[A_index].image->data);
-
+    //LcdWriter_drawChar('A', 10, 10, FONT_COURIER_14);
+    //LcdWriter_drawChar('B', 20, 10, FONT_COURIER_14);
+    //LcdWriter_drawChar('C', 30, 10, FONT_COURIER_14);
+    LcdWriter_drawString("Hello World!", 10, 10, FONT_COURIER_14);
 }
