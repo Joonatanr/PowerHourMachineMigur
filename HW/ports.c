@@ -11,6 +11,7 @@
 
 Public void ports_init(void)
 {
+    /* TODO : Fix the ports module, so we have all the pins in one table and it is only necessary to change them in one place. */
     //First lets set up LED ports as outputs.
     GPIO_setAsOutputPin(GPIO_PORT_P1, GPIO_PIN0 | GPIO_PIN7);
     GPIO_setAsOutputPin(GPIO_PORT_P2, GPIO_PIN0 | GPIO_PIN1 | GPIO_PIN2);
@@ -22,13 +23,13 @@ Public void ports_init(void)
     GPIO_setAsOutputPin(GPIO_PORT_P6, GPIO_PIN1);
 
     /* Setup display chip select pin. */
-    GPIO_setAsOutputPin(GPIO_PORT_P4, GPIO_PIN3);
+    GPIO_setAsOutputPin(GPIO_PORT_P4, GPIO_PIN6);
 
     /* Setup SD card chip select pin. */
     GPIO_setAsOutputPin(GPIO_PORT_P5, GPIO_PIN1);
 
     /* Set up the display BL pin. */
-    GPIO_setAsOutputPin(GPIO_PORT_P5, GPIO_PIN0);
+    GPIO_setAsOutputPin(GPIO_PORT_P5, GPIO_PIN7);
 }
 
 
@@ -137,11 +138,11 @@ Public void setDisplayCS(U8 state)
 {
     if (state)
     {
-        GPIO_setOutputHighOnPin(GPIO_PORT_P4, GPIO_PIN3);
+        GPIO_setOutputHighOnPin(GPIO_PORT_P4, GPIO_PIN6);
     }
     else
     {
-        GPIO_setOutputLowOnPin(GPIO_PORT_P4, GPIO_PIN3);
+        GPIO_setOutputLowOnPin(GPIO_PORT_P4, GPIO_PIN6);
     }
 }
 
@@ -163,10 +164,10 @@ Public void setBL(U8 state)
 {
     if (state)
     {
-        GPIO_setOutputHighOnPin(GPIO_PORT_P5, GPIO_PIN0);
+        GPIO_setOutputHighOnPin(GPIO_PORT_P5, GPIO_PIN7);
     }
     else
     {
-        GPIO_setOutputLowOnPin(GPIO_PORT_P5, GPIO_PIN0);
+        GPIO_setOutputLowOnPin(GPIO_PORT_P5, GPIO_PIN7);
     }
 }

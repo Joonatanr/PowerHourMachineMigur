@@ -10,6 +10,7 @@
 #include "clocks.h"
 #include "ports.h"
 #include "timer.h"
+#include "pot.h"
 
 #include "spidrv.h"
 #include "UART_Driver.h"
@@ -45,6 +46,8 @@ Public void hwmain_init(void)
     ports_set_led_two_blue(0u);
     ports_set_led_two_green(0u);
     ports_set_led_two_red(0u);
+
+    pot_init();
 
     timer_init();
 
