@@ -113,7 +113,7 @@ Private const pot_conf_T priv_conf[NUMBER_OF_DEFINED_POTENTIOMETERS] =
       {
        .led2 = {.port = GPIO_PORT_P7, .pin = GPIO_PIN1 },
        .led3 = {.port = GPIO_PORT_P9, .pin = GPIO_PIN4 },
-       .led4 = {.port = GPIO_PORT_P7, .pin = GPIO_PIN6 },
+       .led4 = {.port = GPIO_PORT_P9, .pin = GPIO_PIN6 },
       },
       .adc_mem = ADC_MEM21,
       .adc_ch = ADC_INPUT_A21,
@@ -150,12 +150,18 @@ Private const pot_conf_T priv_conf[NUMBER_OF_DEFINED_POTENTIOMETERS] =
 #define NUMBER_OF_POT_RANGES 4
 
 /* ADC value is 14 bit, so between 0 and 16384 , 4096 per quadrant*/
+#define RANGE_1_VALUE (12228u - 1024u)
+#define RANGE_2_VALUE (8192u - 1024u)
+#define RANGE_3_VALUE (4096u - 1024u)
+#define RANGE_4_VALUE 0u
+
+
 Private const pot_range_T priv_pot_ranges[NUMBER_OF_POT_RANGES] =
 {
-     { .lower_range = 5500u  + HYSTERESIS_VALUE,  .upper_range = 0x4000u                     },
-     { .lower_range = 3667u  + HYSTERESIS_VALUE,  .upper_range = 5499u - HYSTERESIS_VALUE   },
-     { .lower_range = 1833u  + HYSTERESIS_VALUE,  .upper_range = 3666u  - HYSTERESIS_VALUE   },
-     { .lower_range = 0u,                         .upper_range = 1832u  - HYSTERESIS_VALUE   }
+     { .lower_range = RANGE_1_VALUE  + HYSTERESIS_VALUE,  .upper_range = 0x4000u                     },
+     { .lower_range = RANGE_2_VALUE  + HYSTERESIS_VALUE,  .upper_range = RANGE_1_VALUE - 1u - HYSTERESIS_VALUE   },
+     { .lower_range = RANGE_3_VALUE  + HYSTERESIS_VALUE,  .upper_range = RANGE_2_VALUE - 1u - HYSTERESIS_VALUE   },
+     { .lower_range = RANGE_4_VALUE,                      .upper_range = RANGE_3_VALUE - 1u  - HYSTERESIS_VALUE   }
 };
 
 
@@ -191,6 +197,11 @@ Public void pot_init(void)
         GPIO_setAsOutputPin(pot_conf_ptr->leds.led2.port, pot_conf_ptr->leds.led2.pin);
         GPIO_setAsOutputPin(pot_conf_ptr->leds.led3.port, pot_conf_ptr->leds.led3.pin);
         GPIO_setAsOutputPin(pot_conf_ptr->leds.led4.port, pot_conf_ptr->leds.led4.pin);
+
+        GPIO_setOutputLowOnPin(pot_conf_ptr->leds.led2.port, pot_conf_ptr->leds.led2.pin);
+        GPIO_setOutputLowOnPin(pot_conf_ptr->leds.led3.port, pot_conf_ptr->leds.led3.pin);
+        GPIO_setOutputLowOnPin(pot_conf_ptr->leds.led4.port, pot_conf_ptr->leds.led4.pin);
+
 
         /* Configuring ADC inputs */
         GPIO_setAsPeripheralModuleFunctionInputPin(pot_conf_ptr->input.port, pot_conf_ptr->input.pin,
@@ -296,25 +307,25 @@ Private void setPotLeds(potentiometer_T pot, int range)
 
         switch(range)
         {
-            case 0:
+            case 3:
                // setPotLed(&conf_ptr->leds.led1, TRUE);
                 setPotLed(&conf_ptr->leds.led2, FALSE);
                 setPotLed(&conf_ptr->leds.led3, FALSE);
                 setPotLed(&conf_ptr->leds.led4, FALSE);
                 break;
-            case 1:
+            case 2:
               //  setPotLed(&conf_ptr->leds.led1, TRUE);
                 setPotLed(&conf_ptr->leds.led2, TRUE);
                 setPotLed(&conf_ptr->leds.led3, FALSE);
                 setPotLed(&conf_ptr->leds.led4, FALSE);
                 break;
-            case 2:
+            case 1:
                // setPotLed(&conf_ptr->leds.led1, TRUE);
                 setPotLed(&conf_ptr->leds.led2, TRUE);
                 setPotLed(&conf_ptr->leds.led3, TRUE);
                 setPotLed(&conf_ptr->leds.led4, FALSE);
                 break;
-            case 3:
+            case 0:
                // setPotLed(&conf_ptr->leds.led1, TRUE);
                 setPotLed(&conf_ptr->leds.led2, TRUE);
                 setPotLed(&conf_ptr->leds.led3, TRUE);
