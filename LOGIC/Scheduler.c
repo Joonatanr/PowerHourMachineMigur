@@ -12,6 +12,8 @@
 #include "buzzer.h"
 #include "buttons.h"
 #include <driverlib.h>
+#include "LcdWriter.h"
+#include "display.h"
 
 /* NB! Current implementation assumes that only 1 task is active at any time, but this can be changed ofcourse. */
 /* NB! All lo prio interrupt tasks should come here. I think there is no point to create a separate scheduler for the
@@ -22,23 +24,22 @@
 
 /*************  Private function prototypes.  **************/
 
-#if 0
+
 Private void dedication_start(void);
 Private void dedication_cyclic50ms(void);
 Private void dedicationExitListener(void);
-#endif
 
-#if 0
+
 /* NB! Currently period has to be divisible by 50. Might want to change this. */
 
 /* Ok : Idea is this that this array contains the tasks, of which only one can be active at a time. */
 Private const Scheduler_LogicTask priv_application_modules[NUMBER_OF_APPLICATIONS] =
 {
-     { .period = 1000u, .init_fptr = clockDisplay_init, .start_fptr = clockDisplay_start, .cyclic_fptr = clockDisplay_cyclic1000msec, .stop_fptr = clockDisplay_stop },
-     { .period = 50u,   .init_fptr = snake_init,        .start_fptr = snake_start,        .cyclic_fptr = snake_cyclic50ms,            .stop_fptr = snake_stop        },
+     //{ .period = 1000u, .init_fptr = clockDisplay_init, .start_fptr = clockDisplay_start, .cyclic_fptr = clockDisplay_cyclic1000msec, .stop_fptr = clockDisplay_stop },
+     //{ .period = 50u,   .init_fptr = snake_init,        .start_fptr = snake_start,        .cyclic_fptr = snake_cyclic50ms,            .stop_fptr = snake_stop        },
      { .period = 50u,   .init_fptr = NULL,              .start_fptr = dedication_start,   .cyclic_fptr = dedication_cyclic50ms,       .stop_fptr = NULL              },
 };
-#endif
+
 
 
 /* This array contains the tasks that run all the time. */
@@ -65,7 +66,7 @@ Private Boolean priv_isAppPaused = FALSE;
 void Scheduler_initTasks(void)
 {
     U8 ix;
-#if 0
+
     for (ix = 0u; ix < NUMBER_OF_ITEMS(priv_application_modules); ix++)
     {
         if (priv_application_modules[ix].init_fptr != NULL)
@@ -73,7 +74,6 @@ void Scheduler_initTasks(void)
             priv_application_modules[ix].init_fptr();
         }
     }
-#endif
 
     for (ix = 0u; ix < NUMBER_OF_ITEMS(priv_tasks); ix++)
     {
@@ -101,7 +101,7 @@ void Scheduler_StartTasks(void)
 }
 
 
-#if 0
+
 void Scheduler_SetActiveApplication(Scheduler_LogicModuleEnum task)
 {
     Interrupt_disableMaster();
@@ -111,7 +111,7 @@ void Scheduler_SetActiveApplication(Scheduler_LogicModuleEnum task)
     }
     priv_curr_app_ptr = &priv_application_modules[task];
     priv_isAppPaused = FALSE;
-    MessageBox_SetResponseHandler(NULL); //We make sure that the previous handler does not remain and cause any problems...
+    //MessageBox_SetResponseHandler(NULL); //We make sure that the previous handler does not remain and cause any problems...
     if (priv_curr_app_ptr->init_fptr != NULL)
     {
         priv_curr_app_ptr->init_fptr();
@@ -123,9 +123,9 @@ void Scheduler_SetActiveApplication(Scheduler_LogicModuleEnum task)
         priv_curr_app_ptr->start_fptr();
     }
 }
-#endif
 
-#if 0
+
+
 void Scheduler_StopActiveApplication(void)
 {
     if (priv_curr_app_ptr != NULL)
@@ -146,7 +146,7 @@ void Scheduler_SetActiveApplicationPause(Boolean pause)
         priv_isAppPaused = pause;
     }
 }
-#endif
+
 
 /* Lets assume this gets called every 50 ms, by the main.c lo prio interrupt. */
 void Scheduler_cyclic(void)
@@ -203,7 +203,6 @@ void Scheduler_cyclic(void)
 
 /**************************  Private functions ***********************/
 
-#if 0
 
 Private Boolean priv_is_dedication_screen_exit = FALSE;
 
@@ -216,15 +215,10 @@ Private void dedication_start(void)
 
     priv_is_dedication_screen_exit = FALSE;
 
+    display_fill(COLOR_RED);
+    //display_clear();
+    display_drawString("This Power Hour Machine",           0u, 2u,  FONT_COURIER_14, FALSE);
 
-    display_clear();
-    display_drawString("This Power Hour Machine",           0u, 2u,  FONT_ARIAL_TINY, FALSE);
-    display_drawString("was built for Kaisa Lomp",          0u, 11u, FONT_ARIAL_TINY, FALSE);
-    display_drawString("by her friends in Estonia:",        0u, 20u, FONT_ARIAL_TINY, FALSE);
-    display_drawString("Urmet, Jorx, Diana, Mihkel,",       0u, 29u, FONT_ARIAL_TINY, FALSE);
-    display_drawString("Kristel and Joonatan",              0u, 38u, FONT_ARIAL_TINY, FALSE);
-    display_drawString("as a parting gift, to be enjoyed",  0u, 47u, FONT_ARIAL_TINY, FALSE);
-    display_drawString("in the land Down Under",            0u, 56u, FONT_ARIAL_TINY, FALSE);
 
     /* Basically we wait for ANY key to be pressed. */
     buttons_subscribeListener(UP_BUTTON,    dedicationExitListener);
@@ -248,4 +242,3 @@ Private void dedication_cyclic50ms(void)
         returnToMain();
     }
 }
-#endif

@@ -246,10 +246,22 @@ void LCD_DrawFrameBuffer(U8 xOffset, U8 yOffset, U8 width, U8 height)
 
 /******************************************************* Public functions ***************************************************/
 
+Public void display_clear(void)
+{
+    display_fill(disp_background_color);
+}
+
 Public void display_fill(U16 color)
 {
     setDisplayCS(0);
     LCD_Rectangle(0,0,162,132,color);
+    setDisplayCS(1);
+}
+
+Public void display_fillRectangle(U8 x, U8 y, U8 width, U8 height, U16 color)
+{
+    setDisplayCS(0);
+    LCD_Rectangle(x, y, width, height, color);
     setDisplayCS(1);
 }
 
@@ -263,6 +275,27 @@ Public U16 * display_get_frame_buffer(void)
 Public void display_flushBuffer(U8 x, U8 y, U8 width, U8 height)
 {
     LCD_DrawFrameBuffer(x, y, width, height);
+}
+
+Public void display_drawBitmapCenter(const U16 * src_ptr, U16 centerPoint, U16 y, U8 width, U8 height)
+{
+    U8 halfWidth;
+    U8 myX;
+
+    if (src_ptr != NULL)
+    {
+        halfWidth = width >> 1u;
+        if (halfWidth <= centerPoint)
+        {
+            myX = centerPoint - halfWidth;
+        }
+        else
+        {
+            myX = 0u;
+        }
+
+        display_drawImage(myX, y, width, height, src_ptr);
+    }
 }
 
 
@@ -279,13 +312,17 @@ Public void display_drawImage(U8 x, U8 y, U8 width, U8 height, const U16 * src_p
     drawWidth = x2 - x + 1u;
     drawHeight = y2 - y + 1u;
 
-    setDisplayCS(0);
+    if (x2 < DISPLAY_WIDTH && y2 < DISPLAY_HEIGHT)
+    {
 
-    LCD_SetArea(x, y , x2, y2);
-    LCD_Command(0x2C);
+        setDisplayCS(0);
 
-    setRS(1);
+        LCD_SetArea(x, y , x2, y2);
+        LCD_Command(0x2C);
 
-    spidrv_transmitU16(src_ptr, drawWidth * drawHeight);
-    setDisplayCS(1);
+        setRS(1);
+
+        spidrv_transmitU16(src_ptr, drawWidth * drawHeight);
+        setDisplayCS(1);
+    }
 }

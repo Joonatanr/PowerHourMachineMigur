@@ -39,11 +39,15 @@ typedef enum
     NUMBER_OF_FONTS
 } FontType_t;
 
+/* Legacy conversion */
+#define FONT_MEDIUM_FONT FONT_COURIER_14
+
 extern const tFont PowerHourFont;
 extern const tFont Courier16Bold;
 
 
 extern U8 font_getCharWidth(char asc, FontType_t font);
+extern U8 font_getFontHeight(FontType_t font);
 extern const tFont * font_get_font_ptr(FontType_t font);
 
 

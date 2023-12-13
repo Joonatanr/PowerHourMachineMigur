@@ -30,14 +30,22 @@
 
 #define DISPLAY_WIDTH 162u
 #define DISPLAY_HEIGHT 132u
+#define DISPLAY_CENTER ((DISPLAY_WIDTH / 2u) + 4u)
 
 
 extern void display_init(void);
 
 extern U16 * display_get_frame_buffer(void);
 extern void display_flushBuffer(U8 x, U8 y, U8 width, U8 height);
+extern void display_drawBitmapCenter(const U16 * src_ptr, U16 centerPoint, U16 y, U8 width, U8 height);
 extern void display_drawImage(U8 x, U8 y, U8 width, U8 height, const U16 * src_ptr);
 extern void display_fill(U16 color);
+Public void display_fillRectangle(U8 x, U8 y, U8 width, U8 height, U16 color);
+extern void display_clear(void);
 
+
+extern U16 disp_background_color;
+extern U16 disp_text_color;
+extern U16 disp_highlight_color;
 
 #endif /* HW_DISPLAY_H_ */

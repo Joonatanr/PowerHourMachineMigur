@@ -13,6 +13,8 @@
 #include "backlight.h"
 #include "Scheduler.h"
 
+#include "Menus/Menu.h"
+
 /**
  * main.c
  */
@@ -29,11 +31,49 @@ Private void display_test(void);
 
 Private void timer_50msec_callback(void);
 Private void showStartScreen(void);
+Private void showDedicationText(void);
+Private void startGameHandler(void);
+Private void startSnakeGame(void);
 
 /* TODO : These neeed to be accessed elsewhere as well.*/
-Private U16 priv_background_color = COLOR_BLACK;
-Private U16 priv_text_color = COLOR_GREEN;
+U16 disp_background_color = COLOR_BLACK;
+U16 disp_text_color = COLOR_GREEN;
+U16 disp_highlight_color = COLOR_MAGENTA;
 
+
+/* Settings Menu Items */
+Private const MenuItem SettingsMenuItemArray[] =
+{
+   { .text = "Brightness",    .Action = MENU_ACTION_WIDGET  , .ActionArg.bargraph_ptr = &BRIGHTNESS_BARGRAPH        },
+   { .text = "Snake speed",   .Action = MENU_ACTION_WIDGET  , .ActionArg.bargraph_ptr = &SNAKE_SPEED_BARGRAPH      },
+   { .text = "Task frequency",.Action = MENU_ACTION_WIDGET  , .ActionArg.bargraph_ptr = &TASK_FREQUENCY_BARGRAPH    }
+};
+
+Private SelectionMenu SettingsMenu =
+{
+     .items = SettingsMenuItemArray,
+     .number_of_items = NUMBER_OF_ITEMS(SettingsMenuItemArray),
+     .selected_item = 0u
+};
+
+
+/** Start Menu Items.*/
+Private const MenuItem StartMenuItemArray[] =
+{
+   { .text = "Start Game",  .Action = MENU_ACTION_FUNCTION    , .ActionArg.function_ptr =   startGameHandler        },
+   { .text = "Play Snake",  .Action = MENU_ACTION_FUNCTION    , .ActionArg.function_ptr =   startSnakeGame          },
+   { .text = "Settings",    .Action = MENU_ACTION_SUBMENU     , .ActionArg.subMenu_ptr  =   &SettingsMenu           },
+   { .text = "About",       .Action = MENU_ACTION_FUNCTION    , .ActionArg.function_ptr =   &showDedicationText     },
+};
+
+Private SelectionMenu StartMenu =
+{
+     .items = StartMenuItemArray,
+     .number_of_items = NUMBER_OF_ITEMS(StartMenuItemArray),
+     .selected_item = 0u,
+};
+
+/** End of Start Menu Items. */
 
 
 void main(void)
@@ -63,6 +103,9 @@ void main(void)
     showStartScreen();
     timer_delay_msec(4000);
 
+    /* We pass control over to the menu handler. */
+    menu_enterMenu(&StartMenu);
+
     /* Sleeping when not in use */
 	for(;;)
 	{
@@ -75,6 +118,11 @@ void main(void)
 	}
 }
 
+Public void returnToMain(void)
+{
+    Scheduler_StopActiveApplication();
+    menu_enterMenu(&StartMenu);
+}
 
 Public void timer_1msec_callback(void)
 {
@@ -102,11 +150,11 @@ Private void showStartScreen(void)
     timer_delay_msec(6000u);
 #endif
 
-    display_fill(priv_background_color);
+    display_fill(disp_background_color);
 
-    LcdWriter_drawStringCenter("Power Hour", (DISPLAY_WIDTH / 2u) + 4u, 30u, FONT_COURIER_16_BOLD, priv_text_color, priv_background_color);
-    LcdWriter_drawStringCenter(priv_version_string, (DISPLAY_WIDTH / 2u) + 4u, 50u, FONT_COURIER_16_BOLD, priv_text_color, priv_background_color);
-    LcdWriter_drawStringCenter("Migur Edition", (DISPLAY_WIDTH / 2u) + 4u, 70u, FONT_COURIER_14, priv_text_color, priv_background_color);
+    LcdWriter_drawStringCenter("Power Hour", (DISPLAY_WIDTH / 2u) + 4u, 30u, FONT_COURIER_16_BOLD, disp_text_color, disp_background_color);
+    LcdWriter_drawStringCenter(priv_version_string, (DISPLAY_WIDTH / 2u) + 4u, 50u, FONT_COURIER_16_BOLD, disp_text_color, disp_background_color);
+    LcdWriter_drawStringCenter("Migur Edition", (DISPLAY_WIDTH / 2u) + 4u, 70u, FONT_COURIER_14, disp_text_color, disp_background_color);
 }
 
 #ifdef DISPLAY_TEST
@@ -144,3 +192,42 @@ Private void display_test(void)
     LcdWriter_drawColoredString("First\nSecond", 10, 40, FONT_COURIER_14, COLOR_RED, COLOR_YELLOW);
 }
 #endif
+
+
+/** Placeholders **/
+Private U16 dummy_task_frequency = 3u;
+Private U16 dummy_snake_speed = 4u;
+
+Public void clockDisplay_setTaskFrequency(U16 value)
+{
+    dummy_task_frequency = value;
+}
+
+Public U16 clockDisplay_getTaskFrequency(void)
+{
+    return dummy_task_frequency;
+}
+
+Public void snake_setSpeed(U16 value)
+{
+    dummy_snake_speed = value;
+}
+
+/* Starts the main Power Hour game. */
+Private void startGameHandler(void)
+{
+    //Scheduler_SetActiveApplication(APPLICATION_POWER_HOUR);
+}
+
+/* Starts the snake game. */
+Private void startSnakeGame(void)
+{
+    //Scheduler_SetActiveApplication(APPLICATION_SNAKE);
+}
+
+/* TODO */
+Private void showDedicationText(void)
+{
+    /* Turns out we can't do this without making this into a dummy application for some reason. */
+    Scheduler_SetActiveApplication(APPLICATION_DEDICATION);
+}

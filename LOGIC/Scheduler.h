@@ -14,15 +14,15 @@
 
 typedef void (*Scheduler_TaskFunc)(void);
 
-#if 0
+
 typedef enum
 {
-    APPLICATION_POWER_HOUR,
-    APPLICATION_SNAKE,
+    //APPLICATION_POWER_HOUR,
+    //APPLICATION_SNAKE,
     APPLICATION_DEDICATION,
     NUMBER_OF_APPLICATIONS
 } Scheduler_LogicModuleEnum;
-#endif
+
 
 typedef enum
 {
@@ -45,8 +45,10 @@ extern void Scheduler_initTasks(void);
 extern void Scheduler_cyclic(void);
 extern void Scheduler_StartTasks(void);
 
-//extern void Scheduler_SetActiveApplication(Scheduler_LogicModuleEnum task);
-//extern void Scheduler_StopActiveApplication(void);
-//extern void Scheduler_SetActiveApplicationPause(Boolean pause);
+extern void Scheduler_SetActiveApplication(Scheduler_LogicModuleEnum task);
+extern void Scheduler_StopActiveApplication(void);
+extern void Scheduler_SetActiveApplicationPause(Boolean pause);
+
+extern void returnToMain(void);
 
 #endif /* LOGIC_SCHEDULER_H_ */

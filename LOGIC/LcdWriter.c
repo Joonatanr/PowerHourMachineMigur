@@ -7,6 +7,7 @@
 
 #include "LcdWriter.h"
 #include "display.h"
+#include "MISC\misc.h"
 
 /* Distance between the y coordinates of two consecutive lines in a string. */
 Private U16 priv_line_distance = 18u;
@@ -42,6 +43,7 @@ Public U8 LcdWriter_drawCharColored(char c, int x, int y, FontType_t font, U16 f
     U8 res = 0u;
     U8 ix;
 
+
     if(c >= 0x20u)
     {
         U16 index = c - 0x20;
@@ -49,6 +51,11 @@ Public U8 LcdWriter_drawCharColored(char c, int x, int y, FontType_t font, U16 f
         if (font < NUMBER_OF_FONTS)
         {
             const tFont * font_ptr = font_get_font_ptr(font);
+
+            if (( (x + font_getCharWidth(c, font)) >= DISPLAY_WIDTH) || ((y + font_getFontHeight(font)) >= DISPLAY_HEIGHT))
+            {
+                return 0u;
+            }
 
             memcpy(priv_char_buf, font_ptr->chars[index].image->data, font_ptr->chars[index].image->height * font_ptr->chars[index].image->width * sizeof(U16));
 
@@ -167,3 +174,63 @@ Public void LcdWriter_drawStringCenter(const char * str, U8 centerPoint, U8 yloc
     }
 }
 
+
+/* Retain name for legacy purposes... */
+Public void display_drawStringCenter(const char * str, U8 centerPoint, U8 yloc, FontType_t font, Boolean isInverted)
+{
+    if (isInverted)
+    {
+        LcdWriter_drawStringCenter(str, centerPoint, yloc, font, disp_background_color, disp_text_color);
+    }
+    else
+    {
+        LcdWriter_drawStringCenter(str, centerPoint, yloc, font, disp_text_color, disp_background_color);
+    }
+}
+
+
+Public void display_drawString(const char * str, U8 x, U8 y, FontType_t font, Boolean isInverted)
+{
+    if (isInverted)
+    {
+        LcdWriter_drawColoredString(str, x, y, font, disp_background_color, disp_text_color);
+    }
+    else
+    {
+        LcdWriter_drawColoredString(str, x, y, font, disp_text_color, disp_background_color);
+    }
+}
+
+
+/* Return true, if successful, false, otherwise. */
+Public Boolean display_drawTextBox(const Rectangle * box, const char * str, FontType_t font)
+{
+    U8 box_center_x;
+    U8 box_center_y;
+    U8 str_height = font_getFontHeight(font);
+    /* First we clear the previous value. */
+    //display_fillRectangle(box->location.x, box->location.y, box->size.height, box->size.width, PATTERN_WHITE);
+    display_fillRectangle(box->location.x, box->location.y, box->size.height, box->size.width, disp_background_color);
+
+    /* Check if string will fit in the box. */
+    if ((str_height > box->size.height) || (LcdWriter_getStringWidth(str, font) > box->size.width))
+    {
+        /* This should not normally happen, so we use the gray pattern to indicate that the box is too small. */
+        //display_fillRectangle(box->location.x, box->location.y, box->size.height, box->size.width, PATTERN_GRAY);
+        display_fillRectangle(box->location.x, box->location.y, box->size.height, box->size.width, COLOR_YELLOW);
+        return FALSE;
+    }
+    else
+    {
+        /* We draw the string to the center. */
+        box_center_x = box->location.x + (box->size.width / 2);
+        box_center_y = box->location.y + (box->size.height / 2);
+
+
+        //display_drawStringCenter(str, box_center_x, box_center_y - (str_height / 2) , font, FALSE);
+        /* Currently we draw a string to the center of the box. */
+        display_drawStringCenter(str, box_center_x, GET_Y_FROM_CENTER(box_center_y, str_height), font, FALSE);
+        //display_fillRectangle(box->location.x, box->location.y, box->size.height, box->size.width, PATTERN_GRAY);
+        return TRUE;
+    }
+}

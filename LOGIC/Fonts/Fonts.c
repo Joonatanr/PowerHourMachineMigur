@@ -34,3 +34,11 @@ Public U8 font_getCharWidth(char asc, FontType_t font)
 
     return res;
 }
+
+Public U8 font_getFontHeight(FontType_t font)
+{
+    const tFont * font_info_ptr = priv_fonts[font];
+    U8 res = font_info_ptr->chars[0].image->height;
+
+    return res;
+}
