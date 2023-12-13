@@ -8,6 +8,7 @@
 #include "PowerHourMain.h"
 #include "display.h"
 #include "LcdWriter.h"
+#include "Buzzer.h"
 
 #define CLOCK_X_OFFSET 10u
 #define CLOCK_Y_OFFSET 20u
@@ -29,11 +30,15 @@ Public void powerHour_start(void)
 {
     display_clear();
     drawClock();
-    //LcdWriter_drawCharColored('0', CLOCK_X_OFFSET, CLOCK_Y_OFFSET, FONT_TNR_HUGE_NUMBERS, disp_text_color, disp_background_color);
 }
 
 Public void powerHour_cyclic1000msec(void)
 {
+    if (priv_curr_second == 59u)
+    {
+        buzzer_playBeeps(3u);
+    }
+
     incrementTimer();
     drawClock();
 }
