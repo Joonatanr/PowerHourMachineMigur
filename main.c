@@ -11,15 +11,18 @@
 #include "BitmapHandler.h"
 #include "LcdWriter.h"
 #include "backlight.h"
+#include "Scheduler.h"
 
 /**
  * main.c
  */
 
-Private U8 priv_1sec_flag = 0u;
+Private U8 priv_50msec_flag = 0u;
 Private U16 priv_msec_counter = 0u;
 
 Private void display_test(void);
+Private void timer_50msec_callback(void);
+Private void showStartScreen(void);
 
 void main(void)
 {
@@ -31,22 +34,31 @@ void main(void)
     //Set backlight to 60 percent.
     backlight_set_level(60);
 
-
 	timer_delay_msec(1000u);
     /* Initialize the SD Card reader*/
     SdCardHandlerInit();
 
-    /* Load a bitmap and display it on the screen. */
-    display_test();
+    /* Initialize the main scheduler. */
+    Scheduler_initTasks();
+
+    timer_delay_msec(100);
+
+    //Start all scheduler task
+    Scheduler_StartTasks();
+    timer_delay_msec(100);
+
+    //We show the initial start screen for a while.
+    showStartScreen();
+    timer_delay_msec(4000);
 
     /* Sleeping when not in use */
 	for(;;)
 	{
 	    /* Trap CPU... */
-	    if (priv_1sec_flag == 1u)
+	    if (priv_50msec_flag == 1u)
 	    {
-	        priv_1sec_flag = 0u;
-	        timer_1sec_callback();
+	        priv_50msec_flag = 0u;
+	        timer_50msec_callback();
 	    }
 	}
 }
@@ -57,22 +69,24 @@ Public void timer_1msec_callback(void)
     disk_timerproc();
 
     priv_msec_counter++;
-    if (priv_msec_counter >= 1000u)
+    if (priv_msec_counter >= 50u)
     {
         priv_msec_counter = 0u;
-        priv_1sec_flag = 1u;
+        priv_50msec_flag = 1u;
     }
 }
 
-Public void timer_1sec_callback(void)
+Private void timer_50msec_callback(void)
 {
-
+    Scheduler_cyclic();
 }
 
-
-
-
-
+Private void showStartScreen(void)
+{
+    /* TODO : Placeholder. */
+    /* Load a bitmap and display it on the screen. */
+    display_test();
+}
 
 Private void display_test(void)
 {

@@ -48,8 +48,6 @@ Public void hwmain_init(void)
     ports_set_led_two_green(0u);
     ports_set_led_two_red(0u);
 
-    buttons_init();
-
     backlight_init();
 
     pot_init();
