@@ -5,15 +5,14 @@
  *      Author: JRE
  */
 
-//#include <LOGIC/PowerHourGame/clockDisplay.h>
-//#include <LOGIC/SnakeGame/SnakeMain.h>
-//#include "LOGIC/TextTools/MessageBox.h"
 #include "Scheduler.h"
 #include "buzzer.h"
 #include "buttons.h"
 #include <driverlib.h>
 #include "LcdWriter.h"
 #include "display.h"
+
+#include "PowerHourMain.h"
 
 /* NB! Current implementation assumes that only 1 task is active at any time, but this can be changed ofcourse. */
 /* NB! All lo prio interrupt tasks should come here. I think there is no point to create a separate scheduler for the
@@ -35,9 +34,9 @@ Private void dedicationExitListener(void);
 /* Ok : Idea is this that this array contains the tasks, of which only one can be active at a time. */
 Private const Scheduler_LogicTask priv_application_modules[NUMBER_OF_APPLICATIONS] =
 {
-     //{ .period = 1000u, .init_fptr = clockDisplay_init, .start_fptr = clockDisplay_start, .cyclic_fptr = clockDisplay_cyclic1000msec, .stop_fptr = clockDisplay_stop },
+     { .period = 1000u, .init_fptr = powerHour_init, .  start_fptr = powerHour_start,   .cyclic_fptr = powerHour_cyclic1000msec,    .stop_fptr = powerHour_stop },
      //{ .period = 50u,   .init_fptr = snake_init,        .start_fptr = snake_start,        .cyclic_fptr = snake_cyclic50ms,            .stop_fptr = snake_stop        },
-     { .period = 50u,   .init_fptr = NULL,              .start_fptr = dedication_start,   .cyclic_fptr = dedication_cyclic50ms,       .stop_fptr = NULL              },
+     { .period = 50u,   .init_fptr = NULL,              .start_fptr = dedication_start,   .cyclic_fptr = dedication_cyclic50ms,      .stop_fptr = NULL          },
 };
 
 

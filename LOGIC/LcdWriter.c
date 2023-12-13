@@ -11,7 +11,7 @@
 
 /* Distance between the y coordinates of two consecutive lines in a string. */
 Private U16 priv_line_distance = 18u;
-Private U16 priv_char_buf[256u];
+Private U16 priv_char_buf[1320u * 2u];
 
 
 
@@ -41,12 +41,28 @@ Public U8 LcdWriter_drawChar(char c, int x, int y, FontType_t font)
 Public U8 LcdWriter_drawCharColored(char c, int x, int y, FontType_t font, U16 foreground, U16 background)
 {
     U8 res = 0u;
-    U8 ix;
-
+    U32 ix;
+    U16 index;
+    U16 total_size;
 
     if(c >= 0x20u)
     {
-        U16 index = c - 0x20;
+        if (font == FONT_TNR_HUGE_NUMBERS)
+        {
+           /* Special case... */
+           if (c >= '0' && c <= ':')
+           {
+               index = c- '0';
+           }
+           else
+           {
+               return 0;
+           }
+        }
+        else
+        {
+            index = c - 0x20;
+        }
 
         if (font < NUMBER_OF_FONTS)
         {
@@ -57,9 +73,11 @@ Public U8 LcdWriter_drawCharColored(char c, int x, int y, FontType_t font, U16 f
                 return 0u;
             }
 
+            total_size = font_ptr->chars[index].image->height * font_ptr->chars[index].image->width * sizeof(U16);
+
             memcpy(priv_char_buf, font_ptr->chars[index].image->data, font_ptr->chars[index].image->height * font_ptr->chars[index].image->width * sizeof(U16));
 
-            for (ix = 0u; ix < font_ptr->chars[index].image->width * font_ptr->chars[index].image->height; ix++)
+            for (ix = 0u; ix < total_size; ix++)
             {
                 if (priv_char_buf[ix] == 0xffffu)
                 {

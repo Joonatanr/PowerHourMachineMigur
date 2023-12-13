@@ -19,7 +19,7 @@
  * main.c
  */
 
-//#define DISPLAY_TEST
+#define DISPLAY_TEST
 
 Private U8 priv_50msec_flag = 0u;
 Private U16 priv_msec_counter = 0u;
@@ -216,7 +216,7 @@ Public void snake_setSpeed(U16 value)
 /* Starts the main Power Hour game. */
 Private void startGameHandler(void)
 {
-    //Scheduler_SetActiveApplication(APPLICATION_POWER_HOUR);
+    Scheduler_SetActiveApplication(APPLICATION_POWER_HOUR);
 }
 
 /* Starts the snake game. */
