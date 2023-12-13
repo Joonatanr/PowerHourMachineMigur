@@ -13,10 +13,6 @@
 #include "driverlib.h"
 
 
-#define DISPLAY_WIDTH 162
-#define DISPLAY_HEIGHT 132
-
-
 Private U16 priv_frame_buf[132][162];
 //Private U16 priv_frame_buf[162][132];
 /*
@@ -246,6 +242,15 @@ void LCD_RectangleRainbow(unsigned short x1, unsigned short y1, unsigned short x
 void LCD_DrawFrameBuffer(U8 xOffset, U8 yOffset, U8 width, U8 height)
 {
     display_drawImage(xOffset, yOffset, width, height, &priv_frame_buf[0][0]);
+}
+
+/******************************************************* Public functions ***************************************************/
+
+Public void display_fill(U16 color)
+{
+    setDisplayCS(0);
+    LCD_Rectangle(0,0,162,132,color);
+    setDisplayCS(1);
 }
 
 /* TODO : This is currently a placeholder API. */

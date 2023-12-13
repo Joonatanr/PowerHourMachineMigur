@@ -28,12 +28,16 @@
 #define COLOR_WHITE    CONVERT_888RGB_TO_565BGR(255,255,255 )
 
 
+#define DISPLAY_WIDTH 162u
+#define DISPLAY_HEIGHT 132u
+
 
 extern void display_init(void);
 
 extern U16 * display_get_frame_buffer(void);
 extern void display_flushBuffer(U8 x, U8 y, U8 width, U8 height);
 extern void display_drawImage(U8 x, U8 y, U8 width, U8 height, const U16 * src_ptr);
+extern void display_fill(U16 color);
 
 
 #endif /* HW_DISPLAY_H_ */

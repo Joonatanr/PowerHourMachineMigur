@@ -12,10 +12,7 @@
 Private U16 priv_line_distance = 18u;
 Private U16 priv_char_buf[256u];
 
-Private const tFont * myFonts[NUMBER_OF_FONTS] =
-{
-     &PowerHourFont, /* FONT_COURIER_14 */
-};
+
 
 
 Public U8 LcdWriter_drawChar(char c, int x, int y, FontType_t font)
@@ -28,7 +25,7 @@ Public U8 LcdWriter_drawChar(char c, int x, int y, FontType_t font)
 
         if (font < NUMBER_OF_FONTS)
         {
-            const tFont * font_ptr = myFonts[font];
+            const tFont * font_ptr = font_get_font_ptr(font);
             display_drawImage(x, y, font_ptr->chars[index].image->width,
                               font_ptr->chars[index].image->height,
                               font_ptr->chars[index].image->data);
@@ -51,7 +48,7 @@ Public U8 LcdWriter_drawCharColored(char c, int x, int y, FontType_t font, U16 f
 
         if (font < NUMBER_OF_FONTS)
         {
-            const tFont * font_ptr = myFonts[font];
+            const tFont * font_ptr = font_get_font_ptr(font);
 
             memcpy(priv_char_buf, font_ptr->chars[index].image->data, font_ptr->chars[index].image->height * font_ptr->chars[index].image->width * sizeof(U16));
 
@@ -103,11 +100,11 @@ Public void LcdWriter_drawString(char * str, int x, int y, FontType_t font)
     }
 }
 
-Public void LcdWriter_drawColoredString(char * str, int x, int y, FontType_t font, U16 foreground, U16 background)
+Public void LcdWriter_drawColoredString(const char * str, int x, int y, FontType_t font, U16 foreground, U16 background)
 {
     U16 xCoord = x;
     U16 yCoord = y;
-    char * str_ptr = str;
+    const char * str_ptr = str;
 
     while(*str_ptr)
     {
@@ -126,4 +123,47 @@ Public void LcdWriter_drawColoredString(char * str, int x, int y, FontType_t fon
     }
 }
 
+Public U16 LcdWriter_getStringWidth(const char * str, FontType_t font)
+{
+    const char *ps = str;
+    U8 width = 0u;
+
+    while(*ps)
+    {
+        if (*ps == '\n')
+        {
+            break;
+        }
+
+        width += font_getCharWidth(*ps, font);
+        width++; //Account for one bit in between chars.
+        ps++;
+    }
+
+    return width;
+}
+
+//Draws string around the centerPoint.
+Public void LcdWriter_drawStringCenter(const char * str, U8 centerPoint, U8 yloc, FontType_t font, U16 foreground, U16 background)
+{
+    U16 str_width; //String width in bits.
+    U8 begin_point;
+    if(str != NULL)
+    {
+        str_width = LcdWriter_getStringWidth(str, font);
+        str_width = str_width >> 1u; //Divide with 2.
+
+        if (str_width > centerPoint)
+        {
+            //String is too large to fit to display anyway.
+            begin_point = 0u;
+        }
+        else
+        {
+            begin_point = centerPoint - str_width;
+        }
+
+        LcdWriter_drawColoredString(str, begin_point, yloc, font, foreground, background);
+    }
+}
 

@@ -17,12 +17,24 @@
  * main.c
  */
 
+//#define DISPLAY_TEST
+
 Private U8 priv_50msec_flag = 0u;
 Private U16 priv_msec_counter = 0u;
+Private const char priv_version_string[] = "Machine 4.0";
 
+#ifdef DISPLAY_TEST
 Private void display_test(void);
+#endif
+
 Private void timer_50msec_callback(void);
 Private void showStartScreen(void);
+
+/* TODO : These neeed to be accessed elsewhere as well.*/
+Private U16 priv_background_color = COLOR_BLACK;
+Private U16 priv_text_color = COLOR_GREEN;
+
+
 
 void main(void)
 {
@@ -85,9 +97,19 @@ Private void showStartScreen(void)
 {
     /* TODO : Placeholder. */
     /* Load a bitmap and display it on the screen. */
+#ifdef DISPLAY_TEST
     display_test();
+    timer_delay_msec(6000u);
+#endif
+
+    display_fill(priv_background_color);
+
+    LcdWriter_drawStringCenter("Power Hour", (DISPLAY_WIDTH / 2u) + 4u, 30u, FONT_COURIER_16_BOLD, priv_text_color, priv_background_color);
+    LcdWriter_drawStringCenter(priv_version_string, (DISPLAY_WIDTH / 2u) + 4u, 50u, FONT_COURIER_16_BOLD, priv_text_color, priv_background_color);
+    LcdWriter_drawStringCenter("Migur Edition", (DISPLAY_WIDTH / 2u) + 4u, 70u, FONT_COURIER_14, priv_text_color, priv_background_color);
 }
 
+#ifdef DISPLAY_TEST
 Private void display_test(void)
 {
     U16 * disp_buffer_ptr = display_get_frame_buffer();
@@ -121,3 +143,4 @@ Private void display_test(void)
     //LcdWriter_drawCharColored('A', 5, 70, FONT_COURIER_14, 0xF000, 0xFFFFu);
     LcdWriter_drawColoredString("First\nSecond", 10, 40, FONT_COURIER_14, COLOR_RED, COLOR_YELLOW);
 }
+#endif
