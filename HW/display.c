@@ -195,18 +195,12 @@ void LCD_SetArea(unsigned short x1, unsigned short y1, unsigned short x2, unsign
 void LCD_Rectangle(unsigned short x1, unsigned short y1, unsigned short x2, unsigned short y2, unsigned short colour)
 {
     int x, y;
+    U32 total_area = (x2-x1) * (y2-y1);
 
     LCD_SetArea(x1,y1,x2,y2);
     LCD_Command(0x2C);
 
-    for (y=y1; y <= y2; y++)
-    {
-        for (x=x1; x <= x2; x++)
-        {
-            LCD_Data_Byte(colour >> 8);
-            LCD_Data_Byte(colour & 0xFF);
-        }
-    }
+    spidrv_transmitU16constValue(colour, total_area);
 }
 
 

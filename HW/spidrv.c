@@ -85,6 +85,32 @@ Public void spidrv_transmitU16(const U16 * data, U32 data_len)
     SPI_enableInterrupt(EUSCI_B0_BASE, EUSCI_B_SPI_RECEIVE_INTERRUPT);
 }
 
+Public void spidrv_transmitU16constValue(const U16 data, U32 data_len)
+{
+    U32 buf_len = data_len;
+
+    /* TODO : Since this is time critical, maybe disable all interrupts here?
+     * Though we still probably need at least the timer interrupts to be active.
+     *
+     * Consider at least disabling the ADC interrupts, because otherwise these might take up a lot of time during transmission.
+     * In any case the ADC interrupts should be configured not to trigger non-stop.
+     * */
+    SPI_disableInterrupt(EUSCI_B0_BASE, EUSCI_B_SPI_RECEIVE_INTERRUPT);
+
+    while (buf_len > 0)
+    {
+        while(BITBAND_PERI(EUSCI_B_CMSIS(EUSCI_B0_BASE)->STATW, EUSCI_B_STATW_BBUSY_OFS));
+        __delay_cycles(10);
+        EUSCI_B_CMSIS(EUSCI_B0_BASE)->TXBUF = data >> 8u;
+        while(BITBAND_PERI(EUSCI_B_CMSIS(EUSCI_B0_BASE)->STATW, EUSCI_B_STATW_BBUSY_OFS));
+        __delay_cycles(10);
+        EUSCI_B_CMSIS(EUSCI_B0_BASE)->TXBUF = data & 0xffu;
+        buf_len--;
+    }
+
+    SPI_enableInterrupt(EUSCI_B0_BASE, EUSCI_B_SPI_RECEIVE_INTERRUPT);
+}
+
 
 Public void SPI_Write_Byte(uint32_t SPI, U8 byte)
 {
