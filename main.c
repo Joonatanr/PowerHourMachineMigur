@@ -10,6 +10,7 @@
 #include "fatfs/diskio.h"
 #include "BitmapHandler.h"
 #include "LcdWriter.h"
+#include "backlight.h"
 
 /**
  * main.c
@@ -26,6 +27,10 @@ void main(void)
 
 	/* Test sequence for TFT display. */
 	display_init();
+
+    //Set backlight to 60 percent.
+    backlight_set_level(60);
+
 
 	timer_delay_msec(1000u);
     /* Initialize the SD Card reader*/
@@ -61,8 +66,12 @@ Public void timer_1msec_callback(void)
 
 Public void timer_1sec_callback(void)
 {
-    /* TODO */
+
 }
+
+
+
+
 
 
 Private void display_test(void)

@@ -178,7 +178,6 @@ Private void LCD_Init(void)
     LCD_DrawFrameBuffer(0u, 0u, 162u, 132u);
 
     setDisplayCS(1);
-    setBL(1u);
 }
 
 

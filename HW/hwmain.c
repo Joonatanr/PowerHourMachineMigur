@@ -14,6 +14,7 @@
 #include "buttons.h"
 #include "spidrv.h"
 #include "UART_Driver.h"
+#include "backlight.h"
 
 //#define MAIN_CLK_TEST
 
@@ -48,6 +49,8 @@ Public void hwmain_init(void)
     ports_set_led_two_red(0u);
 
     buttons_init();
+
+    backlight_init();
 
     pot_init();
 

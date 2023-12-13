@@ -26,6 +26,5 @@ extern void setRS(U8 state);
 extern void setDisplayCS(U8 state);
 extern void setSdCardCS(U8 state);
 
-extern void setBL(U8 state);
 
 #endif /* HW_PORTS_H_ */
