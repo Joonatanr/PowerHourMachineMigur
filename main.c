@@ -27,6 +27,7 @@ void main(void)
 	/* Test sequence for TFT display. */
 	display_init();
 
+	timer_delay_msec(1000u);
     /* Initialize the SD Card reader*/
     SdCardHandlerInit();
 
@@ -48,8 +49,6 @@ void main(void)
 
 Public void timer_1msec_callback(void)
 {
-    ports_set_led_one(ports_isBtnOne());
-    ports_set_led_two_green(ports_isBtnTwo());
     disk_timerproc();
 
     priv_msec_counter++;
@@ -62,19 +61,7 @@ Public void timer_1msec_callback(void)
 
 Public void timer_1sec_callback(void)
 {
-    static U8 toggle = 0u;
-    toggle = !toggle;
-    ports_set_led_two_blue(toggle);
-    if (toggle)
-    {
-        GPIO_setOutputHighOnPin(GPIO_PORT_P3, GPIO_PIN6);
-        GPIO_setOutputHighOnPin(GPIO_PORT_P3, GPIO_PIN7);
-    }
-    else
-    {
-        GPIO_setOutputLowOnPin(GPIO_PORT_P3, GPIO_PIN6);
-        GPIO_setOutputLowOnPin(GPIO_PORT_P3, GPIO_PIN7);
-    }
+    /* TODO */
 }
 
 

@@ -27,6 +27,7 @@ Public void ports_init(void)
 
     /* Setup SD card chip select pin. */
     GPIO_setAsOutputPin(GPIO_PORT_P5, GPIO_PIN1);
+    GPIO_setOutputLowOnPin(GPIO_PORT_P5, GPIO_PIN1);
 
     /* Set up the display BL pin. */
     GPIO_setAsOutputPin(GPIO_PORT_P5, GPIO_PIN7);

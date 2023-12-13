@@ -35,9 +35,18 @@ FILINFO FI;
 Public void SdCardHandlerInit(void)
 {
     FRESULT r;
+    U8 ix;
 
-    /*First we should mount the SD Card into the Fatfs file system*/
-    r = f_mount(&FS, "0", 1);
+    for(ix = 0u; ix < 3u; ix++)
+    {
+        /*First we should mount the SD Card into the Fatfs file system*/
+        r = f_mount(&FS, "0", 1);
+        if (r == FR_OK)
+        {
+            break;
+        }
+    }
+
     /*Check for errors. Trap MSP432 if there is an error*/
     if(r != FR_OK)
     {

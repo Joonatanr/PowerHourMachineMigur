@@ -9,6 +9,7 @@
 #include "driverlib.h"
 #include "ports.h"
 #include "pot.h"
+#include "buttons.h"
 
 /*****************************************************************************************************
  *
@@ -97,5 +98,15 @@ Private void TA1_0_IRQHandler(void)
 {
     Timer_A_clearCaptureCompareInterrupt(TIMER_A1_BASE, TIMER_A_CAPTURECOMPARE_REGISTER_0);
     pot_cyclic_10ms();
+
+    buttons_cyclic10msec();
+
+    //ports_set_led_one(ports_isBtnOne());
+    //ports_set_led_two_green(ports_isBtnTwo());
+    ports_set_led_one(isButton(BLACK_BUTTON));
+    ports_set_led_two_green(isButton(GREEN_BUTTON));
+    ports_set_led_two_blue(isButton(BLUE_BUTTON));
+    ports_set_led_two_red(isButton(RED_BUTTON));
+
 }
 
