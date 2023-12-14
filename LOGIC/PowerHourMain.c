@@ -10,6 +10,7 @@
 #include "LcdWriter.h"
 #include "Buzzer.h"
 #include "Bitmaps/Bitmaps.h"
+#include "systimer.h"
 
 #define DISABLE_BUZZER_FOR_TESTING
 
@@ -45,7 +46,7 @@
 #define TEXT_AREA_Y_END DISPLAY_HEIGHT - 1u
 
 
-
+volatile U32 maximum_cyclic_period = 0u;
 
 
 
@@ -94,8 +95,13 @@ Public void powerHour_start(void)
     drawTextOnLine("there is a task for all the girls", 1u);
 }
 
+Private U32 cyclic_begin_timestamp;
+Private U32 cyclic_end_timestamp;
+
 Public void powerHour_cyclic1000msec(void)
 {
+    cyclic_begin_timestamp = systimer_getTimestamp();
+
     if (priv_curr_second == 59u)
     {
 #ifndef DISABLE_BUZZER_FOR_TESTING
@@ -113,6 +119,9 @@ Public void powerHour_cyclic1000msec(void)
         priv_beershot_counter = 0u;
     }
     drawBeerShot(priv_beershot_counter);
+
+    cyclic_end_timestamp = systimer_getTimestamp();
+    maximum_cyclic_period = MAX(maximum_cyclic_period, cyclic_end_timestamp - cyclic_begin_timestamp);
 }
 
 Public void powerHour_stop(void)
@@ -136,11 +145,6 @@ Private void drawBorders(void)
 {
     display_fillRectangle(CLOCK_AREA_X_BEGIN, CLOCK_AREA_Y_END, DISPLAY_WIDTH, BORDER_WIDTH, disp_text_color);
     display_fillRectangle(CLOCK_AREA_X_END, CLOCK_AREA_Y_BEGIN, BORDER_WIDTH, CLOCK_AREA_Y_END, disp_text_color);
-
-
-    //display_fillRectangle(CLOCK_AREA_X_END, CLOCK_AREA_Y_BEGIN, BORDER_WIDTH, 100u, disp_text_color);
-
-    //display_fillRectangle(TEXT_AREA_X_END, TEXT_AREA_Y_BEGIN, BORDER_WIDTH - 1u, TEXT_AREA_Y_END, disp_text_color);
 }
 
 

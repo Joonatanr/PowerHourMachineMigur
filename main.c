@@ -12,6 +12,7 @@
 #include "LcdWriter.h"
 #include "backlight.h"
 #include "Scheduler.h"
+#include "systimer.h"
 
 #include "Menus/Menu.h"
 

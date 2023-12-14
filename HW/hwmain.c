@@ -15,6 +15,7 @@
 #include "spidrv.h"
 #include "UART_Driver.h"
 #include "backlight.h"
+#include "systimer.h"
 
 //#define MAIN_CLK_TEST
 
@@ -40,6 +41,8 @@ Public void hwmain_init(void)
     Interrupt_disableMaster();
 
     clocks_init();
+
+    systimer_init();
 
     ports_init();
 
