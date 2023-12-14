@@ -135,6 +135,7 @@ Public void timer_1msec_callback(void)
     {
         priv_msec_counter = 0u;
         priv_50msec_flag = 1u;
+        Scheduler_50msec_timer();
     }
 }
 

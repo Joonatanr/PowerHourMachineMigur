@@ -11,6 +11,8 @@
 #include "Buzzer.h"
 #include "Bitmaps/Bitmaps.h"
 #include "systimer.h"
+#include "BitmapHandler.h"
+#include "timer.h"
 
 #define DISABLE_BUZZER_FOR_TESTING
 
@@ -95,8 +97,9 @@ Public void powerHour_start(void)
     drawTextOnLine("there is a task for all the girls", 1u);
 }
 
-Private U32 cyclic_begin_timestamp;
-Private U32 cyclic_end_timestamp;
+Private volatile U32 cyclic_begin_timestamp;
+Private volatile U32 cyclic_end_timestamp;
+
 
 Public void powerHour_cyclic1000msec(void)
 {

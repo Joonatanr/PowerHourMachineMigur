@@ -28,6 +28,7 @@ typedef enum
 {
     TASK_CYCLIC100MS_BUZZER,
     TASK_CYCLIC100MS_BUTTONS,
+    TASK_CYCLIC100MS_BITMAP_LOADER,
 
     NUMBER_OF_SCHEDULER_TASKS
 } Scheduler_LogicTaskEnum;
@@ -44,6 +45,7 @@ typedef struct
 extern void Scheduler_initTasks(void);
 extern void Scheduler_cyclic(void);
 extern void Scheduler_StartTasks(void);
+extern void Scheduler_50msec_timer(void);
 
 extern void Scheduler_SetActiveApplication(Scheduler_LogicModuleEnum task);
 extern void Scheduler_StopActiveApplication(void);

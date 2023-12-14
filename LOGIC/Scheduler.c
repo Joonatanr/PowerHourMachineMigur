@@ -11,6 +11,7 @@
 #include <driverlib.h>
 #include "LcdWriter.h"
 #include "display.h"
+#include "BitmapHandler.h"
 
 #include "PowerHourMain.h"
 
@@ -34,9 +35,9 @@ Private void dedicationExitListener(void);
 /* Ok : Idea is this that this array contains the tasks, of which only one can be active at a time. */
 Private const Scheduler_LogicTask priv_application_modules[NUMBER_OF_APPLICATIONS] =
 {
-     { .period = 1000u, .init_fptr = powerHour_init, .  start_fptr = powerHour_start,   .cyclic_fptr = powerHour_cyclic1000msec,    .stop_fptr = powerHour_stop },
+     { .period = 20u, .init_fptr = powerHour_init, .  start_fptr = powerHour_start,   .cyclic_fptr = powerHour_cyclic1000msec,    .stop_fptr = powerHour_stop },
      //{ .period = 50u,   .init_fptr = snake_init,        .start_fptr = snake_start,        .cyclic_fptr = snake_cyclic50ms,            .stop_fptr = snake_stop        },
-     { .period = 50u,   .init_fptr = NULL,              .start_fptr = dedication_start,   .cyclic_fptr = dedication_cyclic50ms,      .stop_fptr = NULL          },
+     { .period = 1u,  .init_fptr = NULL,              .start_fptr = dedication_start,   .cyclic_fptr = dedication_cyclic50ms,      .stop_fptr = NULL          },
 };
 
 
@@ -45,14 +46,15 @@ Private const Scheduler_LogicTask priv_application_modules[NUMBER_OF_APPLICATION
 /* Small incremental changes :) - So lets enable the modules part first and then look at this part. */
 Private const Scheduler_LogicTask priv_tasks[NUMBER_OF_SCHEDULER_TASKS] =
 {
-     { .period = 100u,  .init_fptr = buzzer_init,       .start_fptr = NULL,          .cyclic_fptr = buzzer_cyclic100msec,     .stop_fptr = NULL  }, /* Buzzer task.      */
-     { .period = 100u,  .init_fptr = buttons_init,      .start_fptr = NULL,          .cyclic_fptr = buttons_cyclic100msec,    .stop_fptr = NULL  }, /* Buttons task      */
+     { .period = 2u,  .init_fptr = buzzer_init,       .start_fptr = NULL,          .cyclic_fptr = buzzer_cyclic100msec,     .stop_fptr = NULL  }, /* Buzzer task.       */
+     { .period = 2u,  .init_fptr = buttons_init,      .start_fptr = NULL,          .cyclic_fptr = buttons_cyclic100msec,    .stop_fptr = NULL  }, /* Buttons task       */
+     { .period = 2u,  .init_fptr = NULL,              .start_fptr = NULL,          .cyclic_fptr = BitmapLoaderCyclic100ms,  .stop_fptr = NULL  }, /* Bitmap loader task */
 };
 
 
 /*************  Private variable declarations.  **************/
 Private const Scheduler_LogicTask * priv_curr_app_ptr = NULL;
-Private U16 priv_app_task_timer = 0u;
+Private U32 priv_app_task_timer = 0u;
 Private U32 priv_task_timer = 0u;
 Private Boolean priv_isInitComplete = FALSE;
 Private Boolean priv_isAppPaused = FALSE;
@@ -151,28 +153,19 @@ void Scheduler_SetActiveApplicationPause(Boolean pause)
 void Scheduler_cyclic(void)
 {
     U8 ix;
+    U32 task_timer = priv_task_timer;
+    U32 app_task_timer = priv_app_task_timer;
+
     if (priv_isInitComplete == FALSE)
     {
         return;
     }
 
-    priv_app_task_timer += SCHEDULER_PERIOD;
-    priv_task_timer += SCHEDULER_PERIOD;
-
-    /* Prevent overflow. */
-    if (priv_app_task_timer > 50000u)
-    {
-        priv_app_task_timer = SCHEDULER_PERIOD;
-    }
-
     /* Deal with the current active logical module. */
     if (priv_curr_app_ptr != NULL)
     {
-        /* TODO : Review this, it will not work with a period of for example 20 .*/
-        /* Might be good enough for testing. */
-        if ((priv_app_task_timer % priv_curr_app_ptr->period) == 0u)
+        if ((app_task_timer % priv_curr_app_ptr->period) == 0u)
         {
-            priv_app_task_timer = 0u;
             if (priv_curr_app_ptr->cyclic_fptr != NULL)
             {
                 /* Pause can happen for example because we are waiting for user input... */
@@ -190,7 +183,7 @@ void Scheduler_cyclic(void)
         /* No point to check this, if there is no corresponding function... */
         if (priv_tasks[ix].cyclic_fptr != NULL)
         {
-            if ((priv_task_timer % priv_tasks[ix].period) == 0u)
+            if ((task_timer % priv_tasks[ix].period) == 0u)
             {
                 priv_tasks[ix].cyclic_fptr();
             }
@@ -198,7 +191,12 @@ void Scheduler_cyclic(void)
     }
 }
 
-
+Public void Scheduler_50msec_timer(void)
+{
+    /* TODO : Really need to improve the scheduler's timekeeping method... This is quite a poor idea. */
+    priv_app_task_timer++;
+    priv_task_timer++;
+}
 
 /**************************  Private functions ***********************/
 

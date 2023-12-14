@@ -33,3 +33,9 @@ Public U32 systimer_getTimestamp(void)
     res = (0xFFFFFFFF - curValue) / 187u;
     return res;
 }
+
+
+Public U32 systimer_getPeriod(U32 start_time)
+{
+    return systimer_getTimestamp() - start_time;
+}

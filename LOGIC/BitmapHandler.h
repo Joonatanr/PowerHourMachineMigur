@@ -11,7 +11,11 @@
 
 #include "typedefs.h"
 
+typedef void(*BitmapLoaderCallback)(void);
 
-Public Boolean LoadBitmap(const char * path, U16 * dest);
+
+extern Boolean LoadBitmap(const char * path, U16 * dest);
+extern Boolean StartCyclicBitmapLoad(const char * path, U16 * dest, BitmapLoaderCallback cb);
+extern void BitmapLoaderCyclic100ms(void);
 
 #endif /* LOGIC_BITMAPHANDLER_H_ */
