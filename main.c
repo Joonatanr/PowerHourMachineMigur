@@ -19,7 +19,7 @@
  * main.c
  */
 
-#define DISPLAY_TEST
+//#define DISPLAY_TEST
 
 Private U8 priv_50msec_flag = 0u;
 Private U16 priv_msec_counter = 0u;

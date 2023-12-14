@@ -255,7 +255,7 @@ Public void display_fill(U16 color)
 Public void display_fillRectangle(U8 x, U8 y, U8 width, U8 height, U16 color)
 {
     setDisplayCS(0);
-    LCD_Rectangle(x, y, width, height, color);
+    LCD_Rectangle(x, y, x + width, y + height, color);
     setDisplayCS(1);
 }
 
