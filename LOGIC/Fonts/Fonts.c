@@ -2,9 +2,10 @@
 
 Private const tFont * priv_fonts[NUMBER_OF_FONTS] =
 {
-     &PowerHourFont, /* FONT_COURIER_14 */
-     &Courier16Bold, /* FONT_COURIER_16_BOLD */
-     &ClockFont      /* FONT_TNR_HUGE_NUMBERS */
+     &SmallFont,     /* FONT_SMALL_FONT_10      */
+     &PowerHourFont, /* FONT_COURIER_14         */
+     &Courier16Bold, /* FONT_COURIER_16_BOLD    */
+     &ClockFont      /* FONT_TNR_HUGE_NUMBERS   */
 };
 
 

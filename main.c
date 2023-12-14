@@ -39,6 +39,7 @@ Private void startSnakeGame(void);
 U16 disp_background_color = COLOR_BLACK;
 U16 disp_text_color = COLOR_GREEN;
 U16 disp_highlight_color = COLOR_MAGENTA;
+U16 disp_ph_prompt_text_color = COLOR_RED;
 
 
 /* Settings Menu Items */

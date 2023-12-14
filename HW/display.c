@@ -194,13 +194,24 @@ void LCD_SetArea(unsigned short x1, unsigned short y1, unsigned short x2, unsign
 
 void LCD_Rectangle(unsigned short x1, unsigned short y1, unsigned short x2, unsigned short y2, unsigned short colour)
 {
-    int x, y;
-    U32 total_area = (x2-x1) * (y2-y1);
+    //int x, y;
+    U32 total_area = (x2-x1+1u) * (y2-y1+1u);
 
     LCD_SetArea(x1,y1,x2,y2);
     LCD_Command(0x2C);
 
     spidrv_transmitU16constValue(colour, total_area);
+
+#if 0
+    for (y=y1; y <= y2; y++)
+    {
+        for (x=x1; x <= x2; x++)
+        {
+            LCD_Data_Byte(colour >> 8);
+            LCD_Data_Byte(colour & 0xFF);
+        }
+    }
+#endif
 }
 
 
@@ -255,7 +266,7 @@ Public void display_fill(U16 color)
 Public void display_fillRectangle(U8 x, U8 y, U8 width, U8 height, U16 color)
 {
     setDisplayCS(0);
-    LCD_Rectangle(x, y, x + width, y + height, color);
+    LCD_Rectangle(x, y, (x + width) - 1u, (y + height) - 1u, color);
     setDisplayCS(1);
 }
 

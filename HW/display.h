@@ -47,5 +47,6 @@ extern void display_clear(void);
 extern U16 disp_background_color;
 extern U16 disp_text_color;
 extern U16 disp_highlight_color;
+extern U16 disp_ph_prompt_text_color;
 
 #endif /* HW_DISPLAY_H_ */

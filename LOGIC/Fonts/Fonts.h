@@ -34,7 +34,8 @@
 
 typedef enum
 {
-    FONT_COURIER_14,
+    FONT_SMALL_FONT_10,
+    FONT_COURIER_14, /* TODO : Is this actually necessary? */
     FONT_COURIER_16_BOLD,
     FONT_TNR_HUGE_NUMBERS,
     NUMBER_OF_FONTS
@@ -46,6 +47,7 @@ typedef enum
 extern const tFont PowerHourFont;
 extern const tFont Courier16Bold;
 extern const tFont ClockFont;
+extern const tFont SmallFont;
 
 
 extern U8 font_getCharWidth(char asc, FontType_t font);
