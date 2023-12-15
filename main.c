@@ -65,6 +65,7 @@ Private SelectionMenu ColorMenu =
      .selected_item = 0u,
      .initial_select_func = getSelectedColorScheme,
      .isCheckedMenu = TRUE,
+     .isTransparentMenu = FALSE,
 };
 
 Private const MenuItem SettingsMenuItemArray[] =
@@ -82,6 +83,7 @@ Private SelectionMenu SettingsMenu =
      .selected_item = 0u,
      .initial_select_func = NULL,
      .isCheckedMenu = FALSE,
+     .isTransparentMenu = FALSE,
 };
 
 
@@ -101,6 +103,7 @@ Private SelectionMenu StartMenu =
      .selected_item = 0u,
      .initial_select_func = NULL,
      .isCheckedMenu = FALSE,
+     .isTransparentMenu = TRUE, /* Just for experimenting, probably will not really use this. */
 };
 
 /** End of Start Menu Items. */
@@ -136,7 +139,7 @@ void main(void)
 
     //We show the initial start screen for a while.
     showStartScreen();
-    timer_delay_msec(4000);
+
 
     /* We pass control over to the menu handler. */
     menu_enterMenu(&StartMenu);
@@ -188,9 +191,16 @@ Private void showStartScreen(void)
 
     display_fill(disp_background_color);
 
-    LcdWriter_drawStringCenter("Power Hour", (DISPLAY_WIDTH / 2u) + 4u, 30u, FONT_ARIAL_16_BOLD, disp_text_color, disp_background_color);
-    LcdWriter_drawStringCenter(priv_version_string, (DISPLAY_WIDTH / 2u) + 4u, 50u, FONT_ARIAL_16_BOLD, disp_text_color, disp_background_color);
-    LcdWriter_drawStringCenter("Migur Edition", (DISPLAY_WIDTH / 2u) + 4u, 70u, FONT_COURIER_14, disp_text_color, disp_background_color);
+    BitmapHandler_LoadBitmap("/Migurid/Migurid1.bmp", display_get_frame_buffer());
+    display_flushBuffer(0u, 0u, 162u, 132u);
+    timer_delay_msec(5000u);
+
+    LcdWriter_drawStringCenter("Power Hour", (DISPLAY_WIDTH / 2u) + 4u, 40u, FONT_ARIAL_16_BOLD, disp_text_color, disp_background_color);
+    LcdWriter_drawStringCenter(priv_version_string, (DISPLAY_WIDTH / 2u) + 4u, 60u, FONT_ARIAL_16_BOLD, disp_text_color, disp_background_color);
+    LcdWriter_drawStringCenter("Migur Edition", (DISPLAY_WIDTH / 2u) + 4u, 80u, FONT_COURIER_14, disp_text_color, disp_background_color);
+
+    timer_delay_msec(4000);
+    display_flushBuffer(0u, 0u, 162u, 132u);
 }
 
 #ifdef DISPLAY_TEST

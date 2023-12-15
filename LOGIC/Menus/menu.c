@@ -13,7 +13,7 @@
 #include "buttons.h"
 #include "Bargraph.h"
 
-#define MENU_FONT FONT_MEDIUM_FONT
+#define MENU_FONT FONT_LARGE_FONT
 
 /***** Private function definitions ***********/
 
@@ -34,8 +34,6 @@ Private SelectionMenu * priv_active_menu_ptr = NULL;
 Public void menu_enterMenu(SelectionMenu * menu)
 {
     priv_active_menu_ptr = menu;
-
-    display_clear();
 
     if( menu->initial_select_func != NULL)
     {
@@ -165,7 +163,10 @@ Private void drawMenu(SelectionMenu * menu)
 
 Private void drawMenuAndBackground(SelectionMenu * menu)
 {
-    display_clear();
+    if (!menu->isTransparentMenu)
+    {
+        display_clear();
+    }
     drawMenu(menu);
 }
 

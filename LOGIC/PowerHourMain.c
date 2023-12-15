@@ -19,7 +19,7 @@
 
 #define ENABLE_BORDERS
 
-#define DISABLE_BUZZER_FOR_TESTING
+//#define DISABLE_BUZZER_FOR_TESTING
 
 #define CLOCK_X_OFFSET 3u
 #define CLOCK_Y_OFFSET 15u
@@ -384,6 +384,9 @@ Public void powerHour_cyclic1000msec(void)
                 priv_override_counter = 0u;
             }
 
+            drawBeerShot(action);
+            drawClock();
+
             /* Here is where we start to pre-emptively load the bitmap for the next minute if necessary. Best not to do it too early when the display buffer might still be used. */
             if (priv_curr_second == 30u)
             {
@@ -392,9 +395,6 @@ Public void powerHour_cyclic1000msec(void)
                     handlePreemptiveBitmapLoad();
                 }
             }
-
-            drawBeerShot(action);
-            drawClock();
 
             break;
         case CONTROLLER_OVERRIDDEN:
@@ -498,7 +498,7 @@ Private Boolean guysSpecialIntro(U8 sec)
     sequence.isInverted = FALSE;
     sequence.text_font = FONT_MEDIUM_FONT;
     sequence.text_str = "Round for the Guys!";
-    sequence.text_x = 10u;
+    sequence.text_x = 5u;
     sequence.text_y = 5u;
 
     return genericIntroFunction(&sequence, sec);
@@ -512,7 +512,7 @@ Private Boolean girlsSpecialIntro(U8 sec)
     sequence.isInverted = FALSE;
     sequence.text_font = FONT_MEDIUM_FONT;
     sequence.text_str = "Round for the Girls!";
-    sequence.text_x = 10u;
+    sequence.text_x = 5u;
     sequence.text_y = 5u;
 
     return genericIntroFunction(&sequence, sec);
@@ -526,7 +526,7 @@ Private Boolean EverybodySpecialIntro(U8 sec)
     sequence.isInverted = FALSE;
     sequence.text_font = FONT_MEDIUM_FONT;
     sequence.text_str = "Round for Everybody!";
-    sequence.text_x = 10u;
+    sequence.text_x = 5u;
     sequence.text_y = 5u;
 
     return genericIntroFunction(&sequence, sec);
@@ -540,7 +540,7 @@ Private Boolean KaisaSpecialIntro(U8 sec)
     sequence.isInverted = FALSE;
     sequence.text_font = FONT_MEDIUM_FONT;
     sequence.text_str = "Round for Kaisa!";
-    sequence.text_x = 10u;
+    sequence.text_x = 5u;
     sequence.text_y = 5u;
 
     return genericIntroFunction(&sequence, sec);
@@ -719,6 +719,9 @@ Private void drawBeerShot(beerShotAction action)
            priv_beershot_counter = NUMBER_OF_BEERSHOT_IMAGES - 1u;
            priv_beer_state = BEERSHOT_EMPTYING;
            break;
+       case OVERRIDE_FUNCTION:
+           /* This is a hack... */
+           priv_beer_state = BEERSHOT_FILLING;
        case BEERSHOT_NO_ACTION:
        default:
            break;
@@ -805,7 +808,7 @@ Private void drawTextOnLine(const char * text, int line)
         /* Clear any previous text. */
         display_fillRectangle(TEXT_AREA_X_BEGIN, TEXT_AREA_Y_BEGIN + (line * TEXT_LINE_DISTANCE), TEXT_AREA_X_END - TEXT_AREA_X_BEGIN,TEXT_LINE_DISTANCE, disp_background_color);
 
-        LcdWriter_drawColoredString(text, TEXT_X_OFFSET, TEXT_AREA_Y_BEGIN + TEXT_Y_OFFSET + (line * TEXT_LINE_DISTANCE), FONT_SMALL_FONT_10, disp_ph_prompt_text_color, disp_background_color);
+        LcdWriter_drawColoredString(text, TEXT_X_OFFSET, TEXT_AREA_Y_BEGIN + TEXT_Y_OFFSET + (line * TEXT_LINE_DISTANCE), FONT_SMALL_FONT_12, disp_ph_prompt_text_color, disp_background_color);
     }
 }
 

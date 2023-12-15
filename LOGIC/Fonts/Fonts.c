@@ -2,7 +2,8 @@
 
 Private const tFont * priv_fonts[NUMBER_OF_FONTS] =
 {
-     &SmallFont,     /* FONT_SMALL_FONT_10      */
+     &FontSmall12,   /* FONT_SMALL_FONT_10      */
+     &Arial12,
      &PowerHourFont, /* FONT_COURIER_14         */
      &FontLargeText, /* FONT_COURIER_16_BOLD    */
      &ClockFont      /* FONT_TNR_HUGE_NUMBERS   */

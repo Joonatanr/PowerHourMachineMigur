@@ -24,6 +24,8 @@
 #define SMALL_SHOT_Y 32u
 #define SMALL_SHOT_INTERVAL 20u
 
+#define SPECIALTASK_FONT FONT_LARGE_FONT
+
 
 /*****************************************************************************************************
  *
@@ -906,8 +908,8 @@ Private Boolean DrinkTwiceTask(U8 sec, SpecialTaskType type)
                break;
        }
 
-       display_drawStringCenter(priv_str_buf, DISPLAY_CENTER, 2u, FONT_LARGE_FONT, FALSE);
-       display_drawStringCenter("2x", DISPLAY_CENTER ,20u, FONT_LARGE_FONT, FALSE);
+       display_drawStringCenter(priv_str_buf, DISPLAY_CENTER, 2u, SPECIALTASK_FONT, FALSE);
+       display_drawStringCenter("2x", DISPLAY_CENTER ,20u, SPECIALTASK_FONT, FALSE);
        break;
     case (2u):
         display_drawTimageCenter(&laudur, DISPLAY_CENTER - SMALL_SHOT_INTERVAL, SMALL_SHOT_Y);
@@ -967,11 +969,11 @@ Private Boolean DrinkWaterTask(U8 sec, SpecialTaskType type)
                break;
        }
 
-       display_drawStringCenter(priv_str_buf, 64u, 2u, FONT_LARGE_FONT, FALSE);
-       display_drawStringCenter("a glass of water", 64u ,20u, FONT_LARGE_FONT, FALSE);
+       display_drawStringCenter(priv_str_buf, DISPLAY_CENTER, 2u, SPECIALTASK_FONT, FALSE);
+       display_drawStringCenter("a glass of water", DISPLAY_CENTER ,20u, SPECIALTASK_FONT, FALSE);
        break;
     case (2u):
-        display_drawTimageCenter(&laudur, 64, SMALL_SHOT_Y);
+        display_drawTimageCenter(&laudur, DISPLAY_CENTER, SMALL_SHOT_Y);
        break;
     case(10u):
        res = TRUE;
@@ -1037,17 +1039,17 @@ Private Boolean SpecialTaskWithRandomText(U8 sec, SpecialTaskType type)
         case (2u):
             {
                 display_clear();
-                display_drawStringCenter(priv_task_str_ptr->upper_text, DISPLAY_CENTER, 30u, FONT_MEDIUM_FONT, FALSE);
+                display_drawStringCenter(priv_task_str_ptr->upper_text, DISPLAY_CENTER, 30u, SPECIALTASK_FONT, FALSE);
             }
             break;
         case (3u):
             {
-                display_drawStringCenter(priv_task_str_ptr->middle_text, DISPLAY_CENTER, 60u, FONT_MEDIUM_FONT, FALSE);
+                display_drawStringCenter(priv_task_str_ptr->middle_text, DISPLAY_CENTER, 60u, SPECIALTASK_FONT, FALSE);
             }
             break;
         case(4u):
             {
-                display_drawStringCenter(priv_task_str_ptr->lower_text, DISPLAY_CENTER, 90u, FONT_MEDIUM_FONT, FALSE);
+                display_drawStringCenter(priv_task_str_ptr->lower_text, DISPLAY_CENTER, 90u, SPECIALTASK_FONT, FALSE);
             }
             break;
         case (8u):
@@ -1055,9 +1057,9 @@ Private Boolean SpecialTaskWithRandomText(U8 sec, SpecialTaskType type)
                 if ((pot_getSelectedRange(POTENTIOMETER_SEXY_LEVEL) == 0u) && (pot_getSelectedRange(POTENTIOMETER_NUDE_LEVEL) == 0u) && (pot_getSelectedRange(POTENTIOMETER_RAINBOW_LEVEL) == 0u))
                 {
                     display_clear();
-                    display_drawStringCenter("Come on guys!", 64u, 4u, FONT_MEDIUM_FONT, FALSE);
-                    display_drawStringCenter("don't be pussies!", 64u, 23u, FONT_MEDIUM_FONT, FALSE);
-                    display_drawStringCenter("Turn up some sexy!", 64u, 43u, FONT_MEDIUM_FONT, FALSE);
+                    display_drawStringCenter("Come on guys!", DISPLAY_CENTER, 4u, SPECIALTASK_FONT, FALSE);
+                    display_drawStringCenter("don't be pussies!", DISPLAY_CENTER, 23u, SPECIALTASK_FONT, FALSE);
+                    display_drawStringCenter("Turn up some sexy!", DISPLAY_CENTER, 43u, SPECIALTASK_FONT, FALSE);
                 }
             }
             break;

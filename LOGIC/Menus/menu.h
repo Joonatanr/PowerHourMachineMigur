@@ -50,6 +50,7 @@ typedef struct _Selection_Menu_
 
     MenuGetInitialValueSelectFunc initial_select_func;
     Boolean isCheckedMenu;
+    Boolean isTransparentMenu;
 
 } SelectionMenu;
 
