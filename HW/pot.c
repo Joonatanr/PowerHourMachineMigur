@@ -267,7 +267,8 @@ Public int pot_getSelectedRange(potentiometer_T pot)
 {
     if(pot < NUMBER_OF_DEFINED_POTENTIOMETERS)
     {
-        return currentRange[pot];
+        /* Currently the potentiometers are inverted. Not really a problem to fix it here... */
+        return 3 - currentRange[pot];
     }
     else
     {

@@ -36,17 +36,17 @@ typedef enum
 {
     FONT_SMALL_FONT_10,
     FONT_COURIER_14, /* TODO : Is this actually necessary? */
-    FONT_COURIER_16_BOLD,
+    FONT_ARIAL_16_BOLD,
     FONT_TNR_HUGE_NUMBERS,
     NUMBER_OF_FONTS
 } FontType_t;
 
 /* Legacy conversion */
 #define FONT_MEDIUM_FONT FONT_COURIER_14
-#define FONT_LARGE_FONT FONT_COURIER_16_BOLD
+#define FONT_LARGE_FONT FONT_ARIAL_16_BOLD
 
 extern const tFont PowerHourFont;
-extern const tFont Courier16Bold;
+extern const tFont FontLargeText;
 extern const tFont ClockFont;
 extern const tFont SmallFont;
 

@@ -324,10 +324,12 @@ Public void powerHour_cyclic1000msec(void)
     const ControllerEvent * event_ptr = NULL;
     beerShotAction action = BEERSHOT_NO_ACTION;
 
+#ifndef DISABLE_BUZZER_FOR_TESTING
     if (priv_curr_second == 59u)
     {
         buzzer_playBeeps(3u);
     }
+#endif
 
     //Game ends and we enter final state.
     if (priv_curr_minute == 60u)
@@ -427,6 +429,16 @@ Public void powerHour_stop(void)
 }
 
 
+Public void powerHour_setTaskFrequency(U16 freq)
+{
+    priv_task_frequency = freq;
+}
+
+Public U16 powerHour_getTaskFrequency(void)
+{
+    return priv_task_frequency;
+}
+
 
 /*****************************************************************************************************
  *
@@ -508,7 +520,7 @@ Private Boolean EverybodySpecialIntro(U8 sec)
 
     sequence.isInverted = FALSE;
     sequence.text_font = FONT_MEDIUM_FONT;
-    sequence.text_str = "Round for the Everybody!";
+    sequence.text_str = "Round for Everybody!";
     sequence.text_x = 10u;
     sequence.text_y = 5u;
 
@@ -522,7 +534,7 @@ Private Boolean KaisaSpecialIntro(U8 sec)
 
     sequence.isInverted = FALSE;
     sequence.text_font = FONT_MEDIUM_FONT;
-    sequence.text_str = "Round for the Kaisa!";
+    sequence.text_str = "Round for Kaisa!";
     sequence.text_x = 10u;
     sequence.text_y = 5u;
 

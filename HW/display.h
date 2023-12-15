@@ -45,7 +45,7 @@ extern void display_fill(U16 color);
 extern void display_fillRectangle(U8 x, U8 y, U8 width, U8 height, U16 color);
 extern void display_clear(void);
 
-
+/* Customizable colors. */
 extern U16 disp_background_color;
 extern U16 disp_text_color;
 extern U16 disp_highlight_color;

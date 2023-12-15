@@ -11,20 +11,19 @@
 #include "display.h"
 #include "LcdWriter.h"
 #include "MISC/misc.h"
-//#include "LOGIC/PowerHourGame/clockDisplay.h"
+#include "PowerHourMain.h"
+
 //#include <LOGIC/SnakeGame/SnakeMain.h>
 
-#define BARGRAPH_BEGIN_X    14u
+#define BARGRAPH_BEGIN_X    31u
 #define BARGRAPH_WIDTH     100u
-#define BARGRAPH_HEIGHT      4u
-#define BARGRAPH_OFFSET_Y   53u
+#define BARGRAPH_HEIGHT      8u
+#define BARGRAPH_OFFSET_Y   80u
 
-#define UP_ARROW_OFFSET_Y   14u
-#define DOWN_ARROW_OFFSET_Y 40u
+#define UP_ARROW_OFFSET_Y   30u
+#define DOWN_ARROW_OFFSET_Y 60u
 
-#define NUMBER_OFFSET_Y     25u
-#define NUMBER_BOX_WIDTH    30u
-#define NUMBER_BOX_HEIGHT   14u
+#define NUMBER_OFFSET_Y     40u
 
 
 
@@ -64,21 +63,14 @@ Public Bargraph_T TASK_FREQUENCY_BARGRAPH =
      .value = 2u,
      .parent = NULL,
      .text = "Task Frequency (minutes)",
-     .value_changed = clockDisplay_setTaskFrequency,
-     .value_initial_fptr = clockDisplay_getTaskFrequency
+     .value_changed = powerHour_setTaskFrequency,
+     .value_initial_fptr = powerHour_getTaskFrequency
 };
 
 /*******************/
 
 Private Bargraph_T * priv_active_bar;
 Private char priv_buf[10];
-
-Private const Rectangle priv_number_box =
-{
-     .location = { GET_X_FROM_CENTER(64u, NUMBER_BOX_WIDTH), NUMBER_OFFSET_Y   },
-     .size =     { NUMBER_BOX_HEIGHT,                        NUMBER_BOX_WIDTH  }
-};
-
 
 
 Private const U16 priv_up_arrow_bmp[5][9] =
@@ -152,14 +144,14 @@ Private void drawBarGraph(void)
     //Draw the line
     /* We clear it first. */
     //display_fillRectangle(BARGRAPH_BEGIN_X, BARGRAPH_OFFSET_Y , BARGRAPH_HEIGHT, BARGRAPH_WIDTH, PATTERN_WHITE);
-    display_fillRectangle(BARGRAPH_BEGIN_X, BARGRAPH_OFFSET_Y , BARGRAPH_HEIGHT, BARGRAPH_WIDTH, disp_background_color);
+    display_fillRectangle(BARGRAPH_BEGIN_X, BARGRAPH_OFFSET_Y, BARGRAPH_WIDTH, BARGRAPH_HEIGHT , COLOR_RED);
 
     /* Then draw the actual line. */
-    display_fillRectangle(BARGRAPH_BEGIN_X, BARGRAPH_OFFSET_Y , BARGRAPH_HEIGHT, percentage, disp_highlight_color);
+    display_fillRectangle(BARGRAPH_BEGIN_X, BARGRAPH_OFFSET_Y , percentage, BARGRAPH_HEIGHT , disp_highlight_color);
 
     //Draw the number.
     long2string(priv_active_bar->value, priv_buf);
-    display_drawTextBox(&priv_number_box, priv_buf, FONT_MEDIUM_FONT);
+    display_drawStringCenter(priv_buf, DISPLAY_CENTER, NUMBER_OFFSET_Y, FONT_MEDIUM_FONT, FALSE);
 }
 
 
@@ -169,15 +161,13 @@ Private void drawBackGround(void)
     display_clear();
 
     //Draw title
-    display_drawStringCenter(priv_active_bar->text, 63u, 1u, FONT_COURIER_14 , FALSE);
+    display_drawStringCenter(priv_active_bar->text, DISPLAY_CENTER, 10u, FONT_SMALL_FONT_10 , FALSE);
 
     //Draw up arrow.
-    //display_drawBitmapCenter(&upArrowBitmap, 64u, UP_ARROW_OFFSET_Y , FALSE);
-    display_drawBitmapCenter(&priv_up_arrow_bmp[0][0], (DISPLAY_WIDTH / 2) + 4u, UP_ARROW_OFFSET_Y, 9u, 5u);
+    display_drawBitmapCenter(&priv_up_arrow_bmp[0][0], DISPLAY_CENTER, UP_ARROW_OFFSET_Y, 9u, 5u);
 
     //Draw down arrow.
-    display_drawBitmapCenter(&priv_down_arrow_bmp[0][0], (DISPLAY_WIDTH / 2) + 4u, DOWN_ARROW_OFFSET_Y, 9u, 5u);
-    //display_drawBitmapCenter(&downArrowBitmap, 64u, DOWN_ARROW_OFFSET_Y, FALSE);
+    display_drawBitmapCenter(&priv_down_arrow_bmp[0][0], DISPLAY_CENTER, DOWN_ARROW_OFFSET_Y, 9u, 5u);
 }
 
 

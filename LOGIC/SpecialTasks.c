@@ -1009,17 +1009,17 @@ Private Boolean SpecialTaskWithRandomText(U8 sec, SpecialTaskType type)
         case (2u):
             {
                 display_clear();
-                display_drawStringCenter(priv_task_str_ptr->upper_text, 64u, 4u, FONT_MEDIUM_FONT, FALSE);
+                display_drawStringCenter(priv_task_str_ptr->upper_text, DISPLAY_CENTER, 30u, FONT_MEDIUM_FONT, FALSE);
             }
             break;
         case (3u):
             {
-                display_drawStringCenter(priv_task_str_ptr->middle_text, 64u, 23u, FONT_MEDIUM_FONT, FALSE);
+                display_drawStringCenter(priv_task_str_ptr->middle_text, DISPLAY_CENTER, 60u, FONT_MEDIUM_FONT, FALSE);
             }
             break;
         case(4u):
             {
-                display_drawStringCenter(priv_task_str_ptr->lower_text, 64u, 43u, FONT_MEDIUM_FONT, FALSE);
+                display_drawStringCenter(priv_task_str_ptr->lower_text, DISPLAY_CENTER, 90u, FONT_MEDIUM_FONT, FALSE);
             }
             break;
         case (8u):

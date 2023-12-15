@@ -13,6 +13,7 @@
 #include "backlight.h"
 #include "Scheduler.h"
 #include "systimer.h"
+#include "pot.h"
 
 #include "Menus/Menu.h"
 
@@ -21,6 +22,7 @@
  */
 
 //#define DISPLAY_TEST
+//#define POT_TEST
 
 Private U8 priv_50msec_flag = 0u;
 Private U16 priv_msec_counter = 0u;
@@ -28,6 +30,10 @@ Private const char priv_version_string[] = "Machine 4.0";
 
 #ifdef DISPLAY_TEST
 Private void display_test(void);
+#endif
+
+#ifdef POT_TEST
+Private void pot_test(void);
 #endif
 
 Private void timer_50msec_callback(void);
@@ -101,6 +107,11 @@ void main(void)
     Scheduler_StartTasks();
     timer_delay_msec(100);
 
+#ifdef POT_TEST
+    timer_delay_msec(200u);
+    pot_test();
+#endif
+
     //We show the initial start screen for a while.
     showStartScreen();
     timer_delay_msec(4000);
@@ -155,8 +166,8 @@ Private void showStartScreen(void)
 
     display_fill(disp_background_color);
 
-    LcdWriter_drawStringCenter("Power Hour", (DISPLAY_WIDTH / 2u) + 4u, 30u, FONT_COURIER_16_BOLD, disp_text_color, disp_background_color);
-    LcdWriter_drawStringCenter(priv_version_string, (DISPLAY_WIDTH / 2u) + 4u, 50u, FONT_COURIER_16_BOLD, disp_text_color, disp_background_color);
+    LcdWriter_drawStringCenter("Power Hour", (DISPLAY_WIDTH / 2u) + 4u, 30u, FONT_ARIAL_16_BOLD, disp_text_color, disp_background_color);
+    LcdWriter_drawStringCenter(priv_version_string, (DISPLAY_WIDTH / 2u) + 4u, 50u, FONT_ARIAL_16_BOLD, disp_text_color, disp_background_color);
     LcdWriter_drawStringCenter("Migur Edition", (DISPLAY_WIDTH / 2u) + 4u, 70u, FONT_COURIER_14, disp_text_color, disp_background_color);
 }
 
@@ -196,20 +207,46 @@ Private void display_test(void)
 }
 #endif
 
+#ifdef POT_TEST
+Private void pot_test(void)
+{
+    char str[64u];
+
+    sprintf(str, "Pot 1: %d", pot_getSelectedRange(POTENTIOMETER_RAINBOW_LEVEL));
+    LcdWriter_drawString(str, 5, 10, FONT_SMALL_FONT_10);
+    sprintf(str, "Pot 2: %d", pot_getSelectedRange(POTENTIOMETER_NUDE_LEVEL));
+    LcdWriter_drawString(str, 5, 30, FONT_SMALL_FONT_10);
+    sprintf(str, "Pot 3: %d", pot_getSelectedRange(POTENTIOMETER_SEXY_LEVEL));
+    LcdWriter_drawString(str, 5, 50, FONT_SMALL_FONT_10);
+    sprintf(str, "Pot 4: %d", pot_getSelectedRange(POTENTIOMETER_KAISA));
+    LcdWriter_drawString(str, 5, 70, FONT_SMALL_FONT_10);
+    sprintf(str, "Pot 5: %d", pot_getSelectedRange(POTENTIOMETER_GIRLS));
+    LcdWriter_drawString(str, 5, 90, FONT_SMALL_FONT_10);
+    sprintf(str, "Pot 6: %d", pot_getSelectedRange(POTENTIOMETER_GUYS));
+    LcdWriter_drawString(str, 5, 110, FONT_SMALL_FONT_10);
+
+    while(1u)
+    {
+       timer_delay_msec(1000u);
+
+       sprintf(str, "Pot 1: %d", pot_getSelectedRange(POTENTIOMETER_RAINBOW_LEVEL));
+       LcdWriter_drawString(str, 5, 10, FONT_SMALL_FONT_10);
+       sprintf(str, "Pot 2: %d", pot_getSelectedRange(POTENTIOMETER_NUDE_LEVEL));
+       LcdWriter_drawString(str, 5, 30, FONT_SMALL_FONT_10);
+       sprintf(str, "Pot 3: %d", pot_getSelectedRange(POTENTIOMETER_SEXY_LEVEL));
+       LcdWriter_drawString(str, 5, 50, FONT_SMALL_FONT_10);
+       sprintf(str, "Pot 4: %d", pot_getSelectedRange(POTENTIOMETER_KAISA));
+       LcdWriter_drawString(str, 5, 70, FONT_SMALL_FONT_10);
+       sprintf(str, "Pot 5: %d", pot_getSelectedRange(POTENTIOMETER_GIRLS));
+       LcdWriter_drawString(str, 5, 90, FONT_SMALL_FONT_10);
+       sprintf(str, "Pot 6: %d", pot_getSelectedRange(POTENTIOMETER_GUYS));
+       LcdWriter_drawString(str, 5, 110, FONT_SMALL_FONT_10);
+    }
+}
+#endif
 
 /** Placeholders **/
-Private U16 dummy_task_frequency = 3u;
 Private U16 dummy_snake_speed = 4u;
-
-Public void clockDisplay_setTaskFrequency(U16 value)
-{
-    dummy_task_frequency = value;
-}
-
-Public U16 clockDisplay_getTaskFrequency(void)
-{
-    return dummy_task_frequency;
-}
 
 Public void snake_setSpeed(U16 value)
 {

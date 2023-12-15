@@ -17,4 +17,7 @@ extern void powerHour_start(void);
 extern void powerHour_cyclic1000msec(void);
 extern void powerHour_stop(void);
 
+extern void powerHour_setTaskFrequency(U16 freq);
+extern U16 powerHour_getTaskFrequency(void);
+
 #endif /* LOGIC_POWERHOURMAIN_H_ */
