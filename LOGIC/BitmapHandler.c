@@ -10,6 +10,7 @@
 #include "MSPIO.h"
 #include "fatfs\ff.h"
 #include "systimer.h"
+#include "timer.h"
 #include <stdlib.h>
 
 
@@ -72,15 +73,6 @@ Private Boolean resumeBitmapRead(void);
 
 /* Storage variable for bitmap paths... */
 
-typedef enum
-{
-    FILES_MEN,
-    FILES_WOMEN,
-    FILES_EVERYBODY,
-    FILES_KAISA,
-
-    NUMBER_OF_FILE_CATEGORIES
-} FileCategory_t;
 
 typedef struct
 {
@@ -98,10 +90,6 @@ BitmapFilesCategory priv_file_list[NUMBER_OF_FILE_CATEGORIES] =
      {.directoryName = "/Kaisa",     .fileNames = NULL, .number_of_files = 0u },
 };
 
-/*
-Private char ** priv_men_bitmaps;
-Private U16 priv_number_of_men_bitmaps;
-*/
 
 /***************************** Public functions  **************************************************/
 
@@ -124,7 +112,8 @@ Public void BitmapHandler_start(void)
     U16 ix = 0u;
     U8 category;
     BitmapFilesCategory * filelist_ptr;
-    /* TODO - So basically we want to get a list of BMP files that are in the specific folders on the SD card. */
+
+    /* Basically we want to get a list of BMP files that are in the specific folders on the SD card. */
 
     for (category = 0u; category < NUMBER_OF_FILE_CATEGORIES; category++)
     {
@@ -175,6 +164,8 @@ Public void BitmapHandler_start(void)
         MSPrintf(EUSCI_A0_BASE, "Finished reading directory : %s \r\n", filelist_ptr->directoryName);
         /* End of debug */
     }
+
+    r = f_closedir(&DI);
 }
 
 
@@ -327,6 +318,22 @@ Public void BitmapLoaderCyclic100ms(void)
     }
 }
 
+/* We return the full path.. */
+Public void BitmapHandler_getRandomBitmapForCategory(FileCategory_t type, char *dest)
+{
+    U16 ix;
+    char * ps = dest;
+
+    if (type < NUMBER_OF_FILE_CATEGORIES)
+    {
+        ix = generate_random_number(priv_file_list[type].number_of_files);
+        strcpy(ps, priv_file_list[type].directoryName);
+        ps += strlen(priv_file_list[type].directoryName);
+        *ps = '/';
+        ps++;
+        strcpy(ps, priv_file_list[type].fileNames[ix]);
+    }
+}
 
 /***************************** Private function definitions *******************************/
 Private Boolean setupBitmapLoad(const char * path)

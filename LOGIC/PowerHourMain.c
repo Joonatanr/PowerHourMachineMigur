@@ -86,6 +86,8 @@ Public void powerHour_init(void)
 
 Public void powerHour_start(void)
 {
+    char test_str[64];
+
     display_clear();
     drawBorders();
 
@@ -95,6 +97,8 @@ Public void powerHour_start(void)
     /* Test drawing a string */
     drawTextOnLine("At the end of this round,", 0u);
     drawTextOnLine("there is a task for all the girls", 1u);
+
+    BitmapHandler_getRandomBitmapForCategory(FILES_WOMEN, test_str);
 }
 
 Private volatile U32 cyclic_begin_timestamp;

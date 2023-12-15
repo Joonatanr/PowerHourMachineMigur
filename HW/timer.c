@@ -10,6 +10,7 @@
 #include "ports.h"
 #include "pot.h"
 #include "buttons.h"
+#include <stdlib.h>
 
 /*****************************************************************************************************
  *
@@ -70,6 +71,45 @@ Public void timer_init(void)
     Interrupt_enableInterrupt(INT_TA1_0);
 }
 
+
+Public U16 generate_random_number_rng(U16 min, U16 max)
+{
+    U16 range = max - min;
+    U16 res = 0u;
+
+    if (range > 0u)
+    {
+        res = generate_random_number(range);
+        res += min;
+    }
+
+    return res;
+}
+
+
+Public U16 generate_random_number(U16 max)
+{
+    static U16 priv_seed = 0u;
+    U16 res;
+    if (priv_seed == 0u)
+    {
+        priv_seed = TA0R ^ TA1R;
+        /* We initialize the pseudo random number generator. */
+        srand(priv_seed);
+    }
+
+    /* Max might actually be legitimately 0 in some calculations. */
+    if (max == 0u)
+    {
+        res = 0u;
+    }
+    else
+    {
+        res =  rand() % (max + 1u);
+    }
+
+    return res;
+}
 
 #pragma FUNCTION_OPTIONS(timer_delay_msec, "--opt_level=off")
 Public void timer_delay_msec(U32 msec)

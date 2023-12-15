@@ -16,4 +16,7 @@ extern void timer_delay_msec(U32 msec);
 extern void timer_1msec_callback(void);
 extern void timer_1sec_callback(void);
 
+extern U16 generate_random_number_rng(U16 min, U16 max);
+extern U16 generate_random_number(U16 max);
+
 #endif /* HW_TIMER_H_ */
