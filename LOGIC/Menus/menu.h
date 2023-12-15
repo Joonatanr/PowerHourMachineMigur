@@ -17,10 +17,12 @@ typedef enum
     MENU_ACTION_SUBMENU,                //We enter a submenu.
     MENU_ACTION_WIDGET,                 //We activate a widget, like a bargraph
     MENU_ACTION_FUNCTION,               //We perform an attached function. This also means that we leave the menu.
+    MENU_ACTION_SELECT,                 //We set this item as selected. /* TODO : Make sure that this is actually necessary */
     NUMBER_OF_MENU_ACTIONS
 } MenuActionType;
 
 typedef void (*MenuActionHandler)(void);
+typedef U16  (*MenuGetInitialValueSelectFunc)(void);
 
 typedef struct
 {
@@ -42,6 +44,11 @@ typedef struct _Selection_Menu_
     const MenuItem * items;
     const U8 number_of_items;
     U8 selected_item;
+    U8 checked_item;
+
+    MenuGetInitialValueSelectFunc initial_select_func;
+    Boolean isCheckedMenu;
+
 } SelectionMenu;
 
 extern void menu_enterMenu(SelectionMenu * menu);
@@ -50,5 +57,8 @@ extern void menu_exitMenu(void);
 extern void menu_setSelectedItem(SelectionMenu * menu, U8 selected_item);
 extern const MenuItem * menu_getSelectedItem(SelectionMenu * menu);
 extern void menu_MoveCursor(SelectionMenu * menu, Boolean dir);
+
+
+extern U16 getSelectedColorScheme(void);
 
 #endif /* LOGIC_MENU_H_ */

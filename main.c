@@ -50,18 +50,36 @@ U16 disp_ph_prompt_text_color = COLOR_RED;
 
 
 /* Settings Menu Items */
+Private const MenuItem ColorMenuItemArray[] =
+{
+     { .text = "Scheme 1",    .Action = MENU_ACTION_SELECT  , .ActionArg.bargraph_ptr = NULL  },
+     { .text = "Scheme 2",    .Action = MENU_ACTION_SELECT  , .ActionArg.bargraph_ptr = NULL  },
+};
+
+Private SelectionMenu ColorMenu =
+{
+     .items = ColorMenuItemArray,
+     .number_of_items = NUMBER_OF_ITEMS(ColorMenuItemArray),
+     .selected_item = 0u,
+     .initial_select_func = getSelectedColorScheme,
+     .isCheckedMenu = TRUE,
+};
+
 Private const MenuItem SettingsMenuItemArray[] =
 {
    { .text = "Brightness",    .Action = MENU_ACTION_WIDGET  , .ActionArg.bargraph_ptr = &BRIGHTNESS_BARGRAPH        },
-   { .text = "Snake speed",   .Action = MENU_ACTION_WIDGET  , .ActionArg.bargraph_ptr = &SNAKE_SPEED_BARGRAPH      },
-   { .text = "Task frequency",.Action = MENU_ACTION_WIDGET  , .ActionArg.bargraph_ptr = &TASK_FREQUENCY_BARGRAPH    }
+   { .text = "Snake speed",   .Action = MENU_ACTION_WIDGET  , .ActionArg.bargraph_ptr = &SNAKE_SPEED_BARGRAPH       },
+   { .text = "Task frequency",.Action = MENU_ACTION_WIDGET  , .ActionArg.bargraph_ptr = &TASK_FREQUENCY_BARGRAPH    },
+   { .text = "Color scheme"  ,.Action = MENU_ACTION_SUBMENU , .ActionArg.subMenu_ptr =  &ColorMenu                  }
 };
 
 Private SelectionMenu SettingsMenu =
 {
      .items = SettingsMenuItemArray,
      .number_of_items = NUMBER_OF_ITEMS(SettingsMenuItemArray),
-     .selected_item = 0u
+     .selected_item = 0u,
+     .initial_select_func = NULL,
+     .isCheckedMenu = FALSE,
 };
 
 
@@ -79,6 +97,8 @@ Private SelectionMenu StartMenu =
      .items = StartMenuItemArray,
      .number_of_items = NUMBER_OF_ITEMS(StartMenuItemArray),
      .selected_item = 0u,
+     .initial_select_func = NULL,
+     .isCheckedMenu = FALSE,
 };
 
 /** End of Start Menu Items. */

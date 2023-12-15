@@ -426,6 +426,7 @@ Public void powerHour_stop(void)
     priv_state = CONTROLLER_INIT;
     priv_curr_minute = 0u;
     priv_curr_second = 0u;
+    SpecialTasks_init();
 }
 
 

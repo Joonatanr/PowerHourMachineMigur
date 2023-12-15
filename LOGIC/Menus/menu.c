@@ -35,6 +35,21 @@ Public void menu_enterMenu(SelectionMenu * menu)
     priv_active_menu_ptr = menu;
 
     display_clear();
+
+    if( menu->initial_select_func != NULL)
+    {
+        menu->selected_item = menu->initial_select_func();
+    }
+    else
+    {
+        menu->selected_item = 0u;
+    }
+
+    if (menu->isCheckedMenu)
+    {
+        menu->checked_item = menu->selected_item;
+    }
+
     drawMenu(priv_active_menu_ptr);
 
     //Subscribe to buttons.
@@ -95,8 +110,8 @@ Public const MenuItem * menu_getSelectedItem(SelectionMenu * menu)
     return &(menu->items[menu->selected_item]);
 }
 
-
 /* Private function definitions. */
+Private char priv_char_buf[64];
 
 Private void drawMenu(SelectionMenu * menu)
 {
@@ -106,6 +121,7 @@ Private void drawMenu(SelectionMenu * menu)
     U8 x;
     U8 font_height;
 
+
     font_height = font_getFontHeight(MENU_FONT);
 
     height = (font_height + 2u) * menu->number_of_items;
@@ -113,14 +129,33 @@ Private void drawMenu(SelectionMenu * menu)
 
     for (x = 0u; x < menu->number_of_items; x++)
     {
-        if(x == menu->selected_item)
+        if(menu->isCheckedMenu)
         {
-            display_drawStringCenter(menu->items[x].text, DISPLAY_CENTER, ypos, MENU_FONT, TRUE);
+            if (x == menu->checked_item)
+            {
+                strcpy(priv_char_buf, "(x)");
+                strcpy(priv_char_buf + 3, menu->items[x].text);
+            }
+            else
+            {
+                strcpy(priv_char_buf, "( )");
+                strcpy(priv_char_buf + 3, menu->items[x].text);
+            }
+
+            display_drawStringCenter(priv_char_buf, DISPLAY_CENTER, ypos, MENU_FONT, (x == menu->selected_item));
         }
         else
         {
-            display_drawStringCenter(menu->items[x].text, DISPLAY_CENTER, ypos, MENU_FONT, FALSE);
+            if (x == menu->selected_item)
+            {
+                display_drawStringCenter(menu->items[x].text, DISPLAY_CENTER, ypos, MENU_FONT, TRUE);
+            }
+            else
+            {
+                display_drawStringCenter(menu->items[x].text, DISPLAY_CENTER, ypos, MENU_FONT, FALSE);
+            }
         }
+
         ypos += font_height;
         ypos += 2u;
     }
@@ -188,5 +223,13 @@ Private void backButtonListener(void)
             menu_enterMenu(priv_active_menu_ptr->parent);
         }
     }
+}
+
+Private U16 priv_selected_color_scheme_index = 0u;
+
+/* Color scheme menu functions. */
+Public U16 getSelectedColorScheme(void)
+{
+    return priv_selected_color_scheme_index;
 }
 
