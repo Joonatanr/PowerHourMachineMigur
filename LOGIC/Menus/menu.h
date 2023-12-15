@@ -22,6 +22,7 @@ typedef enum
 } MenuActionType;
 
 typedef void (*MenuActionHandler)(void);
+typedef void (*MenuActionU16Handler)(U16);
 typedef U16  (*MenuGetInitialValueSelectFunc)(void);
 
 typedef struct
@@ -33,6 +34,7 @@ typedef struct
     {
         struct _Selection_Menu_ *   subMenu_ptr;
         MenuActionHandler          function_ptr;
+        MenuActionU16Handler       function_set_u16_ptr;
         struct __Bargraph__ *      bargraph_ptr;
     } ActionArg;
 
@@ -60,5 +62,6 @@ extern void menu_MoveCursor(SelectionMenu * menu, Boolean dir);
 
 
 extern U16 getSelectedColorScheme(void);
+extern void setSelectedColorSchemeIndex(U16 index);
 
 #endif /* LOGIC_MENU_H_ */

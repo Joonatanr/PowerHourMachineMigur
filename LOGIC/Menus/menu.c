@@ -23,6 +23,7 @@ Private void okButtonListener(void);
 Private void backButtonListener(void);
 
 Private void drawMenu(SelectionMenu * menu);
+Private void drawMenuAndBackground(SelectionMenu * menu);
 
 
 /******Private variable definitions ***********/
@@ -50,7 +51,8 @@ Public void menu_enterMenu(SelectionMenu * menu)
         menu->checked_item = menu->selected_item;
     }
 
-    drawMenu(priv_active_menu_ptr);
+    //drawMenu(priv_active_menu_ptr);
+    drawMenuAndBackground(priv_active_menu_ptr);
 
     //Subscribe to buttons.
     buttons_subscribeListener(UP_BUTTON, upButtonListener);
@@ -142,7 +144,7 @@ Private void drawMenu(SelectionMenu * menu)
                 strcpy(priv_char_buf + 3, menu->items[x].text);
             }
 
-            display_drawStringCenter(priv_char_buf, DISPLAY_CENTER, ypos, MENU_FONT, (x == menu->selected_item));
+            display_drawStringCenter(priv_char_buf, DISPLAY_CENTER, ypos, MENU_FONT, (x == menu->selected_item) ? TRUE : FALSE);
         }
         else
         {
@@ -159,7 +161,12 @@ Private void drawMenu(SelectionMenu * menu)
         ypos += font_height;
         ypos += 2u;
     }
+}
 
+Private void drawMenuAndBackground(SelectionMenu * menu)
+{
+    display_clear();
+    drawMenu(menu);
 }
 
 /* This is the OK key. */
@@ -174,7 +181,10 @@ Private void okButtonListener(void)
     case(MENU_ACTION_FUNCTION):
             /* We exit the menu and perform the attached function pointer. */
             menu_exitMenu();
-            item->ActionArg.function_ptr();
+            if (item->ActionArg.function_ptr != NULL)
+            {
+                item->ActionArg.function_ptr();
+            }
             break;
     case(MENU_ACTION_SUBMENU):
             sub = item->ActionArg.subMenu_ptr;
@@ -186,6 +196,19 @@ Private void okButtonListener(void)
             bg_ptr = item->ActionArg.bargraph_ptr;
             bg_ptr->parent = priv_active_menu_ptr;
             enterBarGraph(bg_ptr);
+            break;
+    case(MENU_ACTION_SELECT):
+            /* Change the checked item to the selected item. */
+            if (item->ActionArg.function_set_u16_ptr != NULL)
+            {
+                item->ActionArg.function_set_u16_ptr(priv_active_menu_ptr->selected_item);
+            }
+
+            if (priv_active_menu_ptr->isCheckedMenu)
+            {
+                priv_active_menu_ptr->checked_item = priv_active_menu_ptr->selected_item;
+                drawMenuAndBackground(priv_active_menu_ptr);
+            }
             break;
     case(MENU_ACTION_NONE):
     default:
@@ -225,11 +248,48 @@ Private void backButtonListener(void)
     }
 }
 
+
+
+/* Color scheme menu functions. --- TODO : Probably should eventually be moved elsewhere. */
+
 Private U16 priv_selected_color_scheme_index = 0u;
 
-/* Color scheme menu functions. */
 Public U16 getSelectedColorScheme(void)
 {
     return priv_selected_color_scheme_index;
+}
+
+Public void setSelectedColorSchemeIndex(U16 index)
+{
+    priv_selected_color_scheme_index = index;
+
+    switch(priv_selected_color_scheme_index)
+    {
+        case 3:
+            disp_background_color = COLOR_BLACK;
+            disp_text_color = COLOR_CYAN;
+            disp_highlight_color = COLOR_RED;
+            disp_ph_prompt_text_color = COLOR_MAGENTA;
+            break;
+        case 2:
+            disp_background_color = COLOR_WHITE;
+            disp_text_color = COLOR_BLACK;
+            disp_highlight_color = COLOR_BLUE;
+            disp_ph_prompt_text_color = COLOR_RED;
+            break;
+        case 1:
+            disp_background_color = COLOR_BLUE;
+            disp_text_color = COLOR_WHITE;
+            disp_highlight_color = COLOR_CYAN;
+            disp_ph_prompt_text_color = COLOR_RED;
+            break;
+        case 0:
+        default:
+            disp_background_color = COLOR_BLACK;
+            disp_text_color = COLOR_GREEN;
+            disp_highlight_color = COLOR_CYAN;
+            disp_ph_prompt_text_color = COLOR_RED;
+            break;
+    }
 }
 

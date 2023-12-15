@@ -45,15 +45,17 @@ Private void startSnakeGame(void);
 /* TODO : These neeed to be accessed elsewhere as well.*/
 U16 disp_background_color = COLOR_BLACK;
 U16 disp_text_color = COLOR_GREEN;
-U16 disp_highlight_color = COLOR_MAGENTA;
+U16 disp_highlight_color = COLOR_CYAN;
 U16 disp_ph_prompt_text_color = COLOR_RED;
 
 
 /* Settings Menu Items */
 Private const MenuItem ColorMenuItemArray[] =
 {
-     { .text = "Scheme 1",    .Action = MENU_ACTION_SELECT  , .ActionArg.bargraph_ptr = NULL  },
-     { .text = "Scheme 2",    .Action = MENU_ACTION_SELECT  , .ActionArg.bargraph_ptr = NULL  },
+     { .text = "Scheme 1",    .Action = MENU_ACTION_SELECT  , .ActionArg.function_set_u16_ptr = setSelectedColorSchemeIndex  },
+     { .text = "Scheme 2",    .Action = MENU_ACTION_SELECT  , .ActionArg.function_set_u16_ptr = setSelectedColorSchemeIndex  },
+     { .text = "Scheme 3",    .Action = MENU_ACTION_SELECT  , .ActionArg.function_set_u16_ptr = setSelectedColorSchemeIndex  },
+     { .text = "Scheme 4",    .Action = MENU_ACTION_SELECT  , .ActionArg.function_set_u16_ptr = setSelectedColorSchemeIndex  },
 };
 
 Private SelectionMenu ColorMenu =

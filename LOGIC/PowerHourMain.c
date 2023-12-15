@@ -17,6 +17,8 @@
 #include "Scheduler.h"
 #include "buttons.h"
 
+#define ENABLE_BORDERS
+
 #define DISABLE_BUZZER_FOR_TESTING
 
 #define CLOCK_X_OFFSET 3u
@@ -132,6 +134,8 @@ Private void incrementTimer(void);
 Private void drawBorders(void);
 Private void drawBeerShot(U8 level);
 Private void drawBeerShotLevel(U8 level);
+Private void drawBeerShotBackground(void);
+Private void redrawBackground(void);
 Private void drawTextOnLine(const char * text, int line);
 
 Private U8 getScheduledSpecialTask(const ControllerEvent ** event_ptr);
@@ -191,7 +195,7 @@ Private const ControllerEvent priv_normal_minute_events[] =
 {
      { .second = 7u,  .upperText = "",              .lowerText = "",        .shot_action = BEERSHOT_EMPTY            , .func = NULL },
      { .second = 20u, .upperText = "Fill shots",    .lowerText = NULL,      .shot_action = BEERSHOT_BEGIN_FILLING    , .func = NULL },
-     { .second = 45u, .upperText = "Ready",         .lowerText = NULL,      .shot_action = BEERSHOT_FULL             , .func = NULL },
+     { .second = 44u, .upperText = "Ready",         .lowerText = NULL,      .shot_action = BEERSHOT_FULL             , .func = NULL },
      { .second = 59u, .upperText = "Proosit!",      .lowerText = "Cheers!", .shot_action = BEERSHOT_BEGIN_EMPTYING   , .func = NULL },
 };
 
@@ -199,7 +203,7 @@ Private const ControllerEvent priv_guys_drink_events[] =
 {
      { .second = 7u,  .upperText = "",              .lowerText = "",                    .shot_action = OVERRIDE_FUNCTION         , .func = &guysSpecialIntro   },
      { .second = 20u, .upperText = "Fill shots",    .lowerText = "Guys' round",         .shot_action = BEERSHOT_BEGIN_FILLING    , .func = NULL },
-     { .second = 45u, .upperText = "Ready",         .lowerText = NULL,                  .shot_action = BEERSHOT_FULL             , .func = NULL },
+     { .second = 44u, .upperText = "Ready",         .lowerText = NULL,                  .shot_action = BEERSHOT_FULL             , .func = NULL },
      { .second = 59u, .upperText = "Proosit!",      .lowerText = "Cheers guys!",        .shot_action = OVERRIDE_FUNCTION         , .func = &guysSpecialTask    },
 };
 
@@ -207,7 +211,7 @@ Private const ControllerEvent priv_girls_drink_events[] =
 {
      { .second = 7u,  .upperText = "",              .lowerText = "",                    .shot_action = OVERRIDE_FUNCTION         , .func = &girlsSpecialIntro   },
      { .second = 20u, .upperText = "Fill shots",    .lowerText = "Girls' round",        .shot_action = BEERSHOT_BEGIN_FILLING    , .func = NULL },
-     { .second = 45u, .upperText = "Ready",         .lowerText = NULL,                  .shot_action = BEERSHOT_FULL             , .func = NULL },
+     { .second = 44u, .upperText = "Ready",         .lowerText = NULL,                  .shot_action = BEERSHOT_FULL             , .func = NULL },
      { .second = 59u, .upperText = "Proosit!",      .lowerText = "Cheers girls!",       .shot_action = OVERRIDE_FUNCTION         , .func = &girlsSpecialTask    },
 };
 
@@ -215,7 +219,7 @@ Private const ControllerEvent priv_everybody_drink_events[] =
 {
      { .second = 7u,  .upperText = "",              .lowerText = "",                    .shot_action = OVERRIDE_FUNCTION         , .func = &EverybodySpecialIntro   },
      { .second = 20u, .upperText = "Fill shots",    .lowerText = "Task for all",        .shot_action = BEERSHOT_BEGIN_FILLING    , .func = NULL },
-     { .second = 45u, .upperText = "Ready",         .lowerText = NULL,                  .shot_action = BEERSHOT_FULL             , .func = NULL },
+     { .second = 44u, .upperText = "Ready",         .lowerText = NULL,                  .shot_action = BEERSHOT_FULL             , .func = NULL },
      { .second = 59u, .upperText = "Proosit!",      .lowerText = "Cheers!",             .shot_action = OVERRIDE_FUNCTION         , .func = &everybodySpecialTask    },
 };
 
@@ -223,7 +227,7 @@ Private const ControllerEvent priv_kaisa_drink_events[] =
 {
      { .second = 7u,  .upperText = "",              .lowerText = "",                    .shot_action = OVERRIDE_FUNCTION         , .func = &KaisaSpecialIntro       },
      { .second = 20u, .upperText = "Fill shots",    .lowerText = "Task for Kaisa!",     .shot_action = BEERSHOT_BEGIN_FILLING    , .func = NULL },
-     { .second = 45u, .upperText = "Ready",         .lowerText = NULL,                  .shot_action = BEERSHOT_FULL             , .func = NULL },
+     { .second = 44u, .upperText = "Ready",         .lowerText = NULL,                  .shot_action = BEERSHOT_FULL             , .func = NULL },
      { .second = 59u, .upperText = "Proosit!",      .lowerText = "Cheers!",             .shot_action = OVERRIDE_FUNCTION         , .func = &kaisaSpecialTask        },
 };
 
@@ -290,8 +294,8 @@ Public void powerHour_start(void)
     priv_curr_second = 0u;
     priv_state = CONTROLLER_INIT;
 
-    display_clear();
-    drawBorders();
+    redrawBackground();
+
 
     drawClock();
     drawBeerShot(priv_beershot_counter);
@@ -401,7 +405,7 @@ Public void powerHour_cyclic1000msec(void)
 
             if (priv_override_ptr(priv_override_counter))
             {
-                display_clear();
+                redrawBackground();
                 drawClock();
                 drawBeerShot(BEERSHOT_EMPTY);
                 priv_state = CONTROLLER_COUNTING;
@@ -758,6 +762,22 @@ Private void drawBeerShotLevel(U8 level)
     {
         drawBitmap(BEERSHOT_AREA_X_BEGIN + BEERSHOT_IMAGE_X_OFFSET, BEERSHOT_AREA_Y_BEGIN + BEERSHOT_IMAGE_Y_OFFSET, priv_beershot_images[level]);
     }
+}
+
+Private void drawBeerShotBackground(void)
+{
+    display_fillRectangle(BEERSHOT_AREA_X_BEGIN, BEERSHOT_AREA_Y_BEGIN, BEERSHOT_AREA_X_END - BEERSHOT_AREA_X_BEGIN, BEERSHOT_AREA_Y_END - BEERSHOT_AREA_Y_BEGIN, COLOR_BLACK);
+}
+
+
+Private void redrawBackground(void)
+{
+    display_clear();
+    /* TODO : Are borders really a good idea??? */
+#ifdef  ENABLE_BORDERS
+    drawBorders();
+#endif
+    drawBeerShotBackground();
 }
 
 
