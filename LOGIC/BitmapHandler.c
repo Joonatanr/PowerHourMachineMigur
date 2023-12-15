@@ -170,7 +170,7 @@ Public void BitmapHandler_start(void)
 
 
 /* This functions loads a bitmap, but it locks up the whole CPU. This can be a problem for realtime application. */
-Public Boolean LoadBitmap(const char * path, U16 * dest)
+Public Boolean BitmapHandler_LoadBitmap(const char * path, U16 * dest)
 {
     /* Lets try implementing a general bitmap loader that loads a 24-bit BMP file into a provided memory buffer. */
     FRESULT file_res;
@@ -271,7 +271,7 @@ Public Boolean LoadBitmap(const char * path, U16 * dest)
 }
 
 
-Public Boolean StartCyclicBitmapLoad(const char * path, U16 * dest, BitmapLoaderCallback cb)
+Public Boolean BitmapHandler_StartCyclicLoad(const char * path, U16 * dest, BitmapLoaderCallback cb)
 {
     Boolean res = FALSE;
 
@@ -319,14 +319,14 @@ Public void BitmapLoaderCyclic100ms(void)
 }
 
 /* We return the full path.. */
-Public void BitmapHandler_getRandomBitmapForCategory(FileCategory_t type, char *dest)
+Public void BitmapHandler_getRandomBitmapForCategory(BitmapHandler_FileCategory_t type, char *dest)
 {
     U16 ix;
     char * ps = dest;
 
     if (type < NUMBER_OF_FILE_CATEGORIES)
     {
-        ix = generate_random_number(priv_file_list[type].number_of_files);
+        ix = generate_random_number(priv_file_list[type].number_of_files - 1u);
         strcpy(ps, priv_file_list[type].directoryName);
         ps += strlen(priv_file_list[type].directoryName);
         *ps = '/';

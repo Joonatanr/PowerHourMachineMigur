@@ -102,6 +102,8 @@ typedef struct
 {
     const ControllerEvent * event_array;
     U8                        event_cnt;
+
+    BitmapHandler_FileCategory_t bitmap_category; /* Specifies which random bitmap should be pre-loaded to be used for the intro sequence. */
 } SchedulerTaskConf_T;
 
 typedef struct
@@ -139,8 +141,12 @@ Private Boolean guysSpecialIntro(U8 sec);
 Private Boolean girlsSpecialIntro(U8 sec);
 Private Boolean EverybodySpecialIntro(U8 sec);
 Private Boolean KaisaSpecialIntro(U8 sec);
+Private Boolean genericIntroFunction(const IntroSequence * intro_ptr, U8 sec);
 
 Private void doFinalAction(void);
+Private void setupStartOfMinute(void);
+Private void drawEventText(const ControllerEvent* event);
+Private void handlePreemptiveBitmapLoad(void);
 
 /* Button handlers. */
 Private void subscribeButtonHandlers(void);
@@ -200,7 +206,7 @@ Private const ControllerEvent priv_guys_drink_events[] =
 Private const ControllerEvent priv_girls_drink_events[] =
 {
      { .second = 7u,  .upperText = "",              .lowerText = "",                    .shot_action = OVERRIDE_FUNCTION         , .func = &girlsSpecialIntro   },
-     { .second = 20u, .upperText = "Fill shots",    .lowerText = "Girls' round",         .shot_action = BEERSHOT_BEGIN_FILLING   , .func = NULL },
+     { .second = 20u, .upperText = "Fill shots",    .lowerText = "Girls' round",        .shot_action = BEERSHOT_BEGIN_FILLING    , .func = NULL },
      { .second = 45u, .upperText = "Ready",         .lowerText = NULL,                  .shot_action = BEERSHOT_FULL             , .func = NULL },
      { .second = 59u, .upperText = "Proosit!",      .lowerText = "Cheers girls!",       .shot_action = OVERRIDE_FUNCTION         , .func = &girlsSpecialTask    },
 };
@@ -216,7 +222,7 @@ Private const ControllerEvent priv_everybody_drink_events[] =
 Private const ControllerEvent priv_kaisa_drink_events[] =
 {
      { .second = 7u,  .upperText = "",              .lowerText = "",                    .shot_action = OVERRIDE_FUNCTION         , .func = &KaisaSpecialIntro       },
-     { .second = 20u, .upperText = "Fill shots",    .lowerText = "Task for Kaisa!",      .shot_action = BEERSHOT_BEGIN_FILLING   , .func = NULL },
+     { .second = 20u, .upperText = "Fill shots",    .lowerText = "Task for Kaisa!",     .shot_action = BEERSHOT_BEGIN_FILLING    , .func = NULL },
      { .second = 45u, .upperText = "Ready",         .lowerText = NULL,                  .shot_action = BEERSHOT_FULL             , .func = NULL },
      { .second = 59u, .upperText = "Proosit!",      .lowerText = "Cheers!",             .shot_action = OVERRIDE_FUNCTION         , .func = &kaisaSpecialTask        },
 };
@@ -227,10 +233,10 @@ Private const ControllerEvent priv_kaisa_drink_events[] =
  * as links to their respective actions. */
 Private const SchedulerTaskConf_T priv_scheduler_conf[NUMBER_OF_TASK_TYPES] =
 {
-     {  .event_array = priv_girls_drink_events,     .event_cnt = NUMBER_OF_ITEMS(priv_girls_drink_events)       },  /*   TASK_FOR_GIRLS        */
-     {  .event_array = priv_guys_drink_events,      .event_cnt = NUMBER_OF_ITEMS(priv_guys_drink_events)        },  /*   TASK_FOR_GUYS         */
-     {  .event_array = priv_everybody_drink_events, .event_cnt = NUMBER_OF_ITEMS(priv_everybody_drink_events)   },  /*   TASK_FOR_EVERYONE     */
-     {  .event_array = priv_kaisa_drink_events,     .event_cnt = NUMBER_OF_ITEMS(priv_kaisa_drink_events)       },  /*   TASK_FOR_KAISA        */
+     {  .event_array = priv_girls_drink_events,     .event_cnt = NUMBER_OF_ITEMS(priv_girls_drink_events),      .bitmap_category = FILES_WOMEN     },  /*   TASK_FOR_GIRLS        */
+     {  .event_array = priv_guys_drink_events,      .event_cnt = NUMBER_OF_ITEMS(priv_guys_drink_events),       .bitmap_category = FILES_MEN       },  /*   TASK_FOR_GUYS         */
+     {  .event_array = priv_everybody_drink_events, .event_cnt = NUMBER_OF_ITEMS(priv_everybody_drink_events),  .bitmap_category = FILES_EVERYBODY },  /*   TASK_FOR_EVERYONE     */
+     {  .event_array = priv_kaisa_drink_events,     .event_cnt = NUMBER_OF_ITEMS(priv_kaisa_drink_events),      .bitmap_category = FILES_KAISA     },  /*   TASK_FOR_KAISA        */
 };
 
 
@@ -247,6 +253,16 @@ Private SchedulerTaskState_T priv_scheduler_state[NUMBER_OF_TASK_TYPES];
 Private Boolean priv_isFirstRun = TRUE;
 Private U8 priv_override_counter;
 Private OverrideFunc priv_override_ptr;
+
+Private const ControllerEvent * priv_currentMinuteEvents_ptr = priv_normal_minute_events;
+Private U8 priv_currentControllerEvents_cnt = NUMBER_OF_ITEMS(priv_normal_minute_events);
+
+Private const ControllerEvent * priv_nextMinuteEvents_ptr = priv_normal_minute_events;
+Private U8 priv_nextControllerEvents_cnt = NUMBER_OF_ITEMS(priv_normal_minute_events);
+Private BitmapHandler_FileCategory_t priv_file_type_to_load = FILES_NONE;
+Private char priv_bitmap_name_buf[64u];
+Private Boolean priv_is_bitmap_loaded = FALSE;
+
 
 
 /*****************************************************************************************************
@@ -287,6 +303,12 @@ Public void powerHour_start(void)
     priv_isFirstRun = TRUE;
     priv_state = CONTROLLER_COUNTING;
 
+    priv_currentMinuteEvents_ptr = priv_normal_minute_events;
+    priv_currentControllerEvents_cnt = NUMBER_OF_ITEMS(priv_normal_minute_events);
+
+    priv_nextMinuteEvents_ptr = priv_normal_minute_events;
+    priv_nextControllerEvents_cnt = NUMBER_OF_ITEMS(priv_normal_minute_events);
+
     for (ix = 0u; ix < NUMBER_OF_TASK_TYPES; ix++)
     {
         priv_scheduler_state[ix].counter = 0u;
@@ -295,14 +317,12 @@ Public void powerHour_start(void)
 }
 
 
+
 Public void powerHour_cyclic1000msec(void)
 {
     U8 ix;
     const ControllerEvent * event_ptr = NULL;
     beerShotAction action = BEERSHOT_NO_ACTION;
-
-    static const ControllerEvent * currentMinuteEvents_ptr = priv_normal_minute_events;
-    static U8 controllerEvents_cnt = NUMBER_OF_ITEMS(priv_normal_minute_events);
 
     if (priv_curr_second == 59u)
     {
@@ -322,12 +342,9 @@ Public void powerHour_cyclic1000msec(void)
             //We do not do anything here.
             break;
         case CONTROLLER_COUNTING:
-            if ((priv_curr_second == 0u) && (priv_curr_minute > 0u))
-            {
-                controllerEvents_cnt = getScheduledSpecialTask(&currentMinuteEvents_ptr);
-            }
-
+            setupStartOfMinute();
             incrementTimer();
+
             if (priv_isFirstRun)
             {
                 event_ptr = &priv_initial_event;
@@ -335,9 +352,9 @@ Public void powerHour_cyclic1000msec(void)
             }
             else
             {
-                for (ix = 0u; ix < controllerEvents_cnt; ix++)
+                for (ix = 0u; ix < priv_currentControllerEvents_cnt; ix++)
                 {
-                    event_ptr = &currentMinuteEvents_ptr[ix];
+                    event_ptr = &priv_currentMinuteEvents_ptr[ix];
                     if (event_ptr->second == priv_curr_second)
                     {
                         break;
@@ -348,17 +365,7 @@ Public void powerHour_cyclic1000msec(void)
 
             if (event_ptr != NULL)
             {
-                if (event_ptr->upperText != NULL)
-                {
-                    //setUpperText(event_ptr->upperText);
-                    drawTextOnLine(event_ptr->upperText, 0u);
-                }
-
-                if (event_ptr->lowerText != NULL)
-                {
-                    //setLowerText(event_ptr->lowerText);
-                    drawTextOnLine(event_ptr->lowerText, 1u);
-                }
+                drawEventText(event_ptr);
 
                 action = event_ptr->shot_action;
             }
@@ -371,16 +378,21 @@ Public void powerHour_cyclic1000msec(void)
                 priv_override_counter = 0u;
             }
 
-            drawBeerShot(action);
+            /* Here is where we start to pre-emptively load the bitmap for the next minute if necessary. Best not to do it too early when the display buffer might still be used. */
+            if (priv_curr_second == 30u)
+            {
+                if (priv_file_type_to_load != FILES_NONE)
+                {
+                    handlePreemptiveBitmapLoad();
+                }
+            }
 
+            drawBeerShot(action);
             drawClock();
 
             break;
         case CONTROLLER_OVERRIDDEN:
-            if ((priv_curr_second == 0u) && (priv_curr_minute > 0u))
-            {
-                controllerEvents_cnt = getScheduledSpecialTask(&currentMinuteEvents_ptr);
-            }
+            setupStartOfMinute();
 
             //We still increment timer.
             incrementTimer();
@@ -422,6 +434,38 @@ Public void powerHour_stop(void)
  *
  *****************************************************************************************************/
 
+Private void bitmapLoadedCallback(void)
+{
+    priv_is_bitmap_loaded = TRUE;
+}
+
+Public volatile Boolean debug_is_bmp_error = FALSE;
+
+Private void handlePreemptiveBitmapLoad(void)
+{
+    U16 * buffer_ptr = display_get_frame_buffer();
+
+    priv_is_bitmap_loaded = FALSE;
+    BitmapHandler_getRandomBitmapForCategory(priv_file_type_to_load, priv_bitmap_name_buf);
+    if (BitmapHandler_StartCyclicLoad(priv_bitmap_name_buf, buffer_ptr, bitmapLoadedCallback) == FALSE)
+    {
+        debug_is_bmp_error = TRUE;
+    }
+}
+
+
+Private void setupStartOfMinute(void)
+{
+    if ((priv_curr_second == 0u) && (priv_curr_minute > 0u))
+    {
+        priv_currentControllerEvents_cnt = priv_nextControllerEvents_cnt;
+        priv_currentMinuteEvents_ptr = priv_nextMinuteEvents_ptr;
+        /* We have to determine what the next minute is going to be like, so we can do some pre-emptive bitmap loading if necessary. */
+
+        priv_nextControllerEvents_cnt = getScheduledSpecialTask(&priv_nextMinuteEvents_ptr);
+    }
+}
+
 Private void doFinalAction(void)
 {
     display_clear();
@@ -429,42 +473,93 @@ Private void doFinalAction(void)
     display_drawString("  Congratulations! \n You are now drunk", 5u, 37u, FONT_MEDIUM_FONT, FALSE);
 }
 
+
 Private Boolean guysSpecialIntro(U8 sec)
 {
-    /* Placeholder : Here we should flush the bitmap later on. */
+    IntroSequence sequence;
 
-    drawTextOnLine("Guys round! Placeholder intro", 0u);
-    /* We return true if intro has finished. */
-    return TRUE;
+    sequence.isInverted = FALSE;
+    sequence.text_font = FONT_MEDIUM_FONT;
+    sequence.text_str = "Round for the Guys!";
+    sequence.text_x = 10u;
+    sequence.text_y = 5u;
+
+    return genericIntroFunction(&sequence, sec);
 }
+
 
 Private Boolean girlsSpecialIntro(U8 sec)
 {
-    /* Placeholder : Here we should flush the bitmap later on. */
+    IntroSequence sequence;
 
-    drawTextOnLine("Girls round! Placeholder intro", 0u);
-    /* We return true if intro has finished. */
-    return TRUE;
+    sequence.isInverted = FALSE;
+    sequence.text_font = FONT_MEDIUM_FONT;
+    sequence.text_str = "Round for the Girls!";
+    sequence.text_x = 10u;
+    sequence.text_y = 5u;
+
+    return genericIntroFunction(&sequence, sec);
 }
+
 
 Private Boolean EverybodySpecialIntro(U8 sec)
 {
-    /* Placeholder : Here we should flush the bitmap later on. */
+    IntroSequence sequence;
 
-    drawTextOnLine("Everybody's round! Placeholder intro", 0u);
-    /* We return true if intro has finished. */
-    return TRUE;
+    sequence.isInverted = FALSE;
+    sequence.text_font = FONT_MEDIUM_FONT;
+    sequence.text_str = "Round for the Everybody!";
+    sequence.text_x = 10u;
+    sequence.text_y = 5u;
+
+    return genericIntroFunction(&sequence, sec);
 }
+
 
 Private Boolean KaisaSpecialIntro(U8 sec)
 {
-    /* Placeholder : Here we should flush the bitmap later on. */
+    IntroSequence sequence;
 
-    drawTextOnLine("Kaisa's round! Placeholder intro", 0u);
-    /* We return true if intro has finished. */
-    return TRUE;
+    sequence.isInverted = FALSE;
+    sequence.text_font = FONT_MEDIUM_FONT;
+    sequence.text_str = "Round for the Kaisa!";
+    sequence.text_x = 10u;
+    sequence.text_y = 5u;
+
+    return genericIntroFunction(&sequence, sec);
 }
 
+
+Private Boolean genericIntroFunction(const IntroSequence * intro_ptr, U8 sec)
+{
+    Boolean res = FALSE;
+
+    switch(sec)
+    {
+    case(1u):
+        display_clear();
+        if (priv_is_bitmap_loaded)
+        {
+            display_flushBuffer(0u, 0u, 162u, 132u);
+        }
+        else
+        {
+            /* A literal blue screen of death.. */
+            display_fill(COLOR_BLUE);
+        }
+        break;
+    case(3u):
+        LcdWriter_drawColoredString(intro_ptr->text_str, intro_ptr->text_x, intro_ptr->text_y, intro_ptr->text_font, disp_ph_prompt_text_color, disp_highlight_color);
+        break;
+    case(12u):
+        res = TRUE;
+        break;
+    default:
+        break;
+    }
+
+    return res;
+}
 
 
 //Return default normal cycle if no special events are scheduled.
@@ -478,11 +573,14 @@ Private U8 getScheduledSpecialTask(const ControllerEvent ** event_ptr)
         ix = selectRandomTaskIndex();
         *event_ptr = priv_scheduler_conf[ix].event_array;
         res = priv_scheduler_conf[ix].event_cnt;
+        priv_file_type_to_load = priv_scheduler_conf[ix].bitmap_category;
+
     }
     else
     {
         *event_ptr = priv_normal_minute_events;
         res = NUMBER_OF_ITEMS(priv_normal_minute_events);
+        priv_file_type_to_load = FILES_NONE;
     }
 
     return res;
@@ -554,6 +652,22 @@ Private void incrementTimer(void)
     {
         priv_curr_second = 0u;
         priv_curr_minute++;
+    }
+}
+
+
+Private void drawEventText(const ControllerEvent* event)
+{
+    if (event->upperText != NULL)
+    {
+        //setUpperText(event_ptr->upperText);
+        drawTextOnLine(event->upperText, 0u);
+    }
+
+    if (event->lowerText != NULL)
+    {
+        //setLowerText(event_ptr->lowerText);
+        drawTextOnLine(event->lowerText, 1u);
     }
 }
 
@@ -655,6 +769,9 @@ Private void drawTextOnLine(const char * text, int line)
     /* We should have enough space for two lines of text...*/
     if (line <= 1u)
     {
+        /* Clear any previous text. */
+        display_fillRectangle(TEXT_AREA_X_BEGIN, TEXT_AREA_Y_BEGIN + (line * TEXT_LINE_DISTANCE), TEXT_AREA_X_END - TEXT_AREA_X_BEGIN,TEXT_LINE_DISTANCE, disp_background_color);
+
         LcdWriter_drawColoredString(text, TEXT_X_OFFSET, TEXT_AREA_Y_BEGIN + TEXT_Y_OFFSET + (line * TEXT_LINE_DISTANCE), FONT_SMALL_FONT_10, disp_ph_prompt_text_color, disp_background_color);
     }
 }

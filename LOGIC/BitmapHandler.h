@@ -21,12 +21,14 @@ typedef enum
     FILES_EVERYBODY,
     FILES_KAISA,
 
-    NUMBER_OF_FILE_CATEGORIES
-} FileCategory_t;
+    NUMBER_OF_FILE_CATEGORIES,
 
-extern Boolean LoadBitmap(const char * path, U16 * dest);
-extern Boolean StartCyclicBitmapLoad(const char * path, U16 * dest, BitmapLoaderCallback cb);
-extern void BitmapHandler_getRandomBitmapForCategory(FileCategory_t type, char *dest);
+    FILES_NONE
+} BitmapHandler_FileCategory_t;
+
+extern Boolean BitmapHandler_LoadBitmap(const char * path, U16 * dest);
+extern Boolean BitmapHandler_StartCyclicLoad(const char * path, U16 * dest, BitmapLoaderCallback cb);
+extern void BitmapHandler_getRandomBitmapForCategory(BitmapHandler_FileCategory_t type, char *dest);
 
 extern void BitmapHandler_init(void);
 extern void BitmapHandler_start(void);

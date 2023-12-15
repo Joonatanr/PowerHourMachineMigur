@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include "pot.h"
 #include "Bitmaps/Bitmaps.h"
+#include "timer.h"
 
 /*****************************************************************************************************
  *
@@ -879,15 +880,14 @@ Private Boolean DrinkTwiceTask(U8 sec, SpecialTaskType type)
                break;
        }
 
-       display_drawStringCenter(priv_str_buf, 64u, 2u, FONT_LARGE_FONT, FALSE);
-       display_drawStringCenter("2x", 64u ,20u, FONT_LARGE_FONT, FALSE);
+       display_drawStringCenter(priv_str_buf, DISPLAY_CENTER, 2u, FONT_LARGE_FONT, FALSE);
+       display_drawStringCenter("2x", DISPLAY_CENTER ,20u, FONT_LARGE_FONT, FALSE);
        break;
     case (2u):
-       //display_drawBitmapCenter(&small_shot_bitmap, 64 - SMALL_SHOT_INTERVAL, SMALL_SHOT_Y, FALSE);
-        display_drawTimageCenter(&laudur, 64 - SMALL_SHOT_INTERVAL, SMALL_SHOT_Y);
+        display_drawTimageCenter(&laudur, DISPLAY_CENTER - SMALL_SHOT_INTERVAL, SMALL_SHOT_Y);
        break;
     case (3u):
-        display_drawTimageCenter(&laudur, 64 + SMALL_SHOT_INTERVAL, SMALL_SHOT_Y);
+        display_drawTimageCenter(&laudur, DISPLAY_CENTER + SMALL_SHOT_INTERVAL, SMALL_SHOT_Y);
        break;
     case(10u):
        res = TRUE;
