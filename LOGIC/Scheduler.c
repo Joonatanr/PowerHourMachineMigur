@@ -46,9 +46,9 @@ Private const Scheduler_LogicTask priv_application_modules[NUMBER_OF_APPLICATION
 /* Small incremental changes :) - So lets enable the modules part first and then look at this part. */
 Private const Scheduler_LogicTask priv_tasks[NUMBER_OF_SCHEDULER_TASKS] =
 {
-     { .period = 2u,  .init_fptr = buzzer_init,       .start_fptr = NULL,          .cyclic_fptr = buzzer_cyclic100msec,     .stop_fptr = NULL  }, /* Buzzer task.       */
-     { .period = 2u,  .init_fptr = buttons_init,      .start_fptr = NULL,          .cyclic_fptr = buttons_cyclic100msec,    .stop_fptr = NULL  }, /* Buttons task       */
-     { .period = 2u,  .init_fptr = NULL,              .start_fptr = NULL,          .cyclic_fptr = BitmapLoaderCyclic100ms,  .stop_fptr = NULL  }, /* Bitmap loader task */
+     { .period = 2u,  .init_fptr = buzzer_init,       .start_fptr = NULL,               .cyclic_fptr = buzzer_cyclic100msec,     .stop_fptr = NULL  }, /* Buzzer task.       */
+     { .period = 2u,  .init_fptr = buttons_init,      .start_fptr = NULL,               .cyclic_fptr = buttons_cyclic100msec,    .stop_fptr = NULL  }, /* Buttons task       */
+     { .period = 2u,  .init_fptr = BitmapHandler_init,.start_fptr = BitmapHandler_start,.cyclic_fptr = BitmapLoaderCyclic100ms,  .stop_fptr = NULL  }, /* Bitmap loader task */
 };
 
 

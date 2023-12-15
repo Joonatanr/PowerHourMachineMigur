@@ -10,6 +10,7 @@
 #include "MSPIO.h"
 #include "fatfs\ff.h"
 #include "systimer.h"
+#include <stdlib.h>
 
 
 typedef enum
@@ -67,8 +68,115 @@ Private BitmapLoaderCallback priv_load_complete_callback;
 Private Boolean setupBitmapLoad(const char * path);
 Private Boolean resumeBitmapRead(void);
 
+#define FILE_NAME_PTR_CHUNK_SIZE 32u
+
+/* Storage variable for bitmap paths... */
+
+typedef enum
+{
+    FILES_MEN,
+    FILES_WOMEN,
+    FILES_EVERYBODY,
+    FILES_KAISA,
+
+    NUMBER_OF_FILE_CATEGORIES
+} FileCategory_t;
+
+typedef struct
+{
+    const char * directoryName;
+    char ** fileNames;
+    U32 number_of_files;
+} BitmapFilesCategory;
+
+
+BitmapFilesCategory priv_file_list[NUMBER_OF_FILE_CATEGORIES] =
+{
+     {.directoryName = "/Men",       .fileNames = NULL, .number_of_files = 0u },
+     {.directoryName = "/Women",     .fileNames = NULL, .number_of_files = 0u },
+     {.directoryName = "/Everybody", .fileNames = NULL, .number_of_files = 0u },
+     {.directoryName = "/Kaisa",     .fileNames = NULL, .number_of_files = 0u },
+};
+
+/*
+Private char ** priv_men_bitmaps;
+Private U16 priv_number_of_men_bitmaps;
+*/
 
 /***************************** Public functions  **************************************************/
+
+Public void BitmapHandler_init(void)
+{
+    U8 ix;
+    priv_state = BITMAP_HANDLER_IDLE;
+
+    for(ix = 0u; ix < NUMBER_OF_FILE_CATEGORIES; ix++)
+    {
+        priv_file_list[ix].fileNames = malloc(FILE_NAME_PTR_CHUNK_SIZE * sizeof(char*));
+    }
+}
+
+Public void BitmapHandler_start(void)
+{
+    FRESULT r;
+    DIR DI;
+    FILINFO FI;
+    U16 ix = 0u;
+    U8 category;
+    BitmapFilesCategory * filelist_ptr;
+    /* TODO - So basically we want to get a list of BMP files that are in the specific folders on the SD card. */
+
+    for (category = 0u; category < NUMBER_OF_FILE_CATEGORIES; category++)
+    {
+        filelist_ptr = &priv_file_list[category];
+        ix = 0u;
+
+        MSPrintf(EUSCI_A0_BASE, "Opening directory : %s \r\n", filelist_ptr->directoryName);
+        r = f_opendir(&DI, filelist_ptr->directoryName);
+
+        if(r != FR_OK)
+        {
+            MSPrintf(EUSCI_A0_BASE, "Could not open directory : s \r\n", filelist_ptr->directoryName);
+            continue;
+        }
+
+        /*Read everything inside the directory*/
+        do
+        {
+            /*Read a directory/file*/
+            r = f_readdir(&DI, &FI);
+            /* Check for errors. */
+            if (r != FR_OK)
+            {
+                MSPrintf(EUSCI_A0_BASE, "Error reading file/directory\r\n");
+                continue;
+            }
+
+            /* Add to the list of filenames. */
+            filelist_ptr->fileNames[ix] = malloc(strlen(FI.fname) * sizeof(char));
+            strcpy(filelist_ptr->fileNames[ix], FI.fname);
+            ix++;
+
+            if ((ix % FILE_NAME_PTR_CHUNK_SIZE) == 0u)
+            {
+                realloc(filelist_ptr->fileNames, (FILE_NAME_PTR_CHUNK_SIZE * sizeof(char*)) * ((ix / FILE_NAME_PTR_CHUNK_SIZE) + 1u));
+            }
+
+        } while(FI.fname[0]);
+
+        filelist_ptr->number_of_files = ix - 1u;
+
+        /** Debug */
+        for (ix = 0u; ix < filelist_ptr->number_of_files; ix++)
+        {
+            MSPrintf(EUSCI_A0_BASE, "File: %s\r\n", filelist_ptr->fileNames[ix]);
+        }
+
+        MSPrintf(EUSCI_A0_BASE, "Finished reading directory : %s \r\n", filelist_ptr->directoryName);
+        /* End of debug */
+    }
+}
+
 
 /* This functions loads a bitmap, but it locks up the whole CPU. This can be a problem for realtime application. */
 Public Boolean LoadBitmap(const char * path, U16 * dest)

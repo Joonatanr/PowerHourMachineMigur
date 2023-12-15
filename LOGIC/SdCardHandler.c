@@ -83,11 +83,5 @@ Public void SdCardHandlerInit(void)
                (FI.fattrib & AM_SYS) ? 'S' : '-',
                (FI.fattrib & AM_ARC) ? 'A' : '-',
                ((char*)FI.fname));
-
-        if (strncmp(FI.fname, "Lena", 4) == 0)
-        {
-            MSPrintf(EUSCI_A0_BASE, "Leidsin!");
-            /* Lets try reading the contents of the file. */
-        }
     }while(FI.fname[0]);
 }
