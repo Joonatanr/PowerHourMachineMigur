@@ -43,6 +43,7 @@ typedef enum
 
 /* Legacy conversion */
 #define FONT_MEDIUM_FONT FONT_COURIER_14
+#define FONT_LARGE_FONT FONT_COURIER_16_BOLD
 
 extern const tFont PowerHourFont;
 extern const tFont Courier16Bold;

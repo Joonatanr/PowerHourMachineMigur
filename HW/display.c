@@ -13,6 +13,7 @@
 #include "driverlib.h"
 
 
+
 Private U16 priv_frame_buf[132][162];
 //Private U16 priv_frame_buf[162][132];
 /*
@@ -281,6 +282,12 @@ Public void display_flushBuffer(U8 x, U8 y, U8 width, U8 height)
 {
     LCD_DrawFrameBuffer(x, y, width, height);
 }
+
+Public void display_drawTimageCenter(const tImage * image_ptr, U16 centerPoint, U16 y)
+{
+    display_drawBitmapCenter(image_ptr->data, centerPoint, y, image_ptr->width, image_ptr->height);
+}
+
 
 Public void display_drawBitmapCenter(const U16 * src_ptr, U16 centerPoint, U16 y, U8 width, U8 height)
 {

@@ -9,6 +9,7 @@
 #define HW_DISPLAY_H_
 
 #include "typedefs.h"
+#include "Bitmaps/Bitmaps.h"
 
 #define CONVERT_888RGB_TO_565BGR(r, g, b) ((r >> 3) | ((g >> 2) << 5) | ((b >> 3) << 11))
 /* The problem here is that we shall be accessing memory via DMA, 1 byte at a time. So we also need to switch the MSB and LSB of the resulting U16 here. */
@@ -38,9 +39,10 @@ extern void display_init(void);
 extern U16 * display_get_frame_buffer(void);
 extern void display_flushBuffer(U8 x, U8 y, U8 width, U8 height);
 extern void display_drawBitmapCenter(const U16 * src_ptr, U16 centerPoint, U16 y, U8 width, U8 height);
+extern void display_drawTimageCenter(const tImage * image_ptr, U16 centerPoint, U16 y);
 extern void display_drawImage(U8 x, U8 y, U8 width, U8 height, const U16 * src_ptr);
 extern void display_fill(U16 color);
-Public void display_fillRectangle(U8 x, U8 y, U8 width, U8 height, U16 color);
+extern void display_fillRectangle(U8 x, U8 y, U8 width, U8 height, U16 color);
 extern void display_clear(void);
 
 

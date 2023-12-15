@@ -13,6 +13,9 @@
 #include "systimer.h"
 #include "BitmapHandler.h"
 #include "timer.h"
+#include "SpecialTasks.h"
+#include "Scheduler.h"
+#include "buttons.h"
 
 #define DISABLE_BUZZER_FOR_TESTING
 
@@ -48,19 +51,113 @@
 #define TEXT_AREA_Y_END DISPLAY_HEIGHT - 1u
 
 
-volatile U32 maximum_cyclic_period = 0u;
 
 
+/*****************************************************************************************************
+ *
+ * Private type definitions
+ *
+ *****************************************************************************************************/
 
-Private U16 priv_curr_minute;
-Private U16 priv_curr_second;
+typedef enum
+{
+    CONTROLLER_INIT,
+    CONTROLLER_COUNTING,
+    CONTROLLER_OVERRIDDEN,
+    CONTROLLER_FINAL,
+    CONTROLLER_EXITING,
+    CONTROLLER_NUMBER_OF_STATES
+} controllerState;
+
+typedef enum
+{
+    BEERSHOT_NO_ACTION,         //No action with bitmap.
+    BEERSHOT_EMPTY,             //Draw initial beershot bitmap.
+    BEERSHOT_BEGIN_FILLING,     //Initiate filling animation.
+    BEERSHOT_FULL,              //Draw full beershot.
+    BEERSHOT_BEGIN_EMPTYING,    //Initiate emptying animation.
+
+    OVERRIDE_FUNCTION,          //Overrides ordinary function, displays bitmap instead.
+    RESTORE_FUNCTION,           //Restore normal handling.
+} beerShotAction;
+
+typedef enum
+{
+    BEERSHOT_FROZEN,    //Nothing currently to draw.
+    BEERSHOT_FILLING,
+    BEERSHOT_EMPTYING
+} beershotState;
+
+
+typedef struct
+{
+    U8 second;                      // When the event should be triggered.
+    const char * upperText;         // Text to be written to upper part of display.
+    const char * lowerText;         // Text to be written to lower part of display.
+    beerShotAction shot_action;     // Action to be performed on bitmap.
+    OverrideFunc    func;           // Optional parameter - This function will override all behaviour, used for special actions.
+} ControllerEvent;
+
+typedef struct
+{
+    const ControllerEvent * event_array;
+    U8                        event_cnt;
+} SchedulerTaskConf_T;
+
+typedef struct
+{
+    U16 counter;
+    Boolean is_enabled;
+} SchedulerTaskState_T;
+
+typedef struct
+{
+    const char * text_str;
+    U8 text_x;
+    U8 text_y;
+    FontType_t text_font;
+    Boolean isInverted;
+} IntroSequence;
+
+/*****************************************************************************************************
+ *
+ * Private function Prototypes
+ *
+ *****************************************************************************************************/
 
 Private void drawClock(void);
 Private void incrementTimer(void);
 Private void drawBorders(void);
 Private void drawBeerShot(U8 level);
-Private void drawTextOnLine(char * text, int line);
+Private void drawBeerShotLevel(U8 level);
+Private void drawTextOnLine(const char * text, int line);
 
+Private U8 getScheduledSpecialTask(const ControllerEvent ** event_ptr);
+Private U8 selectRandomTaskIndex(void);
+
+Private Boolean guysSpecialIntro(U8 sec);
+Private Boolean girlsSpecialIntro(U8 sec);
+Private Boolean EverybodySpecialIntro(U8 sec);
+Private Boolean KaisaSpecialIntro(U8 sec);
+
+Private void doFinalAction(void);
+
+/* Button handlers. */
+Private void subscribeButtonHandlers(void);
+Private void HandleUpButton(void);
+Private void HandleDownButton(void);
+Private void HandleRightButton(void);
+Private void HandleLeftButton(void);
+
+/*****************************************************************************************************
+ *
+ * Private variable declarations.
+ *
+ *****************************************************************************************************/
+
+//volatile U32 maximum_cyclic_period = 0u;
+
+/* Beer shot variables */
 #define NUMBER_OF_BEERSHOT_IMAGES 8U
 Private const tImage * priv_beershot_images[NUMBER_OF_BEERSHOT_IMAGES] =
 {
@@ -75,18 +172,107 @@ Private const tImage * priv_beershot_images[NUMBER_OF_BEERSHOT_IMAGES] =
 };
 
 Private U8 priv_beershot_counter = 0u;
+Private beershotState priv_beer_state;
+/* End of Beer shot variables. */
+
+Private U16 priv_curr_minute;
+Private U16 priv_curr_second;
+
+Private controllerState priv_state;
+Private U8 priv_task_frequency = 3u; /* Default value is a task every 2 minutes. */
+
+Private const ControllerEvent priv_normal_minute_events[] =
+{
+     { .second = 7u,  .upperText = "",              .lowerText = "",        .shot_action = BEERSHOT_EMPTY            , .func = NULL },
+     { .second = 20u, .upperText = "Fill shots",    .lowerText = NULL,      .shot_action = BEERSHOT_BEGIN_FILLING    , .func = NULL },
+     { .second = 45u, .upperText = "Ready",         .lowerText = NULL,      .shot_action = BEERSHOT_FULL             , .func = NULL },
+     { .second = 59u, .upperText = "Proosit!",      .lowerText = "Cheers!", .shot_action = BEERSHOT_BEGIN_EMPTYING   , .func = NULL },
+};
+
+Private const ControllerEvent priv_guys_drink_events[] =
+{
+     { .second = 7u,  .upperText = "",              .lowerText = "",                    .shot_action = OVERRIDE_FUNCTION         , .func = &guysSpecialIntro   },
+     { .second = 20u, .upperText = "Fill shots",    .lowerText = "Guys' round",         .shot_action = BEERSHOT_BEGIN_FILLING    , .func = NULL },
+     { .second = 45u, .upperText = "Ready",         .lowerText = NULL,                  .shot_action = BEERSHOT_FULL             , .func = NULL },
+     { .second = 59u, .upperText = "Proosit!",      .lowerText = "Cheers guys!",        .shot_action = OVERRIDE_FUNCTION         , .func = &guysSpecialTask    },
+};
+
+Private const ControllerEvent priv_girls_drink_events[] =
+{
+     { .second = 7u,  .upperText = "",              .lowerText = "",                    .shot_action = OVERRIDE_FUNCTION         , .func = &girlsSpecialIntro   },
+     { .second = 20u, .upperText = "Fill shots",    .lowerText = "Girls' round",         .shot_action = BEERSHOT_BEGIN_FILLING   , .func = NULL },
+     { .second = 45u, .upperText = "Ready",         .lowerText = NULL,                  .shot_action = BEERSHOT_FULL             , .func = NULL },
+     { .second = 59u, .upperText = "Proosit!",      .lowerText = "Cheers girls!",       .shot_action = OVERRIDE_FUNCTION         , .func = &girlsSpecialTask    },
+};
+
+Private const ControllerEvent priv_everybody_drink_events[] =
+{
+     { .second = 7u,  .upperText = "",              .lowerText = "",                    .shot_action = OVERRIDE_FUNCTION         , .func = &EverybodySpecialIntro   },
+     { .second = 20u, .upperText = "Fill shots",    .lowerText = "Task for all",        .shot_action = BEERSHOT_BEGIN_FILLING    , .func = NULL },
+     { .second = 45u, .upperText = "Ready",         .lowerText = NULL,                  .shot_action = BEERSHOT_FULL             , .func = NULL },
+     { .second = 59u, .upperText = "Proosit!",      .lowerText = "Cheers!",             .shot_action = OVERRIDE_FUNCTION         , .func = &everybodySpecialTask    },
+};
+
+Private const ControllerEvent priv_kaisa_drink_events[] =
+{
+     { .second = 7u,  .upperText = "",              .lowerText = "",                    .shot_action = OVERRIDE_FUNCTION         , .func = &KaisaSpecialIntro       },
+     { .second = 20u, .upperText = "Fill shots",    .lowerText = "Task for Kaisa!",      .shot_action = BEERSHOT_BEGIN_FILLING   , .func = NULL },
+     { .second = 45u, .upperText = "Ready",         .lowerText = NULL,                  .shot_action = BEERSHOT_FULL             , .func = NULL },
+     { .second = 59u, .upperText = "Proosit!",      .lowerText = "Cheers!",             .shot_action = OVERRIDE_FUNCTION         , .func = &kaisaSpecialTask        },
+};
+
+
+/* This is a scheduler for special minutes.
+ * It contains data about the frequency and offset of special minutes as well
+ * as links to their respective actions. */
+Private const SchedulerTaskConf_T priv_scheduler_conf[NUMBER_OF_TASK_TYPES] =
+{
+     {  .event_array = priv_girls_drink_events,     .event_cnt = NUMBER_OF_ITEMS(priv_girls_drink_events)       },  /*   TASK_FOR_GIRLS        */
+     {  .event_array = priv_guys_drink_events,      .event_cnt = NUMBER_OF_ITEMS(priv_guys_drink_events)        },  /*   TASK_FOR_GUYS         */
+     {  .event_array = priv_everybody_drink_events, .event_cnt = NUMBER_OF_ITEMS(priv_everybody_drink_events)   },  /*   TASK_FOR_EVERYONE     */
+     {  .event_array = priv_kaisa_drink_events,     .event_cnt = NUMBER_OF_ITEMS(priv_kaisa_drink_events)       },  /*   TASK_FOR_KAISA        */
+};
+
+
+Private const ControllerEvent priv_initial_event =
+{
+ .second = 1u,
+ .upperText = "Begin!",
+ .lowerText = NULL,
+ .shot_action = BEERSHOT_EMPTY
+};
+
+
+Private SchedulerTaskState_T priv_scheduler_state[NUMBER_OF_TASK_TYPES];
+Private Boolean priv_isFirstRun = TRUE;
+Private U8 priv_override_counter;
+Private OverrideFunc priv_override_ptr;
+
+
+/*****************************************************************************************************
+ *
+ * Public function definitions
+ *
+ *****************************************************************************************************/
 
 Public void powerHour_init(void)
 {
     priv_curr_minute = 0u;
     priv_curr_second = 0u;
-
     priv_beershot_counter = 0u;
+
+    priv_state = CONTROLLER_INIT;
 }
+
 
 Public void powerHour_start(void)
 {
-    char test_str[64];
+    U8 ix;
+
+    /* Set up critical variables, as we might want to restart the game. */
+    priv_curr_minute = 0u;
+    priv_curr_second = 0u;
+    priv_state = CONTROLLER_INIT;
 
     display_clear();
     drawBorders();
@@ -94,47 +280,271 @@ Public void powerHour_start(void)
     drawClock();
     drawBeerShot(priv_beershot_counter);
 
-    /* Test drawing a string */
-    drawTextOnLine("At the end of this round,", 0u);
-    drawTextOnLine("there is a task for all the girls", 1u);
+    /* Set up buttons */
+    subscribeButtonHandlers();
 
-    BitmapHandler_getRandomBitmapForCategory(FILES_WOMEN, test_str);
+    //We start counting.
+    priv_isFirstRun = TRUE;
+    priv_state = CONTROLLER_COUNTING;
+
+    for (ix = 0u; ix < NUMBER_OF_TASK_TYPES; ix++)
+    {
+        priv_scheduler_state[ix].counter = 0u;
+        priv_scheduler_state[ix].is_enabled = TRUE; /* In this version all tasks are always enabled. */
+    }
 }
-
-Private volatile U32 cyclic_begin_timestamp;
-Private volatile U32 cyclic_end_timestamp;
 
 
 Public void powerHour_cyclic1000msec(void)
 {
-    cyclic_begin_timestamp = systimer_getTimestamp();
+    U8 ix;
+    const ControllerEvent * event_ptr = NULL;
+    beerShotAction action = BEERSHOT_NO_ACTION;
+
+    static const ControllerEvent * currentMinuteEvents_ptr = priv_normal_minute_events;
+    static U8 controllerEvents_cnt = NUMBER_OF_ITEMS(priv_normal_minute_events);
 
     if (priv_curr_second == 59u)
     {
-#ifndef DISABLE_BUZZER_FOR_TESTING
         buzzer_playBeeps(3u);
-#endif
     }
 
-    incrementTimer();
-    drawClock();
-
-    /* Just for testing the beershot animation : TODO, Remove this. */
-    priv_beershot_counter++;
-    if (priv_beershot_counter >= NUMBER_OF_BEERSHOT_IMAGES)
+    //Game ends and we enter final state.
+    if (priv_curr_minute == 60u)
     {
-        priv_beershot_counter = 0u;
+        doFinalAction();
+        priv_state = CONTROLLER_FINAL;
     }
-    drawBeerShot(priv_beershot_counter);
 
-    cyclic_end_timestamp = systimer_getTimestamp();
-    maximum_cyclic_period = MAX(maximum_cyclic_period, cyclic_end_timestamp - cyclic_begin_timestamp);
+    switch(priv_state)
+    {
+        case CONTROLLER_INIT:
+            //We do not do anything here.
+            break;
+        case CONTROLLER_COUNTING:
+            if ((priv_curr_second == 0u) && (priv_curr_minute > 0u))
+            {
+                controllerEvents_cnt = getScheduledSpecialTask(&currentMinuteEvents_ptr);
+            }
+
+            incrementTimer();
+            if (priv_isFirstRun)
+            {
+                event_ptr = &priv_initial_event;
+                priv_isFirstRun = FALSE;
+            }
+            else
+            {
+                for (ix = 0u; ix < controllerEvents_cnt; ix++)
+                {
+                    event_ptr = &currentMinuteEvents_ptr[ix];
+                    if (event_ptr->second == priv_curr_second)
+                    {
+                        break;
+                    }
+                    event_ptr = NULL;
+                }
+            }
+
+            if (event_ptr != NULL)
+            {
+                if (event_ptr->upperText != NULL)
+                {
+                    //setUpperText(event_ptr->upperText);
+                    drawTextOnLine(event_ptr->upperText, 0u);
+                }
+
+                if (event_ptr->lowerText != NULL)
+                {
+                    //setLowerText(event_ptr->lowerText);
+                    drawTextOnLine(event_ptr->lowerText, 1u);
+                }
+
+                action = event_ptr->shot_action;
+            }
+
+            //Currently we still finish this cycle and special handling begins on the next.
+            if (action == OVERRIDE_FUNCTION)
+            {
+                priv_state = CONTROLLER_OVERRIDDEN;
+                priv_override_ptr = event_ptr->func;
+                priv_override_counter = 0u;
+            }
+
+            drawBeerShot(action);
+
+            drawClock();
+
+            break;
+        case CONTROLLER_OVERRIDDEN:
+            if ((priv_curr_second == 0u) && (priv_curr_minute > 0u))
+            {
+                controllerEvents_cnt = getScheduledSpecialTask(&currentMinuteEvents_ptr);
+            }
+
+            //We still increment timer.
+            incrementTimer();
+
+            if (priv_override_ptr(priv_override_counter))
+            {
+                display_clear();
+                drawClock();
+                drawBeerShot(BEERSHOT_EMPTY);
+                priv_state = CONTROLLER_COUNTING;
+            }
+            priv_override_counter++;
+            break;
+        case CONTROLLER_FINAL:
+            break;
+        case CONTROLLER_EXITING:
+            returnToMain();
+            break;
+        default:
+            break;
+    }
 }
 
+
+
+/* Should return all variables to their initial states. */
 Public void powerHour_stop(void)
 {
-
+    priv_state = CONTROLLER_INIT;
+    priv_curr_minute = 0u;
+    priv_curr_second = 0u;
 }
+
+
+
+/*****************************************************************************************************
+ *
+ * Private function definitions
+ *
+ *****************************************************************************************************/
+
+Private void doFinalAction(void)
+{
+    display_clear();
+    display_drawString("Game Over!", 20u, 15u, FONT_LARGE_FONT, FALSE);
+    display_drawString("  Congratulations! \n You are now drunk", 5u, 37u, FONT_MEDIUM_FONT, FALSE);
+}
+
+Private Boolean guysSpecialIntro(U8 sec)
+{
+    /* Placeholder : Here we should flush the bitmap later on. */
+
+    drawTextOnLine("Guys round! Placeholder intro", 0u);
+    /* We return true if intro has finished. */
+    return TRUE;
+}
+
+Private Boolean girlsSpecialIntro(U8 sec)
+{
+    /* Placeholder : Here we should flush the bitmap later on. */
+
+    drawTextOnLine("Girls round! Placeholder intro", 0u);
+    /* We return true if intro has finished. */
+    return TRUE;
+}
+
+Private Boolean EverybodySpecialIntro(U8 sec)
+{
+    /* Placeholder : Here we should flush the bitmap later on. */
+
+    drawTextOnLine("Everybody's round! Placeholder intro", 0u);
+    /* We return true if intro has finished. */
+    return TRUE;
+}
+
+Private Boolean KaisaSpecialIntro(U8 sec)
+{
+    /* Placeholder : Here we should flush the bitmap later on. */
+
+    drawTextOnLine("Kaisa's round! Placeholder intro", 0u);
+    /* We return true if intro has finished. */
+    return TRUE;
+}
+
+
+
+//Return default normal cycle if no special events are scheduled.
+Private U8 getScheduledSpecialTask(const ControllerEvent ** event_ptr)
+{
+    U8 ix;
+    U8 res;
+
+    if ((priv_curr_minute % priv_task_frequency) == 0u)
+    {
+        ix = selectRandomTaskIndex();
+        *event_ptr = priv_scheduler_conf[ix].event_array;
+        res = priv_scheduler_conf[ix].event_cnt;
+    }
+    else
+    {
+        *event_ptr = priv_normal_minute_events;
+        res = NUMBER_OF_ITEMS(priv_normal_minute_events);
+    }
+
+    return res;
+}
+
+/* It returns a random enabled task. However the function should prefer tasks that have not yet been displayed or have been displayed less than others. */
+Private U8 selectRandomTaskIndex(void)
+{
+    U8 max_count = 0u;
+    U8 min_count = 0xffu;
+    U8 ix;
+    U8 res = 0u;
+
+    U8 index_array[NUMBER_OF_TASK_TYPES];
+    U8 index_length = 0u;
+
+    /* Lets first establish the MAX and MIN count that we have. */
+    for (ix = 0u; ix < NUMBER_OF_TASK_TYPES; ix++)
+    {
+        if (priv_scheduler_state[ix].is_enabled)
+        {
+            max_count = MAX(priv_scheduler_state[ix].counter, max_count);
+            min_count = MIN(priv_scheduler_state[ix].counter, min_count);
+        }
+    }
+
+    if (max_count == min_count)
+    {
+        /* We have no preference in this case. We add all indexes that are enabled to the array. */
+        for (ix = 0u; ix < NUMBER_OF_TASK_TYPES; ix++)
+        {
+            if (priv_scheduler_state[ix].is_enabled)
+            {
+                index_array[index_length] = ix;
+                index_length++;
+            }
+        }
+
+        max_count++;
+    }
+    else
+    {
+        /* We prefer tasks that have not been selected yet. */
+        for (ix = 0u; ix < NUMBER_OF_TASK_TYPES; ix++)
+        {
+            if (priv_scheduler_state[ix].is_enabled && (priv_scheduler_state[ix].counter < max_count))
+            {
+                index_array[index_length] = ix;
+                index_length++;
+            }
+        }
+    }
+
+    res = index_array[generate_random_number(index_length - 1u)];
+
+
+    /* We set the selected count to the max. */
+    priv_scheduler_state[res].counter = max_count;
+
+    return res;
+}
+
 
 
 Private void incrementTimer(void)
@@ -155,7 +565,66 @@ Private void drawBorders(void)
 }
 
 
-Private void drawBeerShot(U8 level)
+Private void drawBeerShot(beerShotAction action)
+{
+
+   switch(action)
+   {
+       case BEERSHOT_EMPTY:
+           priv_beershot_counter = 0u;
+           priv_beer_state = BEERSHOT_FROZEN;
+           drawBeerShotLevel(priv_beershot_counter);
+           break;
+       case BEERSHOT_FULL:
+           priv_beershot_counter = NUMBER_OF_BEERSHOT_IMAGES - 1u;
+           drawBeerShotLevel(priv_beershot_counter);
+           priv_beer_state = BEERSHOT_FROZEN;
+           break;
+       case BEERSHOT_BEGIN_FILLING:
+           priv_beershot_counter = 0u;
+           priv_beer_state = BEERSHOT_FILLING;
+           break;
+       case BEERSHOT_BEGIN_EMPTYING:
+           priv_beershot_counter = NUMBER_OF_BEERSHOT_IMAGES - 1u;
+           priv_beer_state = BEERSHOT_EMPTYING;
+           break;
+       case BEERSHOT_NO_ACTION:
+       default:
+           break;
+   }
+
+   switch(priv_beer_state)
+   {
+       case(BEERSHOT_FROZEN):
+           //Nothing new to draw.
+           break;
+       case(BEERSHOT_EMPTYING):
+           drawBeerShotLevel(priv_beershot_counter);
+           if (priv_beershot_counter > 0u)
+           {
+               priv_beershot_counter--;
+           }
+           else
+           {
+               priv_beershot_counter = NUMBER_OF_BEERSHOT_IMAGES - 1u;
+           }
+           break;
+       case(BEERSHOT_FILLING):
+           drawBeerShotLevel(priv_beershot_counter);
+           priv_beershot_counter++;
+           if (priv_beershot_counter == NUMBER_OF_BEERSHOT_IMAGES)
+           {
+               priv_beershot_counter = 0u;
+           }
+           break;
+       default:
+           break;
+   }
+
+}
+
+
+Private void drawBeerShotLevel(U8 level)
 {
     /* Lets begin with some very initial testing. */
     if(level < NUMBER_OF_BEERSHOT_IMAGES)
@@ -181,11 +650,48 @@ Private void drawClock(void)
 }
 
 
-Private void drawTextOnLine(char * text, int line)
+Private void drawTextOnLine(const char * text, int line)
 {
     /* We should have enough space for two lines of text...*/
     if (line <= 1u)
     {
         LcdWriter_drawColoredString(text, TEXT_X_OFFSET, TEXT_AREA_Y_BEGIN + TEXT_Y_OFFSET + (line * TEXT_LINE_DISTANCE), FONT_SMALL_FONT_10, disp_ph_prompt_text_color, disp_background_color);
     }
+}
+
+
+
+/********** Button Handlers  ********/
+
+Private void subscribeButtonHandlers(void)
+{
+    buttons_subscribeListener(UP_BUTTON,    HandleUpButton);
+    buttons_subscribeListener(DOWN_BUTTON,  HandleDownButton);
+    buttons_subscribeListener(RIGHT_BUTTON, HandleRightButton);
+    buttons_subscribeListener(LEFT_BUTTON,  HandleLeftButton);
+}
+
+
+Private void HandleUpButton(void)
+{
+    /* Placeholder. */
+}
+
+Private void HandleDownButton(void)
+{
+    /* Placeholder. */
+}
+
+
+Private void HandleRightButton(void)
+{
+    /* This will open up a message box that will allow the user to cancel the game. */
+    //MessageBox_SetResponseHandler(handleMessageBoxResponse);
+    //MessageBox_ShowWithOkCancel("Quit game?");
+    /* TODO : Implement message boxes and then add the ability to quit the game.*/
+}
+
+Private void HandleLeftButton(void)
+{
+    /* Placeholder. */
 }

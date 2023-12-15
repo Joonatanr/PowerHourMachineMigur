@@ -13,6 +13,8 @@ extern const tImage BeerShot_6;
 extern const tImage BeerShot_7;
 extern const tImage BeerShot_8;
 
+extern const tImage laudur;
+
 extern void drawBitmap(U8 x, U8 y, const tImage * bmp_ptr);
 
 #endif
