@@ -240,13 +240,26 @@ Private const Task_T priv_TextArrayAllLevel1[] =
 Private U8 priv_TextArrayAllLevel1_counter[NUMBER_OF_ITEMS(priv_TextArrayAllLevel1)];
 
 /* Easy tasks */
-/* TODO : Placeholder */
 Private const Task_T priv_TextArrayMigurLevel1[] =
 {
      {  NULL                    , "{$} drinks 2x",               NULL       , .nude_level = 0u, .sexy_level = 0u    }, /* 1  */
      {  "{$} must take"         , "vodka shot",                  NULL       , .nude_level = 0u, .sexy_level = 0u    }, /* 2  */
      {  "Shortest Migur"        , "takes a",               "vodka shot"     , .nude_level = 0u, .sexy_level = 0u    }, /* 3  */
      {  "Oldest Migur"          , "drinks 2x",                   NULL       , .nude_level = 0u, .sexy_level = 0u    }, /* 4  */
+     {  "{$} makes"             , "a toast",                     NULL       , .nude_level = 0u, .sexy_level = 0u,   }, /* 5  */
+     {  "{$} begins a"          , "waterfall",                   NULL       , .nude_level = 0u, .sexy_level = 0u,   }, /* 6  */
+     {  "{$} can order"       , "one person to",    "take vodka shot"       , .nude_level = 0u, .sexy_level = 0u,   }, /* 7  */
+
+     /* Tasks that need criteria. */
+     {  "Each player who"       , " has kissed",     "{$}, drinks 3x"       , .nude_level = 0u, .sexy_level = 1u,   }, /* 8  */
+
+     /* Strange cases, where somebody is playing on easy mode, but with maximum nudity/sexyness. */
+     {  "{$} can confiscate"  , "one item of",             "clothing"       , .nude_level = 3u, .sexy_level = 0u,   },
+     {  "{$} loses"           , "one item of",             "clothing"       , .nude_level = 3u, .sexy_level = 0u,   },
+     {  "{$} takes the"       , "the shirts of",       "all the guys"       , .nude_level = 3u, .sexy_level = 0u,   },
+
+     {  "{$} chooses 2 guys"  , "who either make out",  "or drink vodka"    , .nude_level = 0u, .sexy_level = 3u,   },
+     {  "{$} chooses 2 girls" , "who either make out",  "or drink vodka"    , .nude_level = 0u, .sexy_level = 3u,   },
 };
 Private U8 priv_TextArrayMigurLevel1_counter[NUMBER_OF_ITEMS(priv_TextArrayMigurLevel1)];
 
