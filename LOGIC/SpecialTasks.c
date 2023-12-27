@@ -160,7 +160,7 @@ Private const Task_T priv_TextArrayGirlsLevel1[] =
      /* Strange cases, where somebody is playing on easy mode, but with maximum sexyness */
      {  "Girl closest to"           , "machine spins",         "the bottle"      ,  .nude_level = 0u, .sexy_level = 3u},
      {  "All girls find"            , "somebody to",           "kiss"            ,  .nude_level = 0u, .sexy_level = 3u},
-     {  "One girls must"            , "make out with",         "Kaisa"           ,  .nude_level = 0u, .sexy_level = 3u},
+     {  "One girls must"            , "make out with",         "one Migur"       ,  .nude_level = 0u, .sexy_level = 3u},
 
 
      /* Strange cases, where somebody is playing on easy mode, but with maximum gay */
@@ -200,7 +200,6 @@ Private const Task_T priv_TextArrayGuysLevel1[] =
 
 /* Strange cases, where somebody is playing on easy mode, but with maximum sexyness */
      {  "Guy closest to"           , "machine spins",         "the bottle"      ,  .nude_level = 0u, .sexy_level = 3u  },
-     {  "Kaisa chooses one"        , "of the guys",           "to make out with",  .nude_level = 0u, .sexy_level = 3u  },
 
 /* Strange cases, where somebody is playing on easy mode, but with maximum gay */
      {  "Guys drink vodka" ,       "Girls have to",         "kiss"              ,  .nude_level = 0u, .sexy_level = 1u  },
@@ -228,7 +227,7 @@ Private const Task_T priv_TextArrayAllLevel1[] =
 /* Tasks that need criteria. */
      {  "Everyone takes off"     , "one sock",                     NULL       ,   .nude_level = 1u, .sexy_level = 0u   },
      {  "Those that have"        , "french-kissed today",    "drink 3x"       ,   .nude_level = 0u, .sexy_level = 1u   },
-     {  "Everybody who has"      , "made out with Kaisa",    "drinks vodka"   ,   .nude_level = 0u, .sexy_level = 1u   },
+     {  "Everybody who has"      , "kissed a Migur",         "drinks vodka"   ,   .nude_level = 0u, .sexy_level = 1u   },
      {  "One closest to machine" , "gets slapped on",        "the ass"        ,   .nude_level = 0u, .sexy_level = 2u   },
 
 
@@ -351,7 +350,7 @@ Private const Task_T priv_TextArrayAllLevel2[] =
      {  "Everybody drinks"      , "1 shot of vodka",     "and 1 shot of beer" ,   .nude_level = 0u, .sexy_level = 0u   }, /* 3  */
      {  "Everybody drinks"      , "1 shot of vodka",    "or 5x shots of beer" ,   .nude_level = 0u, .sexy_level = 0u   }, /* 3  */
      {  "Everybody who is "     , "already drunk",          "drinks 3x"       ,   .nude_level = 0u, .sexy_level = 0u   }, /* 3  */
-     {  "Whoever is the most"   , "drunk (probably Kaisa)",   "drinks 3x"     ,   .nude_level = 0u, .sexy_level = 0u   }, /* 3  */
+     {  "Whoever is the most"   , "drunk (probably Mirtel)","drinks 3x"       ,   .nude_level = 0u, .sexy_level = 0u   }, /* 3  */
 
      {  "Whoever is closest to" , "the machine must", "distribute 6 beershots",  .nude_level = 0u, .sexy_level = 0u    }, /* 3  */
 
@@ -533,7 +532,7 @@ Private const Task_T priv_TextArrayGirlsLevel4[] =
      { "Girls must drink " ,  "1x for each ",      "sex toy they own"     ,  .nude_level = 0u, .sexy_level = 1u     },  /* 20 */
      { "Girls must drink " ,  "3x if they own ",   "a vibrator"           ,  .nude_level = 0u, .sexy_level = 1u     },  /* 20 */
      { "Girls must drink " ,  "vodka if they own ","a black dildo"        ,  .nude_level = 0u, .sexy_level = 1u     },  /* 20 */
-     { "One girl must"     ,  "perform a lapdance","on Kaisa"             ,  .nude_level = 0u, .sexy_level = 3u     },  /* 3  */
+     { "One girl must"     ,  "perform a lapdance","on Mirtel"            ,  .nude_level = 0u, .sexy_level = 3u     },  /* 3  */
 
      { "In 60 seconds"     ,     "all girls must kiss ",  "every single girl",   .nude_level = 0u, .sexy_level = 3u },  /* 10   */
      { "In 60 seconds",     "all girls must kiss ",  "every single player"  ,    .nude_level = 0u, .sexy_level = 3u },  /* 10   */

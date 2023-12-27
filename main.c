@@ -244,13 +244,13 @@ Private void pot_test(void)
 {
     char str[64u];
 
-    sprintf(str, "Pot 1: %d", pot_getSelectedRange(POTENTIOMETER_RAINBOW_LEVEL));
+    sprintf(str, "Pot 1: %d", pot_getSelectedRange(POTENTIOMETER_MIGUR2));
     LcdWriter_drawString(str, 5, 10, FONT_SMALL_FONT_10);
     sprintf(str, "Pot 2: %d", pot_getSelectedRange(POTENTIOMETER_NUDE_LEVEL));
     LcdWriter_drawString(str, 5, 30, FONT_SMALL_FONT_10);
     sprintf(str, "Pot 3: %d", pot_getSelectedRange(POTENTIOMETER_SEXY_LEVEL));
     LcdWriter_drawString(str, 5, 50, FONT_SMALL_FONT_10);
-    sprintf(str, "Pot 4: %d", pot_getSelectedRange(POTENTIOMETER_KAISA));
+    sprintf(str, "Pot 4: %d", pot_getSelectedRange(POTENTIOMETER_MIGUR1));
     LcdWriter_drawString(str, 5, 70, FONT_SMALL_FONT_10);
     sprintf(str, "Pot 5: %d", pot_getSelectedRange(POTENTIOMETER_GIRLS));
     LcdWriter_drawString(str, 5, 90, FONT_SMALL_FONT_10);
@@ -261,13 +261,13 @@ Private void pot_test(void)
     {
        timer_delay_msec(1000u);
 
-       sprintf(str, "Pot 1: %d", pot_getSelectedRange(POTENTIOMETER_RAINBOW_LEVEL));
+       sprintf(str, "Pot 1: %d", pot_getSelectedRange(POTENTIOMETER_MIGUR2));
        LcdWriter_drawString(str, 5, 10, FONT_SMALL_FONT_10);
        sprintf(str, "Pot 2: %d", pot_getSelectedRange(POTENTIOMETER_NUDE_LEVEL));
        LcdWriter_drawString(str, 5, 30, FONT_SMALL_FONT_10);
        sprintf(str, "Pot 3: %d", pot_getSelectedRange(POTENTIOMETER_SEXY_LEVEL));
        LcdWriter_drawString(str, 5, 50, FONT_SMALL_FONT_10);
-       sprintf(str, "Pot 4: %d", pot_getSelectedRange(POTENTIOMETER_KAISA));
+       sprintf(str, "Pot 4: %d", pot_getSelectedRange(POTENTIOMETER_MIGUR1));
        LcdWriter_drawString(str, 5, 70, FONT_SMALL_FONT_10);
        sprintf(str, "Pot 5: %d", pot_getSelectedRange(POTENTIOMETER_GIRLS));
        LcdWriter_drawString(str, 5, 90, FONT_SMALL_FONT_10);
