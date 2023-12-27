@@ -14,6 +14,7 @@
 #include "Scheduler.h"
 #include "systimer.h"
 #include "pot.h"
+#include "misc.h"
 
 #include "Menus/Menu.h"
 
@@ -23,10 +24,15 @@
 
 //#define DISPLAY_TEST
 //#define POT_TEST
+//#define STR_TEST
 
 Private U8 priv_50msec_flag = 0u;
 Private U16 priv_msec_counter = 0u;
 Private const char priv_version_string[] = "Machine 4.0";
+
+#ifdef STR_TEST
+Private void ReplaceStringEscapeChars(const char * str, char * dest);
+#endif
 
 #ifdef DISPLAY_TEST
 Private void display_test(void);
@@ -36,18 +42,25 @@ Private void display_test(void);
 Private void pot_test(void);
 #endif
 
+#ifdef STR_TEST
+Private void str_test(void);
+#endif
+
+
 Private void timer_50msec_callback(void);
 Private void showStartScreen(void);
 Private void showDedicationText(void);
 Private void startGameHandler(void);
 Private void startSnakeGame(void);
 
-/* TODO : These neeed to be accessed elsewhere as well.*/
 U16 disp_background_color = COLOR_BLACK;
 U16 disp_text_color = COLOR_GREEN;
 U16 disp_highlight_color = COLOR_CYAN;
 U16 disp_ph_prompt_text_color = COLOR_RED;
 
+#ifdef STR_TEST
+Private char priv_test_buf[32];
+#endif
 
 /* Settings Menu Items */
 Private const MenuItem ColorMenuItemArray[] =
@@ -137,12 +150,17 @@ void main(void)
     pot_test();
 #endif
 
+#ifdef STR_TEST
+    str_test();
+    timer_delay_msec(10000);
+#endif
+
     //We show the initial start screen for a while.
     showStartScreen();
 
 
     /* We pass control over to the menu handler. */
-    menu_enterMenu(&StartMenu);
+    menu_enterMenu(&StartMenu, TRUE);
 
     /* Sleeping when not in use */
 	for(;;)
@@ -159,7 +177,7 @@ void main(void)
 Public void returnToMain(void)
 {
     Scheduler_StopActiveApplication();
-    menu_enterMenu(&StartMenu);
+    menu_enterMenu(&StartMenu, FALSE);
 }
 
 Public void timer_1msec_callback(void)
@@ -303,3 +321,51 @@ Private void showDedicationText(void)
     /* Turns out we can't do this without making this into a dummy application for some reason. */
     Scheduler_SetActiveApplication(APPLICATION_DEDICATION);
 }
+
+
+#ifdef STR_TEST
+
+Private void str_test(void)
+{
+    strcpy(priv_test_buf, "##############################");
+    ReplaceStringEscapeChars("{$} must take", priv_test_buf);
+    //ReplaceStringEscapeChars("Yolotron", priv_test_buf);
+    display_drawStringCenter(priv_test_buf, DISPLAY_CENTER, 20u, FONT_COURIER_14, FALSE);
+}
+
+Private void ReplaceStringEscapeChars(const char * str, char * dest)
+{
+    const char * ps = str;
+
+    if (ps == NULL)
+    {
+        return;
+    }
+
+    while(*ps)
+    {
+        if(*ps == '{')
+        {
+            if (*(ps+1) == '$' && *(ps+2) == '}' )
+            {
+                ps+=3;
+                dest += addstr(dest, "Diana");
+            }
+            else
+            {
+                *dest = *ps;
+                ps++;
+                dest++;
+                *dest = 0;
+            }
+        }
+        else
+        {
+            *dest = *ps;
+            ps++;
+            dest++;
+            *dest = 0;
+        }
+    }
+}
+#endif

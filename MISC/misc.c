@@ -119,7 +119,7 @@ Public U8 addchar (char * str, char c)
 }
 
 
-Public U8 addstr (char * str1, const char * str2)
+Public U8 addStrToEnd (char * str1, const char * str2)
 {
     U8 pos1 = 0u;
 
@@ -135,6 +135,27 @@ Public U8 addstr (char * str1, const char * str2)
         ps1++;
         pos1++;
     }
+
+    while (ps2)
+    {
+        if (ps2[0] == 0)
+        {
+            break;
+        }
+        str1[pos1] = ps2[0];
+        ps2++;
+        pos1++;
+    }
+    str1[pos1] = 0;
+    return pos1;
+}
+
+
+Public U8 addstr (char * str1, const char * str2)
+{
+    U8 pos1 = 0u;
+
+    const char * ps2 = str2;
 
     while (ps2)
     {

@@ -209,7 +209,7 @@ Private void handleButtonAck(void)
     if (priv_active_bar->parent != NULL)
     {
         buttons_unsubscribeAll();
-        menu_enterMenu(priv_active_bar->parent);
+        menu_enterMenu(priv_active_bar->parent, FALSE);
         priv_active_bar = NULL;
     }
     /* Else, I guess we are stuck here...   */

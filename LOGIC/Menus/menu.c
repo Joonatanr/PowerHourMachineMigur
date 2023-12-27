@@ -23,7 +23,7 @@ Private void okButtonListener(void);
 Private void backButtonListener(void);
 
 Private void drawMenu(SelectionMenu * menu);
-Private void drawMenuAndBackground(SelectionMenu * menu);
+Private void drawMenuAndBackground(SelectionMenu * menu, Boolean isForceRedraw);
 
 
 /******Private variable definitions ***********/
@@ -31,7 +31,7 @@ Private SelectionMenu * priv_active_menu_ptr = NULL;
 
 
 
-Public void menu_enterMenu(SelectionMenu * menu)
+Public void menu_enterMenu(SelectionMenu * menu, Boolean isInitial)
 {
     priv_active_menu_ptr = menu;
 
@@ -49,8 +49,7 @@ Public void menu_enterMenu(SelectionMenu * menu)
         menu->checked_item = menu->selected_item;
     }
 
-    //drawMenu(priv_active_menu_ptr);
-    drawMenuAndBackground(priv_active_menu_ptr);
+    drawMenuAndBackground(priv_active_menu_ptr, !isInitial);
 
     //Subscribe to buttons.
     buttons_subscribeListener(UP_BUTTON, upButtonListener);
@@ -161,9 +160,9 @@ Private void drawMenu(SelectionMenu * menu)
     }
 }
 
-Private void drawMenuAndBackground(SelectionMenu * menu)
+Private void drawMenuAndBackground(SelectionMenu * menu, Boolean isForceRedraw)
 {
-    if (!menu->isTransparentMenu)
+    if (!menu->isTransparentMenu || isForceRedraw)
     {
         display_clear();
     }
@@ -190,7 +189,7 @@ Private void okButtonListener(void)
     case(MENU_ACTION_SUBMENU):
             sub = item->ActionArg.subMenu_ptr;
             sub->parent = priv_active_menu_ptr;
-            menu_enterMenu(sub);
+            menu_enterMenu(sub, FALSE);
             break;
     case(MENU_ACTION_WIDGET):
             /* TODO : Currently we have only 1 widget type, in the future this might become more complex. */
@@ -208,7 +207,7 @@ Private void okButtonListener(void)
             if (priv_active_menu_ptr->isCheckedMenu)
             {
                 priv_active_menu_ptr->checked_item = priv_active_menu_ptr->selected_item;
-                drawMenuAndBackground(priv_active_menu_ptr);
+                drawMenuAndBackground(priv_active_menu_ptr, TRUE);
             }
             break;
     case(MENU_ACTION_NONE):
@@ -244,7 +243,7 @@ Private void backButtonListener(void)
         if (priv_active_menu_ptr->parent != NULL)
         {
             /* This is a submenu. */
-            menu_enterMenu(priv_active_menu_ptr->parent);
+            menu_enterMenu(priv_active_menu_ptr->parent, FALSE);
         }
     }
 }

@@ -54,7 +54,7 @@ typedef struct _Selection_Menu_
 
 } SelectionMenu;
 
-extern void menu_enterMenu(SelectionMenu * menu);
+extern void menu_enterMenu(SelectionMenu * menu, Boolean isInitial);
 extern void menu_exitMenu(void);
 
 extern void menu_setSelectedItem(SelectionMenu * menu, U8 selected_item);

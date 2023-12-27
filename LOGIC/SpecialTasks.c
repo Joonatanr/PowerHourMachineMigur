@@ -354,7 +354,7 @@ Private const Task_T priv_TextArrayAllLevel2[] =
      {  "Everybody takes off"   , "One Item of Clothing",          NULL       ,   .nude_level = 2u, .sexy_level = 0u },  /* 3  */
 
      {  "Everybody who is"      , "horny drinks",                   "3x"      ,   .nude_level = 0u, .sexy_level = 1u     }, /* 3  */
-     {  "Everybody who has"     , "ever watched gay",   "porn drinks 3x"      ,   .nude_level = 0u, .sexy_level = 1u     }, /* 3  */
+     {  "Everybody who has"     , "ever watched gay",   "porn drinks 3x"      ,   .nude_level = 0u, .sexy_level = 2u     }, /* 3  */
      {  "Everybody who has"     , "watched porn",       "today drinks 3x"     ,   .nude_level = 0u, .sexy_level = 1u     }, /* 3  */
 
      {  "Everybody drinks"      , "while slapping",       "their own ass"     ,   .nude_level = 0u, .sexy_level = 2u },  /* 3  */
@@ -383,27 +383,27 @@ Private U8 priv_TextArrayMigurLevel2_counter[NUMBER_OF_ITEMS(priv_TextArrayMigur
 Private const Task_T priv_TextArrayGirlsLevel3[] =
 {
  /* Casual tasks : These should not contain any extra criteria. */
-     {  "Vodka round!!!",          "for girls!!!"   ,                   NULL   ,  .nude_level = 0u, .sexy_level = 0u }, /* 2  */
-     {  "Girl showing the"     ,   "least cleavage"  ,           "drinks 3x"   ,  .nude_level = 0u, .sexy_level = 0u }, /* 9  */
-     {  "Girls can"            ,   "slap one of"  ,              "the guys"    ,  .nude_level = 0u, .sexy_level = 0u }, /* 12 */
-     {  "All girls must",          "drink under",                "the table"   ,  .nude_level = 0u, .sexy_level = 0u }, /* 18 */
+     {  "Vodka round!!!",          "for girls!!!"   ,                   NULL   ,  .nude_level = 0u, .sexy_level = 0u }, /* 4  */
+     {  "Girl showing the"     ,   "least cleavage"  ,           "drinks 3x"   ,  .nude_level = 0u, .sexy_level = 0u }, /* 5  */
+     {  "Girls can"            ,   "slap one of"  ,              "the guys"    ,  .nude_level = 0u, .sexy_level = 0u }, /* 6  */
+     {  "All girls must",          "drink under",                "the table"   ,  .nude_level = 0u, .sexy_level = 0u }, /* 7  */
 
  /* Tasks that need criteria. */
-     {  "Girls must"             , "do a ",                      "sexy dance"  ,  .nude_level = 0u, .sexy_level = 2u }, /* 1  */
-     {  "Most naked"           ,   "girl drinks ",               "2x"          ,  .nude_level = 1u, .sexy_level = 0u }, /* 3  */
-     {  "All girls lose"       ,   "two items of ",              "clothing"    ,  .nude_level = 2u, .sexy_level = 0u }, /* 4  */
-     {  "Girls with"           ,   ">5 flags&numbers",           "drink 3x"    ,  .nude_level = 0u, .sexy_level = 1u }, /* 5  */
-     {  "Girls who've had"     ,   "sex with 1 of the",  "players drink 2x"    ,  .nude_level = 0u, .sexy_level = 1u }, /* 6  */
-     {  "Girls do"             ,   "bodyshots!!!",                     NULL    ,  .nude_level = 0u, .sexy_level = 2u }, /* 7  */
-     {  "The last girl"        ,   "to finish shot"  ,    "loses 1 clothing"   ,  .nude_level = 2u, .sexy_level = 0u }, /* 10 */
-     {  "The last girl"        ,   "to finish shot"  ,    "loses 1 clothing"   ,  .nude_level = 2u, .sexy_level = 0u }, /* 10 */
-     {  "Girl showing the"     ,   "most cleavage"  ,           "drinks 3x"    ,  .nude_level = 1u, .sexy_level = 1u }, /* 11 */
-     {  "Girls: 1 shot for"    ,  "each guy they slept"  , "with this year"    ,  .nude_level = 0u, .sexy_level = 2u }, /* 14 */
-     {  "All girls with"       ,  "black underwear"      , "drink vodka"       ,  .nude_level = 0u, .sexy_level = 1u }, /* 15 */
-     { " Girls must make"      ,  "a naughty"   ,                "toast"       ,  .nude_level = 0u, .sexy_level = 1u }, /* 16 */
-     { " Girls must make"      ,  "a kinky"   ,                  "toast"       ,  .nude_level = 0u, .sexy_level = 1u }, /* 17 */
-     {  "All girls must"       ,  "drink with hands",    "on their butts"      ,  .nude_level = 0u, .sexy_level = 2u }, /* 19 */
-     { "All girls must"        ,  "drink while",          "twerking"           ,  .nude_level = 0u, .sexy_level = 2u }, /* 19 */
+     {  "Girls must"             , "do a ",                      "sexy dance"  ,  .nude_level = 0u, .sexy_level = 2u }, /* 8  */
+     {  "Most naked"           ,   "girl drinks ",               "2x"          ,  .nude_level = 1u, .sexy_level = 0u }, /* 9  */
+     {  "All girls lose"       ,   "two items of ",              "clothing"    ,  .nude_level = 2u, .sexy_level = 0u }, /* 10 */
+     {  "Girls with"           ,   ">5 flags&numbers",           "drink 3x"    ,  .nude_level = 0u, .sexy_level = 1u }, /* 11 */
+     {  "Girls who've had"     ,   "sex with 1 of the",  "players drink 2x"    ,  .nude_level = 0u, .sexy_level = 1u }, /* 12 */
+     {  "Girls do"             ,   "bodyshots!!!",                     NULL    ,  .nude_level = 0u, .sexy_level = 2u }, /* 13 */
+     {  "The last girl"        ,   "to finish shot"  ,    "loses 1 clothing"   ,  .nude_level = 2u, .sexy_level = 0u }, /* 14 */
+     {  "The last girl"        ,   "to finish shot"  ,    "loses 1 clothing"   ,  .nude_level = 2u, .sexy_level = 0u }, /* 15 */
+     {  "Girl showing the"     ,   "most cleavage"  ,           "drinks 3x"    ,  .nude_level = 1u, .sexy_level = 1u }, /* 16 */
+     {  "Girls: 1 shot for"    ,   "each guy they slept"  , "with this year"   ,  .nude_level = 0u, .sexy_level = 2u }, /* 17 */
+     {  "All girls with"       ,   "black underwear"      , "drink vodka"      ,  .nude_level = 0u, .sexy_level = 1u }, /* 18 */
+     { " Girls must make"      ,   "a naughty"   ,                "toast"      ,  .nude_level = 0u, .sexy_level = 1u }, /* 19 */
+     { " Girls must make"      ,   "a kinky"   ,                  "toast"      ,  .nude_level = 0u, .sexy_level = 1u }, /* 20 */
+     {  "All girls must"       ,   "drink with hands",    "on their butts"     ,  .nude_level = 0u, .sexy_level = 2u }, /* 21 */
+     { "All girls must"        ,   "drink while",          "twerking"          ,  .nude_level = 0u, .sexy_level = 2u }, /* 22 */
 };
 
 Private U8 priv_TextArrayGirlsLevel3_counter[NUMBER_OF_ITEMS(priv_TextArrayGirlsLevel3)];
@@ -848,13 +848,18 @@ Private void ReplaceStringEscapeChars(const char * str, char * dest)
 {
     const char * ps = str;
 
+    if (ps == NULL)
+    {
+        return;
+    }
+
     while(*ps)
     {
         if(*ps == '{')
         {
             if (*(ps+1) == '$' && *(ps+2) == '}' )
             {
-                ps+=2;
+                ps+=3;
 
                 if (priv_selected_migur == DIANA)
                 {
@@ -944,20 +949,29 @@ Private Boolean SpecialTaskWithRandomText(U8 sec, SpecialTaskType type)
         case (2u):
             {
                 display_clear();
-                ReplaceStringEscapeChars(priv_task_str_ptr->upper_text, priv_str_buf);
-                display_drawStringCenter(priv_str_buf, DISPLAY_CENTER, 30u, SPECIALTASK_FONT, FALSE);
+                if (priv_task_str_ptr->upper_text != NULL)
+                {
+                    ReplaceStringEscapeChars(priv_task_str_ptr->upper_text, priv_str_buf);
+                    display_drawStringCenter(priv_str_buf, DISPLAY_CENTER, 30u, SPECIALTASK_FONT, FALSE);
+                }
             }
             break;
         case (3u):
             {
-                ReplaceStringEscapeChars(priv_task_str_ptr->middle_text, priv_str_buf);
-                display_drawStringCenter(priv_str_buf, DISPLAY_CENTER, 60u, SPECIALTASK_FONT, FALSE);
+                if (priv_task_str_ptr->middle_text != NULL)
+                {
+                    ReplaceStringEscapeChars(priv_task_str_ptr->middle_text, priv_str_buf);
+                    display_drawStringCenter(priv_str_buf, DISPLAY_CENTER, 60u, SPECIALTASK_FONT, FALSE);
+                }
             }
             break;
         case(4u):
             {
-                ReplaceStringEscapeChars(priv_task_str_ptr->lower_text, priv_str_buf);
-                display_drawStringCenter(priv_str_buf, DISPLAY_CENTER, 90u, SPECIALTASK_FONT, FALSE);
+                if (priv_task_str_ptr->lower_text != NULL)
+                {
+                    ReplaceStringEscapeChars(priv_task_str_ptr->lower_text, priv_str_buf);
+                    display_drawStringCenter(priv_str_buf, DISPLAY_CENTER, 90u, SPECIALTASK_FONT, FALSE);
+                }
             }
             break;
         case (8u):
