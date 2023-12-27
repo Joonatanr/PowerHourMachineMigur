@@ -389,6 +389,9 @@ Private const Task_T priv_TextArrayMigurLevel2[] =
      {  "{$} must use a cheesy" , "pickup line on", "somebody in the room"  , .nude_level = 0u, .sexy_level = 1u,  }, /* 2  */
      {  "{$} must distribute"   , "6x beershots"  , "among the players"     , .nude_level = 0u, .sexy_level = 1u,  }, /* 3  */
      {  "{$} must drink"        , "without using"  , "her hands"            , .nude_level = 0u, .sexy_level = 0u,  }, /* 4  */
+     {  "Whoever is closest"    , "makes a selfie" , "with {$}"             , .nude_level = 0u, .sexy_level = 0u,  }, /* 4  */
+     {  "Whoever is closest"    , "must make {$}"  , "laugh, or take 1 vodka", .nude_level = 0u, .sexy_level = 0u,  }, /* 4  */
+
 
      {  "{$} commands 1 person" , "to do his or her best"  , "Jack Sparrow imitation", .nude_level = 0u, .sexy_level = 0u,  }, /* 4  */
 
@@ -495,8 +498,10 @@ Private const Task_T priv_TextArrayAllLevel3[] =
      {  "Everybody drinks"      , "with their hands",     "behind their back" ,     .nude_level = 0u, .sexy_level = 1u  }, /* 14  */
      {  "Everybody drinks"      , "with their hands",     "on their head"     ,     .nude_level = 0u, .sexy_level = 0u  }, /* 15  */
 
-
      {  "Everybody who has"     , "had sex today",                "drinks 3x" ,    .nude_level = 0u, .sexy_level = 1u }, /* 16  */
+     {  "Everybody who is"      , "sitting in their phone",       "drinks 3x" ,    .nude_level = 0u, .sexy_level = 0u }, /* 16  */
+     {  "Everybody who is"      , "sitting in their phone",     "loses pants" ,    .nude_level = 2u, .sexy_level = 0u }, /* 16  */
+
 
      {  "One round of rock"     , "paper scissors, losers", "lose 1 item of clothing" , .nude_level = 2u, .sexy_level = 0u  }, /* 17  */
 };
@@ -506,9 +511,24 @@ Private U8 priv_TextArrayAllLevel3_counter[NUMBER_OF_ITEMS(priv_TextArrayAllLeve
 /* TODO : Placeholder */
 Private const Task_T priv_TextArrayMigurLevel3[] =
 {
-     {  NULL                    , "{$} drinks 2x",               NULL       , .nude_level = 0u, .sexy_level = 0u   }, /* 1  */
-     {  "{$} must take"         , "vodka shot",                  NULL       , .nude_level = 0u, .sexy_level = 0u   }, /* 2  */
-     {  "Shortest Migur"        , "takes a",               "vodka shot"     , .nude_level = 0u, .sexy_level = 0u   }, /* 3  */
+     {  NULL                    , "{$} drinks 2x",               NULL       ,       .nude_level = 0u, .sexy_level = 0u   }, /* 1  */
+     {  "{$} must take"         , "vodka shot",                  NULL       ,       .nude_level = 0u, .sexy_level = 0u   }, /* 2  */
+     {  "Shortest Migur"        , "takes a",               "vodka shot"     ,       .nude_level = 0u, .sexy_level = 0u   }, /* 3  */
+
+     {  "One Migur gets a"     , "a shot of water, ", "the other vodka"     ,       .nude_level = 0u, .sexy_level = 0u   }, /* 4  */
+     {  "{$} must moan",        "between shots"       ,"and drink 3x"       ,       .nude_level = 0u, .sexy_level = 2u,  }, /* 5  */
+     {  "The 3rd person to ", "{$}'s right must"  ,"ask 1 question from her",       .nude_level = 0u, .sexy_level = 2u,  }, /* 6  */
+     {  "{$} must drink"    ,   "while twerking"       ,               NULL,        .nude_level = 0u, .sexy_level = 2u,  }, /* 7  */
+
+     {  "{$} must do",        "a TikTok dance"       ,"while drinking"      ,       .nude_level = 0u, .sexy_level = 1u,  }, /* 5  */
+
+
+     {  "Everybody who has"     , "seen {$} naked",             "drinks 3x" ,       .nude_level = 0u, .sexy_level = 2u,  }, /* 8  */
+     {  "All the boyfriends"    , "of Migurs",             "drink vodka" ,          .nude_level = 0u, .sexy_level = 0u,  }, /* 8  */
+
+     {  "{$} must remove"     , "1 item of clothing",            NULL       ,       .nude_level = 2u, .sexy_level = 0u,  }, /* 9  */
+     {  "{$} must remove"     , "1 item of clothing",            NULL       ,       .nude_level = 2u, .sexy_level = 0u,  }, /* 10 */
+     {  "{$} must remove"     , "1 item of clothing",            NULL       ,       .nude_level = 2u, .sexy_level = 0u,  }, /* 11 */
 };
 Private U8 priv_TextArrayMigurLevel3_counter[NUMBER_OF_ITEMS(priv_TextArrayMigurLevel3)];
 
@@ -659,6 +679,12 @@ Private const Task_T priv_TextArrayMigurLevel4[] =
      {  NULL                    , "{$} drinks 2x",               NULL       , .nude_level = 0u, .sexy_level = 0u    }, /* 1  */
      {  "{$} must take"         , "vodka shot",                  NULL       , .nude_level = 0u, .sexy_level = 0u    }, /* 2  */
      {  "Shortest Migur"        , "takes a",               "vodka shot"     , .nude_level = 0u, .sexy_level = 0u    }, /* 3  */
+
+     {  "{$} must spin the"   , "bottle",                        NULL       , .nude_level = 0u, .sexy_level = 1u,   }, /* 3  */
+
+     {  "{$} must choose"     , "a male player",            "to slap"       ,  .nude_level = 0u, .sexy_level = 2u,  }, /* 3  */
+     {  "{$} must choose"     , "a female player",          "to slap"       ,  .nude_level = 0u, .sexy_level = 2u,  }, /* 3  */
+     {  "{$} gives vodka to"  , "the player she believes",  "has largest penis", .nude_level = 0u, .sexy_level = 1u,}, /* 3  */
 };
 Private U8 priv_TextArrayMigurLevel4_counter[NUMBER_OF_ITEMS(priv_TextArrayMigurLevel4)];
 
