@@ -123,6 +123,7 @@ typedef struct
     Boolean isInverted;
 } IntroSequence;
 
+
 /*****************************************************************************************************
  *
  * Private function Prototypes
@@ -144,7 +145,7 @@ Private U8 selectRandomTaskIndex(void);
 Private Boolean guysSpecialIntro(U8 sec);
 Private Boolean girlsSpecialIntro(U8 sec);
 Private Boolean EverybodySpecialIntro(U8 sec);
-Private Boolean KaisaSpecialIntro(U8 sec);
+Private Boolean MigurSpecialIntro(U8 sec);
 Private Boolean genericIntroFunction(const IntroSequence * intro_ptr, U8 sec);
 
 Private void doFinalAction(void);
@@ -223,12 +224,12 @@ Private const ControllerEvent priv_everybody_drink_events[] =
      { .second = 59u, .upperText = "Proosit!",      .lowerText = "Cheers!",             .shot_action = OVERRIDE_FUNCTION         , .func = &everybodySpecialTask    },
 };
 
-Private const ControllerEvent priv_kaisa_drink_events[] =
+Private const ControllerEvent priv_migur_drink_events[] =
 {
-     { .second = 7u,  .upperText = "",              .lowerText = "",                    .shot_action = OVERRIDE_FUNCTION         , .func = &KaisaSpecialIntro       },
-     { .second = 20u, .upperText = "Fill shots",    .lowerText = "Task for Kaisa!",     .shot_action = BEERSHOT_BEGIN_FILLING    , .func = NULL },
-     { .second = 44u, .upperText = "Ready",         .lowerText = NULL,                  .shot_action = BEERSHOT_FULL             , .func = NULL },
-     { .second = 59u, .upperText = "Proosit!",      .lowerText = "Cheers!",             .shot_action = OVERRIDE_FUNCTION         , .func = &kaisaSpecialTask        },
+     { .second = 7u,  .upperText = "",              .lowerText = "",                    .shot_action = OVERRIDE_FUNCTION         , .func = &MigurSpecialIntro       },
+     { .second = 20u, .upperText = "Fill shots",    .lowerText = "Task for Migur!",     .shot_action = BEERSHOT_BEGIN_FILLING    , .func = NULL                     },
+     { .second = 44u, .upperText = "Ready",         .lowerText = NULL,                  .shot_action = BEERSHOT_FULL             , .func = NULL                     },
+     { .second = 59u, .upperText = "Proosit!",      .lowerText = "Cheers!",             .shot_action = OVERRIDE_FUNCTION         , .func = &MigurSpecialTask        },
 };
 
 
@@ -240,7 +241,7 @@ Private const SchedulerTaskConf_T priv_scheduler_conf[NUMBER_OF_TASK_TYPES] =
      {  .event_array = priv_girls_drink_events,     .event_cnt = NUMBER_OF_ITEMS(priv_girls_drink_events),      .bitmap_category = FILES_WOMEN     },  /*   TASK_FOR_GIRLS        */
      {  .event_array = priv_guys_drink_events,      .event_cnt = NUMBER_OF_ITEMS(priv_guys_drink_events),       .bitmap_category = FILES_MEN       },  /*   TASK_FOR_GUYS         */
      {  .event_array = priv_everybody_drink_events, .event_cnt = NUMBER_OF_ITEMS(priv_everybody_drink_events),  .bitmap_category = FILES_EVERYBODY },  /*   TASK_FOR_EVERYONE     */
-     {  .event_array = priv_kaisa_drink_events,     .event_cnt = NUMBER_OF_ITEMS(priv_kaisa_drink_events),      .bitmap_category = FILES_KAISA     },  /*   TASK_FOR_KAISA        */
+     {  .event_array = priv_migur_drink_events,     .event_cnt = NUMBER_OF_ITEMS(priv_migur_drink_events),      .bitmap_category = FILES_MIGUR     },  /*   TASK_FOR_MIGUR        */
 };
 
 
@@ -533,13 +534,17 @@ Private Boolean EverybodySpecialIntro(U8 sec)
 }
 
 
-Private Boolean KaisaSpecialIntro(U8 sec)
+
+Private Boolean MigurSpecialIntro(U8 sec)
 {
     IntroSequence sequence;
 
     sequence.isInverted = FALSE;
     sequence.text_font = FONT_MEDIUM_FONT;
-    sequence.text_str = "Round for Kaisa!";
+
+    /* Could be a task for both of them, so lets not reveal the selection yet. */
+    sequence.text_str = "Round for the Migurs!";
+
     sequence.text_x = 5u;
     sequence.text_y = 5u;
 

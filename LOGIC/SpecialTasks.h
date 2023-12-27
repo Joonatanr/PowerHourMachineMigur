@@ -16,7 +16,7 @@ typedef enum
     TASK_FOR_GIRLS,
     TASK_FOR_GUYS,
     TASK_FOR_EVERYONE,
-    TASK_FOR_KAISA,
+    TASK_FOR_MIGUR,
 
     NUMBER_OF_TASK_TYPES
 } SpecialTaskType;
@@ -29,7 +29,7 @@ extern void SpecialTasks_init(void);
 extern Boolean girlsSpecialTask(U8 sec);
 extern Boolean guysSpecialTask(U8 sec);
 extern Boolean everybodySpecialTask(U8 sec);
-extern Boolean kaisaSpecialTask(U8 sec);
+extern Boolean MigurSpecialTask(U8 sec);
 
 
 #endif /* LOGIC_POWERHOURGAME_SPECIALTASKS_H_ */
