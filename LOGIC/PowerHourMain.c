@@ -16,10 +16,12 @@
 #include "SpecialTasks.h"
 #include "Scheduler.h"
 #include "buttons.h"
+#include "misc.h"
 
 #define ENABLE_BORDERS
 
 //#define DISABLE_BUZZER_FOR_TESTING
+//#define PSEUDORANDOM_NUMBER_TEST
 
 #define CLOCK_X_OFFSET 3u
 #define CLOCK_Y_OFFSET 15u
@@ -289,11 +291,37 @@ Public void powerHour_init(void)
 Public void powerHour_start(void)
 {
     U8 ix;
+#ifdef PSEUDORANDOM_NUMBER_TEST
+    char buf[10];
+    U8 xCoord = 5u;
+    U8 yCoord = 5u;
+#endif
 
     /* Set up critical variables, as we might want to restart the game. */
     priv_curr_minute = 0u;
     priv_curr_second = 0u;
     priv_state = CONTROLLER_INIT;
+
+#ifdef PSEUDORANDOM_NUMBER_TEST
+    int number = generate_random_number(30u);
+
+    for (ix = 0u; ix < 40u; ix++)
+    {
+        long2string(number, buf);
+        display_drawString(buf, xCoord, yCoord, FONT_SMALL_FONT_12, FALSE);
+        yCoord += 10u;
+
+        if (yCoord > 120u)
+        {
+            yCoord = 5u;
+            xCoord += 20u;
+        }
+
+        number = generate_random_number(30u);
+    }
+
+    timer_delay_msec(10000);
+#endif
 
     redrawBackground();
 
