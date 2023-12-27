@@ -10,17 +10,19 @@
 
 #include "typedefs.h"
 
+
 typedef enum
 {
-    POTENTIOMETER_RAINBOW_LEVEL,    /* How gay is OK?                    */
-    POTENTIOMETER_NUDE_LEVEL,       /* Nude task meter                   */
-    POTENTIOMETER_SEXY_LEVEL,       /* Sexy task meter                   */
-    POTENTIOMETER_KAISA,            /* How drunk Kaisa is                */
-    POTENTIOMETER_GIRLS,            /* How brave/intense the girls are   */
-    POTENTIOMETER_GUYS,             /* How brave/intense the guys are    */
+    POTENTIOMETER_NUDE_LEVEL,       /* Stripi mõõdik                        */
+    POTENTIOMETER_SEXY_LEVEL,       /* Nilbuste mõõdik                      */
+    POTENTIOMETER_MIGUR1,           /* Diana/Mirtel                         */
+    POTENTIOMETER_MIGUR2,           /* Mirtel/Diana                         */
+    POTENTIOMETER_GIRLS,            /* How brave/intense the girls are      */
+    POTENTIOMETER_GUYS,             /* How brave/intense the guys are       */
 
     NUMBER_OF_DEFINED_POTENTIOMETERS
 } potentiometer_T;
+
 
 extern void pot_init(void);
 extern void pot_cyclic_10ms(void);
