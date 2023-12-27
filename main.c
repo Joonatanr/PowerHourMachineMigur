@@ -200,7 +200,6 @@ Private void timer_50msec_callback(void)
 
 Private void showStartScreen(void)
 {
-    /* TODO : Placeholder. */
     /* Load a bitmap and display it on the screen. */
 #ifdef DISPLAY_TEST
     display_test();

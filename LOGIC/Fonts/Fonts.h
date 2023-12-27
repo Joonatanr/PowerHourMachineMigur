@@ -36,7 +36,7 @@ typedef enum
 {
     FONT_SMALL_FONT_12,
     FONT_ARIAL_12,
-    FONT_COURIER_14, /* TODO : Is this actually necessary? */
+    FONT_COURIER_14,
     FONT_ARIAL_16_BOLD,
     FONT_TNR_HUGE_NUMBERS,
 
@@ -44,7 +44,6 @@ typedef enum
 } FontType_t;
 
 /* Legacy conversion */
-//#define FONT_MEDIUM_FONT FONT_COURIER_14
 #define FONT_MEDIUM_FONT FONT_ARIAL_12
 #define FONT_LARGE_FONT FONT_ARIAL_16_BOLD
 
