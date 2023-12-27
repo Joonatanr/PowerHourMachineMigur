@@ -16,7 +16,7 @@ Private U16 priv_char_buf[1320u * 2u];
 
 
 
-
+/***************************** Public functions  **************************************************/
 Public U8 LcdWriter_drawChar(char c, int x, int y, FontType_t font)
 {
     U8 res = 0u;

@@ -9,150 +9,68 @@
 #include "driverlib.h"
 
 
+typedef struct
+{
+    U8 port;
+    U16 pin;
+} Gpio_Conf_T;
+
+
+Private const Gpio_Conf_T priv_output_conf[NUMBER_OF_OUTPUT_PINS] =
+{
+     {.port = GPIO_PORT_P1, .pin = GPIO_PIN0 }, /*  LED_ONE         */
+     {.port = GPIO_PORT_P2, .pin = GPIO_PIN0 },/*  LED_TWO_RED     */
+     {.port = GPIO_PORT_P2, .pin = GPIO_PIN1 },/*  LED_TWO_GREEN   */
+     {.port = GPIO_PORT_P2, .pin = GPIO_PIN2 },/*  LED_TWO_BLUE    */
+     {.port = GPIO_PORT_P6, .pin = GPIO_PIN1 },/*  DISP_RESET      */
+     {.port = GPIO_PORT_P1, .pin = GPIO_PIN7 },/*  DISP_RS         */
+     {.port = GPIO_PORT_P4, .pin = GPIO_PIN6 },/*  DISP_CS         */
+     {.port = GPIO_PORT_P5, .pin = GPIO_PIN1 },/*  SD_CARD_CS      */
+};
+
+Private const Gpio_Conf_T priv_input_conf[NUMBER_OF_INPUT_PINS] =
+{
+     {.port = GPIO_PORT_P1, .pin = GPIO_PIN1 }, /*  LED_ONE         */
+     {.port = GPIO_PORT_P1, .pin = GPIO_PIN4 }, /*  LED_TWO_RED     */
+};
+
+/***************************** Public functions  **************************************************/
 Public void ports_init(void)
 {
-    /* TODO : Fix the ports module, so we have all the pins in one table and it is only necessary to change them in one place. */
-    //First lets set up LED ports as outputs.
-    GPIO_setAsOutputPin(GPIO_PORT_P1, GPIO_PIN0 | GPIO_PIN7);
-    GPIO_setAsOutputPin(GPIO_PORT_P2, GPIO_PIN0 | GPIO_PIN1 | GPIO_PIN2);
+    U8 ix;
 
-    //Lets set up S1 and S2 as input pins.
-    GPIO_setAsInputPinWithPullUpResistor(GPIO_PORT_P1, GPIO_PIN1 | GPIO_PIN4);
+    for (ix = 0u; ix < NUMBER_OF_OUTPUT_PINS; ix++)
+    {
+        GPIO_setAsOutputPin(priv_output_conf[ix].port, priv_output_conf[ix].pin);
+    }
 
-    /* Set up the display reset pin */
-    GPIO_setAsOutputPin(GPIO_PORT_P6, GPIO_PIN1);
+    for (ix = 0u; ix < NUMBER_OF_INPUT_PINS; ix++)
+    {
+        GPIO_setAsInputPinWithPullUpResistor(priv_input_conf[ix].port, priv_input_conf[ix].pin);
+    }
 
-    /* Setup display chip select pin. */
-    GPIO_setAsOutputPin(GPIO_PORT_P4, GPIO_PIN6);
-
-    /* Setup SD card chip select pin. */
-    GPIO_setAsOutputPin(GPIO_PORT_P5, GPIO_PIN1);
     GPIO_setOutputLowOnPin(GPIO_PORT_P5, GPIO_PIN1);
 }
 
 
-Public void ports_set_led_one(U8 state)
+Public void ports_setOutput(U8 state, Output_Pin_T output)
 {
     if (state == 1u)
     {
-        GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN0);
+        GPIO_setOutputHighOnPin(priv_output_conf[output].port, priv_output_conf[output].pin);
     }
     else
     {
-        GPIO_setOutputLowOnPin(GPIO_PORT_P1, GPIO_PIN0);
+        GPIO_setOutputLowOnPin(priv_output_conf[output].port, priv_output_conf[output].pin);
     }
 }
 
-
-Public void ports_set_led_two_red(U8 state)
+Public U8 ports_isInput(Input_Pin_T input)
 {
-    if (state == 1u)
+    U8 res = 0u;
+    if (GPIO_getInputPinValue(priv_input_conf[input].port, priv_input_conf[input].pin) == GPIO_INPUT_PIN_LOW)
     {
-        GPIO_setOutputHighOnPin(GPIO_PORT_P2, GPIO_PIN0);
-    }
-    else
-    {
-        GPIO_setOutputLowOnPin(GPIO_PORT_P2, GPIO_PIN0);
-    }
-}
-
-
-Public void ports_set_led_two_green(U8 state)
-{
-    if (state == 1u)
-    {
-        GPIO_setOutputHighOnPin(GPIO_PORT_P2, GPIO_PIN1);
-    }
-    else
-    {
-        GPIO_setOutputLowOnPin(GPIO_PORT_P2, GPIO_PIN1);
-    }
-}
-
-
-Public void ports_set_led_two_blue(U8 state)
-{
-    if (state == 1u)
-    {
-        GPIO_setOutputHighOnPin(GPIO_PORT_P2, GPIO_PIN2);
-    }
-    else
-    {
-        GPIO_setOutputLowOnPin(GPIO_PORT_P2, GPIO_PIN2);
-    }
-}
-
-
-Public void ports_set_disp_reset(U8 state)
-{
-    if (state)
-    {
-        GPIO_setOutputHighOnPin(GPIO_PORT_P6, GPIO_PIN1);
-    }
-    else
-    {
-        GPIO_setOutputLowOnPin(GPIO_PORT_P6, GPIO_PIN1);
-    }
-}
-
-
-Public U8 ports_isBtnOne(void)
-{
-    U8 res = 0x00u;
-    if (GPIO_getInputPinValue(GPIO_PORT_P1, GPIO_PIN1) == GPIO_INPUT_PIN_LOW)
-    {
-        res = 0x01u;
+        res = 1u;
     }
     return res;
-}
-
-
-Public U8 ports_isBtnTwo(void)
-{
-    U8 res = 0x00u;
-    if (GPIO_getInputPinValue(GPIO_PORT_P1, GPIO_PIN4) == GPIO_INPUT_PIN_LOW)
-    {
-        res = 0x01u;
-    }
-    return res;
-}
-
-
-/* Set function for the RS or A0 pin. */
-Public void setRS(U8 state)
-{
-    if (state)
-    {
-        GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN7);
-    }
-    else
-    {
-        GPIO_setOutputLowOnPin(GPIO_PORT_P1, GPIO_PIN7);
-    }
-}
-
-/* Set function for Chip Select pin. */
-Public void setDisplayCS(U8 state)
-{
-    if (state)
-    {
-        GPIO_setOutputHighOnPin(GPIO_PORT_P4, GPIO_PIN6);
-    }
-    else
-    {
-        GPIO_setOutputLowOnPin(GPIO_PORT_P4, GPIO_PIN6);
-    }
-}
-
-
-Public void setSdCardCS(U8 state)
-{
-    if (state)
-    {
-        GPIO_setOutputHighOnPin(GPIO_PORT_P5, GPIO_PIN1);
-    }
-    else
-    {
-        GPIO_setOutputLowOnPin(GPIO_PORT_P5, GPIO_PIN1);
-    }
 }

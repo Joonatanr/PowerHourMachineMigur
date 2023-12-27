@@ -141,12 +141,9 @@ Private void TA1_0_IRQHandler(void)
 
     buttons_cyclic10msec();
 
-    //ports_set_led_one(ports_isBtnOne());
-    //ports_set_led_two_green(ports_isBtnTwo());
-    ports_set_led_one(isButton(BLACK_BUTTON));
-    ports_set_led_two_green(isButton(GREEN_BUTTON));
-    ports_set_led_two_blue(isButton(BLUE_BUTTON));
-    ports_set_led_two_red(isButton(RED_BUTTON));
-
+    ports_setOutput(isButton(BLACK_BUTTON), PORTS_LED_ONE);
+    ports_setOutput(isButton(GREEN_BUTTON), PORTS_LED_TWO_GREEN);
+    ports_setOutput(isButton(BLUE_BUTTON), PORTS_LED_TWO_BLUE);
+    ports_setOutput(isButton(RED_BUTTON), PORTS_LED_TWO_RED);
 }
 

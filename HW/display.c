@@ -48,7 +48,8 @@ Public void display_init(void)
 
 Private inline void setReset(U8 state)
 {
-    ports_set_disp_reset(state);
+    //ports_set_disp_reset(state);
+    ports_setOutput(state, PORTS_DISP_RESET);
 }
 
 Private inline void DelayMs(U32 period)
@@ -59,9 +60,9 @@ Private inline void DelayMs(U32 period)
 
 Private void LCD_Command(unsigned char cmd)
 {
-    setRS(0u);
+    ports_setOutput(0, PORTS_DISP_RS);
     SPI_Write_Byte(EUSCI_B0_BASE, cmd);
-    setRS(1u);
+    ports_setOutput(1, PORTS_DISP_RS);
 }
 
 Private void LCD_Data(U8 * data_ptr, U16 len)
@@ -82,7 +83,7 @@ Private void LCD_Init(void)
     setReset(1);
     DelayMs(500);
 
-    setDisplayCS(0);
+    ports_setOutput(0, PORTS_DISP_CS);
     LCD_Command(0x11);//Sleep out
     DelayMs(120);
     //ST7735R Frame Rate
@@ -150,32 +151,13 @@ Private void LCD_Init(void)
     LCD_Data_Byte(0x05);
 
     LCD_Command(0x2C);//Display on
-    //LCD_Rectangle(0,0,162,132,COLOR_RED); // black it out
     LCD_Command(0x29);//Display on
-
 
     //Test Drawing a frame buffer.
     memset(priv_frame_buf, 0x00u, sizeof(U16) * 162u * 132u);
-
-
-    //Lets set some lines to a different color.
-#if 0
-    int x;
-    for (x = 0; x < 162; x++)
-    {
-        priv_frame_buf[5][x] = COLOR_RED;
-        priv_frame_buf[6][x] = COLOR_RED;
-        priv_frame_buf[7][x] = COLOR_BLUE;
-        priv_frame_buf[8][x] = COLOR_BLUE;
-        priv_frame_buf[9][x]= COLOR_GREEN;
-        priv_frame_buf[10][x] = COLOR_GREEN;
-    }
-
-    priv_frame_buf[50][50] = COLOR_GREEN;
-#endif
     LCD_DrawFrameBuffer(0u, 0u, 162u, 132u);
 
-    setDisplayCS(1);
+    ports_setOutput(1, PORTS_DISP_CS);
 }
 
 
@@ -260,19 +242,18 @@ Public void display_clear(void)
 
 Public void display_fill(U16 color)
 {
-    setDisplayCS(0);
+    ports_setOutput(0, PORTS_DISP_CS);
     LCD_Rectangle(0,0,162,132,color);
-    setDisplayCS(1);
+    ports_setOutput(1, PORTS_DISP_CS);
 }
 
 Public void display_fillRectangle(U8 x, U8 y, U8 width, U8 height, U16 color)
 {
-    setDisplayCS(0);
+    ports_setOutput(0, PORTS_DISP_CS);
     LCD_Rectangle(x, y, (x + width) - 1u, (y + height) - 1u, color);
-    setDisplayCS(1);
+    ports_setOutput(1, PORTS_DISP_CS);
 }
 
-/* TODO : This is currently a placeholder API. */
 Public U16 * display_get_frame_buffer(void)
 {
     return &priv_frame_buf[0][0];
@@ -328,14 +309,14 @@ Public void display_drawImage(U8 x, U8 y, U8 width, U8 height, const U16 * src_p
     if (x2 < DISPLAY_WIDTH && y2 < DISPLAY_HEIGHT)
     {
 
-        setDisplayCS(0);
+        ports_setOutput(0, PORTS_DISP_CS);
 
         LCD_SetArea(x, y , x2, y2);
         LCD_Command(0x2C);
 
-        setRS(1);
+        ports_setOutput(1, PORTS_DISP_RS);
 
         spidrv_transmitU16(src_ptr, drawWidth * drawHeight);
-        setDisplayCS(1);
+        ports_setOutput(1, PORTS_DISP_CS);
     }
 }

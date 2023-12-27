@@ -10,21 +10,32 @@
 
 #include "typedefs.h"
 
+
+typedef enum
+{
+    PORTS_LED_ONE,
+    PORTS_LED_TWO_RED,
+    PORTS_LED_TWO_GREEN,
+    PORTS_LED_TWO_BLUE,
+    PORTS_DISP_RESET,
+    PORTS_DISP_RS,
+    PORTS_DISP_CS,
+    PORTS_SD_CARD_CS,
+
+    NUMBER_OF_OUTPUT_PINS
+} Output_Pin_T;
+
+typedef enum
+{
+    BTN_ONE,
+    BTN_TWO,
+
+    NUMBER_OF_INPUT_PINS
+} Input_Pin_T;
+
 extern void ports_init(void);
-
-extern void ports_set_led_one(U8 state);
-extern void ports_set_led_two_red(U8 state);
-extern void ports_set_led_two_green(U8 state);
-extern void ports_set_led_two_blue(U8 state);
-
-extern void ports_set_disp_reset(U8 state);
-
-extern U8 ports_isBtnOne(void);
-extern U8 ports_isBtnTwo(void);
-
-extern void setRS(U8 state);
-extern void setDisplayCS(U8 state);
-extern void setSdCardCS(U8 state);
+extern U8 ports_isInput(Input_Pin_T input);
+extern void ports_setOutput(U8 state, Output_Pin_T output);
 
 
 #endif /* HW_PORTS_H_ */

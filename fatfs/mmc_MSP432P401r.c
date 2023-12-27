@@ -20,11 +20,8 @@
 
 //#define SPI_BASE    EUSCI_B0_BASE
 #define SPI_BASE    EUSCI_B1_BASE
-//#define GPIO_PORT   GPIO_PORT_P5
-//#define DESELECT    GPIO_High(GPIO_PORT_P5, GPIO_PIN1);
-//#define SELECT      GPIO_Low(GPIO_PORT_P5, GPIO_PIN1);
-#define DESELECT      setSdCardCS(1u);
-#define SELECT        setSdCardCS(0u);
+#define DESELECT      ports_setOutput(1, PORTS_SD_CARD_CS);
+#define SELECT        ports_setOutput(0, PORTS_SD_CARD_CS);
 
 
 static volatile DSTATUS Stat = STA_NOINIT;

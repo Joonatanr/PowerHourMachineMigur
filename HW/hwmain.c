@@ -46,10 +46,10 @@ Public void hwmain_init(void)
 
     ports_init();
 
-    ports_set_led_one(0u);
-    ports_set_led_two_blue(0u);
-    ports_set_led_two_green(0u);
-    ports_set_led_two_red(0u);
+    ports_setOutput(0u, PORTS_LED_ONE);
+    ports_setOutput(0u, PORTS_LED_TWO_BLUE);
+    ports_setOutput(0u, PORTS_LED_TWO_GREEN);
+    ports_setOutput(0u, PORTS_LED_TWO_RED);
 
     backlight_init();
 
