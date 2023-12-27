@@ -812,7 +812,6 @@ Private void drawBeerShotBackground(void)
 Private void redrawBackground(void)
 {
     display_clear();
-    /* TODO : Are borders really a good idea??? */
 #ifdef  ENABLE_BORDERS
     drawBorders();
 #endif

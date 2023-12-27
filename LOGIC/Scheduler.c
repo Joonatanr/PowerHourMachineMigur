@@ -193,7 +193,6 @@ void Scheduler_cyclic(void)
 
 Public void Scheduler_50msec_timer(void)
 {
-    /* TODO : Really need to improve the scheduler's timekeeping method... This is quite a poor idea. */
     priv_app_task_timer++;
     priv_task_timer++;
 }
@@ -214,8 +213,25 @@ Private void dedication_start(void)
 
     display_fill(COLOR_RED);
     //display_clear();
+
     display_drawString("This Power Hour Machine",           0u, 2u,  FONT_COURIER_14, FALSE);
 
+
+
+    /**
+     *
+     * Üks masin BESTi rahval sinitaeva all
+       Üks seisab kuskil Hellis maa külmis kivikambreis
+       Üks on loodud Kaisale, kel lõunamandril vald
+       Üks kuulub Esinaisele, ja kloonile, kelle võim on kangeim
+       Külmkapi Töögrupis, meie lipu all.
+
+       Üks masin juhib neid, üks leiab üles,
+       Üks masin toob nad kokku Migurite süles
+       Külmkapi Töögrupis, meie lipu all.
+     *
+     *
+     */
 
     /* Basically we wait for ANY key to be pressed. */
     buttons_subscribeListener(UP_BUTTON,    dedicationExitListener);
