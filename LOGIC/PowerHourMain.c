@@ -198,40 +198,40 @@ Private U8 priv_task_frequency = 3u; /* Default value is a task every 2 minutes.
 Private const ControllerEvent priv_normal_minute_events[] =
 {
      { .second = 7u,  .upperText = "",              .lowerText = "",        .shot_action = BEERSHOT_EMPTY            , .func = NULL },
-     { .second = 20u, .upperText = "Fill shots",    .lowerText = NULL,      .shot_action = BEERSHOT_BEGIN_FILLING    , .func = NULL },
-     { .second = 44u, .upperText = "Ready",         .lowerText = NULL,      .shot_action = BEERSHOT_FULL             , .func = NULL },
+     { .second = 21u, .upperText = "Fill shots",    .lowerText = NULL,      .shot_action = BEERSHOT_BEGIN_FILLING    , .func = NULL },
+     { .second = 45u, .upperText = "Ready",         .lowerText = NULL,      .shot_action = BEERSHOT_FULL             , .func = NULL },
      { .second = 59u, .upperText = "Proosit!",      .lowerText = "Cheers!", .shot_action = BEERSHOT_BEGIN_EMPTYING   , .func = NULL },
 };
 
 Private const ControllerEvent priv_guys_drink_events[] =
 {
      { .second = 7u,  .upperText = "",              .lowerText = "",                    .shot_action = OVERRIDE_FUNCTION         , .func = &guysSpecialIntro   },
-     { .second = 20u, .upperText = "Fill shots",    .lowerText = "Guys' round",         .shot_action = BEERSHOT_BEGIN_FILLING    , .func = NULL },
-     { .second = 44u, .upperText = "Ready",         .lowerText = NULL,                  .shot_action = BEERSHOT_FULL             , .func = NULL },
+     { .second = 21u, .upperText = "Fill shots",    .lowerText = "Guys' round",         .shot_action = BEERSHOT_BEGIN_FILLING    , .func = NULL },
+     { .second = 45u, .upperText = "Ready",         .lowerText = NULL,                  .shot_action = BEERSHOT_FULL             , .func = NULL },
      { .second = 59u, .upperText = "Proosit!",      .lowerText = "Cheers guys!",        .shot_action = OVERRIDE_FUNCTION         , .func = &guysSpecialTask    },
 };
 
 Private const ControllerEvent priv_girls_drink_events[] =
 {
      { .second = 7u,  .upperText = "",              .lowerText = "",                    .shot_action = OVERRIDE_FUNCTION         , .func = &girlsSpecialIntro   },
-     { .second = 20u, .upperText = "Fill shots",    .lowerText = "Girls' round",        .shot_action = BEERSHOT_BEGIN_FILLING    , .func = NULL },
-     { .second = 44u, .upperText = "Ready",         .lowerText = NULL,                  .shot_action = BEERSHOT_FULL             , .func = NULL },
+     { .second = 21u, .upperText = "Fill shots",    .lowerText = "Girls' round",        .shot_action = BEERSHOT_BEGIN_FILLING    , .func = NULL },
+     { .second = 45u, .upperText = "Ready",         .lowerText = NULL,                  .shot_action = BEERSHOT_FULL             , .func = NULL },
      { .second = 59u, .upperText = "Proosit!",      .lowerText = "Cheers girls!",       .shot_action = OVERRIDE_FUNCTION         , .func = &girlsSpecialTask    },
 };
 
 Private const ControllerEvent priv_everybody_drink_events[] =
 {
      { .second = 7u,  .upperText = "",              .lowerText = "",                    .shot_action = OVERRIDE_FUNCTION         , .func = &EverybodySpecialIntro   },
-     { .second = 20u, .upperText = "Fill shots",    .lowerText = "Task for all",        .shot_action = BEERSHOT_BEGIN_FILLING    , .func = NULL },
-     { .second = 44u, .upperText = "Ready",         .lowerText = NULL,                  .shot_action = BEERSHOT_FULL             , .func = NULL },
+     { .second = 21u, .upperText = "Fill shots",    .lowerText = "Task for all",        .shot_action = BEERSHOT_BEGIN_FILLING    , .func = NULL },
+     { .second = 45u, .upperText = "Ready",         .lowerText = NULL,                  .shot_action = BEERSHOT_FULL             , .func = NULL },
      { .second = 59u, .upperText = "Proosit!",      .lowerText = "Cheers!",             .shot_action = OVERRIDE_FUNCTION         , .func = &everybodySpecialTask    },
 };
 
 Private const ControllerEvent priv_migur_drink_events[] =
 {
      { .second = 7u,  .upperText = "",              .lowerText = "",                    .shot_action = OVERRIDE_FUNCTION         , .func = &MigurSpecialIntro       },
-     { .second = 20u, .upperText = "Fill shots",    .lowerText = "Task for Migur!",     .shot_action = BEERSHOT_BEGIN_FILLING    , .func = NULL                     },
-     { .second = 44u, .upperText = "Ready",         .lowerText = NULL,                  .shot_action = BEERSHOT_FULL             , .func = NULL                     },
+     { .second = 21u, .upperText = "Fill shots",    .lowerText = "Task for Migur!",     .shot_action = BEERSHOT_BEGIN_FILLING    , .func = NULL                     },
+     { .second = 45u, .upperText = "Ready",         .lowerText = NULL,                  .shot_action = BEERSHOT_FULL             , .func = NULL                     },
      { .second = 59u, .upperText = "Proosit!",      .lowerText = "Cheers!",             .shot_action = OVERRIDE_FUNCTION         , .func = &MigurSpecialTask        },
 };
 
@@ -620,7 +620,7 @@ Private U8 getScheduledSpecialTask(const ControllerEvent ** event_ptr)
     U8 ix;
     U8 res;
 
-    if ((priv_curr_minute % priv_task_frequency) == 0u)
+    if (((priv_curr_minute + 1u) % priv_task_frequency) == 0u)
     {
         ix = selectRandomTaskIndex();
         *event_ptr = priv_scheduler_conf[ix].event_array;
@@ -755,8 +755,9 @@ Private void drawBeerShot(beerShotAction action)
            priv_beer_state = BEERSHOT_EMPTYING;
            break;
        case OVERRIDE_FUNCTION:
-           /* This is a hack... */
-           priv_beer_state = BEERSHOT_FILLING;
+           priv_beer_state = BEERSHOT_FROZEN;
+           //priv_beershot_counter = 0u;
+           //drawBeerShotLevel(priv_beershot_counter);
        case BEERSHOT_NO_ACTION:
        default:
            break;
