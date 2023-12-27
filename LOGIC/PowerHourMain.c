@@ -17,6 +17,7 @@
 #include "Scheduler.h"
 #include "buttons.h"
 #include "misc.h"
+#include "configuration.h"
 
 #define ENABLE_BORDERS
 
@@ -301,6 +302,7 @@ Public void powerHour_start(void)
     priv_curr_minute = 0u;
     priv_curr_second = 0u;
     priv_state = CONTROLLER_INIT;
+    priv_task_frequency = configuration_getItem(CONFIG_ITEM_TASK_FREQ);
 
 #ifdef PSEUDORANDOM_NUMBER_TEST
     int number = generate_random_number(30u);

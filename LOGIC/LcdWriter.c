@@ -9,6 +9,7 @@
 #include "display.h"
 #include "MISC\misc.h"
 
+
 /* Distance between the y coordinates of two consecutive lines in a string. */
 Private U16 priv_line_distance = 18u;
 Private U16 priv_char_buf[1320u * 2u];

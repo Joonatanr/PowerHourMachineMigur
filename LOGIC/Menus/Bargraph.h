@@ -9,10 +9,11 @@
 #define LOGIC_MENUS_BARGRAPH_H_
 
 #include "typedefs.h"
+#include "Configuration.h"
 #include "menu.h"
 
 typedef void (*bargraph_func)(U16 value);
-typedef U16  (*bargraph_initial_val_func)(void);
+
 
 typedef struct __Bargraph__
 {
@@ -23,7 +24,7 @@ typedef struct __Bargraph__
     struct _Selection_Menu_ * parent;
     char * text;
     bargraph_func value_changed;
-    bargraph_initial_val_func value_initial_fptr;
+    Configuration_Item config_item;
 } Bargraph_T;
 
 extern Bargraph_T BRIGHTNESS_BARGRAPH;

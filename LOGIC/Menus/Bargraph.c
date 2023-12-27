@@ -40,19 +40,7 @@ Public Bargraph_T BRIGHTNESS_BARGRAPH =
      .parent = NULL,
      .text = "Brightness",
      .value_changed = backlight_set_level,
-     .value_initial_fptr = NULL,
-};
-
-Public Bargraph_T SNAKE_SPEED_BARGRAPH =
-{
-     .max_value = 5u,
-     .min_value = 1u,
-     .increment = 1u,
-     .value = 2u,
-     .parent = NULL,
-     .text = "Snake speed",
-     .value_changed = snake_setSpeed,
-     .value_initial_fptr = NULL
+     .config_item = CONFIG_ITEM_BRIGHTNESS,
 };
 
 Public Bargraph_T TASK_FREQUENCY_BARGRAPH =
@@ -64,7 +52,7 @@ Public Bargraph_T TASK_FREQUENCY_BARGRAPH =
      .parent = NULL,
      .text = "Task Frequency (minutes)",
      .value_changed = powerHour_setTaskFrequency,
-     .value_initial_fptr = powerHour_getTaskFrequency
+     .config_item = CONFIG_ITEM_TASK_FREQ,
 };
 
 /*******************/
@@ -121,9 +109,9 @@ Public void enterBarGraph(Bargraph_T * bar)
 
     //priv_number_box = CreateRectangleAroundCenter((Point){64u, NUMBER_OFFSET_Y }, (Size){ 20u, 20u });
 
-    if (bar->value_initial_fptr != NULL)
+    if (bar->config_item < NUMBER_OF_CONFIG_ITEMS)
     {
-        bar->value = bar->value_initial_fptr();
+        bar->value = configuration_getItem(bar->config_item);
     }
 
     drawBackGround();
@@ -206,6 +194,11 @@ Private void updateBargraph(void)
 
 Private void handleButtonAck(void)
 {
+    if (priv_active_bar->config_item < NUMBER_OF_CONFIG_ITEMS)
+    {
+        configuration_setItem(priv_active_bar->value, priv_active_bar->config_item);
+    }
+
     if (priv_active_bar->parent != NULL)
     {
         buttons_unsubscribeAll();

@@ -11,6 +11,7 @@
 
 #include "typedefs.h"
 #include "Fonts/Fonts.h"
+#include "ColorScheme.h"
 
 extern U8 LcdWriter_drawChar(char c, int x, int y, FontType_t font);
 extern void LcdWriter_drawString(char * str, int x, int y, FontType_t font);

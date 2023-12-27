@@ -14,6 +14,7 @@
 #include "Scheduler.h"
 #include "systimer.h"
 #include "pot.h"
+#include "Configuration.h"
 #include "misc.h"
 
 #include "Menus/Menu.h"
@@ -53,10 +54,7 @@ Private void showDedicationText(void);
 Private void startGameHandler(void);
 Private void startSnakeGame(void);
 
-U16 disp_background_color = COLOR_BLACK;
-U16 disp_text_color = COLOR_GREEN;
-U16 disp_highlight_color = COLOR_CYAN;
-U16 disp_ph_prompt_text_color = COLOR_RED;
+
 
 #ifdef STR_TEST
 Private char priv_test_buf[32];
@@ -84,7 +82,6 @@ Private SelectionMenu ColorMenu =
 Private const MenuItem SettingsMenuItemArray[] =
 {
    { .text = "Brightness",    .Action = MENU_ACTION_WIDGET  , .ActionArg.bargraph_ptr = &BRIGHTNESS_BARGRAPH        },
-   { .text = "Snake speed",   .Action = MENU_ACTION_WIDGET  , .ActionArg.bargraph_ptr = &SNAKE_SPEED_BARGRAPH       },
    { .text = "Task frequency",.Action = MENU_ACTION_WIDGET  , .ActionArg.bargraph_ptr = &TASK_FREQUENCY_BARGRAPH    },
    { .text = "Color scheme"  ,.Action = MENU_ACTION_SUBMENU , .ActionArg.subMenu_ptr =  &ColorMenu                  }
 };
@@ -141,6 +138,10 @@ void main(void)
 
     timer_delay_msec(100);
 
+    //Set up the configuration
+    configuration_start();
+    ColorScheme_start();
+
     //Start all scheduler task
     Scheduler_StartTasks();
     timer_delay_msec(100);
@@ -157,7 +158,6 @@ void main(void)
 
     //We show the initial start screen for a while.
     showStartScreen();
-
 
     /* We pass control over to the menu handler. */
     menu_enterMenu(&StartMenu, TRUE);
@@ -295,13 +295,6 @@ Private void pot_test(void)
 }
 #endif
 
-/** Placeholders **/
-Private U16 dummy_snake_speed = 4u;
-
-Public void snake_setSpeed(U16 value)
-{
-    dummy_snake_speed = value;
-}
 
 /* Starts the main Power Hour game. */
 Private void startGameHandler(void)

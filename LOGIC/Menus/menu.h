@@ -61,8 +61,4 @@ extern void menu_setSelectedItem(SelectionMenu * menu, U8 selected_item);
 extern const MenuItem * menu_getSelectedItem(SelectionMenu * menu);
 extern void menu_MoveCursor(SelectionMenu * menu, Boolean dir);
 
-
-extern U16 getSelectedColorScheme(void);
-extern void setSelectedColorSchemeIndex(U16 index);
-
 #endif /* LOGIC_MENU_H_ */
