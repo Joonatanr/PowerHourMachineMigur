@@ -18,7 +18,6 @@ typedef void (*Scheduler_TaskFunc)(void);
 typedef enum
 {
     APPLICATION_POWER_HOUR,
-    //APPLICATION_SNAKE,
     APPLICATION_DEDICATION,
     NUMBER_OF_APPLICATIONS
 } Scheduler_LogicModuleEnum;
