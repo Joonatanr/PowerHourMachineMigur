@@ -535,6 +535,8 @@ Private const Task_T priv_TextArrayMigurLevel3[] =
      {  "Tallest Migur"         , "takes a",               "vodka shot"     ,       .nude_level = 0u, .sexy_level = 0u   }, /* 3  */
      {  "The Migur wearing"     , "the most clothes",  " drinks vodka shot" ,       .nude_level = 0u, .sexy_level = 0u   }, /* 4  */
      {  "The most Migur"        , "does the most",     " Migur thing"       ,       .nude_level = 0u, .sexy_level = 0u   }, /* 5  */
+     {  "For the next 5 minutes", "{$} can only talk", " while singing"     ,       .nude_level = 0u, .sexy_level = 0u   }, /* 5  */
+     {  "{$} can distribute",     "three shots",             "of vodka"     ,       .nude_level = 0u, .sexy_level = 0u   }, /* 5  */
 
      {  "The Migur with"        , "the largest boobs",     " drinks 3x"       ,     .nude_level = 0u, .sexy_level = 1u   }, /* 6  */
      {  "The Migur showing"     , "the least cleavage",    " drinks 3x"       ,     .nude_level = 0u, .sexy_level = 1u   }, /* 7  */
@@ -713,24 +715,25 @@ Private const Task_T priv_TextArrayMigurLevel4[] =
      {  "{$} must take"         , "vodka shot",                  NULL       , .nude_level = 0u, .sexy_level = 0u    }, /* 2  */
      {  "Shortest Migur"        , "takes a",               "vodka shot"     , .nude_level = 0u, .sexy_level = 0u    }, /* 3  */
      {  "{$} can spank"         , "a player",                  NULL         , .nude_level = 0u, .sexy_level = 2u    }, /* 4  */
-     {  "If {$} has been a"     , "good girl today",   "she drinks vodka"   , .nude_level = 0u, .sexy_level = 2u    }, /* 4  */
-     {  "If {$} has been a"     , "bad girl today",    "she drinks vodka"   , .nude_level = 0u, .sexy_level = 2u    }, /* 4  */
+     {  "If {$} has been a"     , "good girl today",   "she drinks vodka"   , .nude_level = 0u, .sexy_level = 2u    }, /* 5  */
+     {  "If {$} has been a"     , "bad girl today",    "she drinks vodka"   , .nude_level = 0u, .sexy_level = 2u    }, /* 6  */
 
 
-     {  "{$} must spin the"   , "bottle",                        NULL       , .nude_level = 0u, .sexy_level = 1u,   }, /* 5  */
+     {  "{$} must spin the"   , "bottle",                        NULL       , .nude_level = 0u, .sexy_level = 1u,   }, /* 7  */
 
-     {  "{$} must choose"     , "a male player",            "to slap"       ,  .nude_level = 0u, .sexy_level = 2u,  }, /* 6  */
-     {  "{$} must choose"     , "a female player",          "to slap"       ,  .nude_level = 0u, .sexy_level = 2u,  }, /* 7  */
-     {  "{$} gives vodka to"  , "the player she believes",  "has largest penis", .nude_level = 0u, .sexy_level = 1u,}, /* 8  */
-     {  "{$} must name"       , "10 sex positions",         NULL            ,  .nude_level = 0u, .sexy_level = 1u,  }, /* 6  */
+     {  "{$} must choose"     , "a male player",            "to slap"       ,  .nude_level = 0u, .sexy_level = 2u,  }, /* 8  */
+     {  "{$} must choose"     , "a female player",          "to slap"       ,  .nude_level = 0u, .sexy_level = 2u,  }, /* 9  */
+     {  "{$} gives vodka to"  , "the player she believes",  "has largest penis", .nude_level = 0u, .sexy_level = 2u,}, /* 10  */
+     {  "{$} must name"       , "10 sex positions",         NULL            ,  .nude_level = 0u, .sexy_level = 1u,  }, /* 11  */
 
+     {  "{$} must drink"      , "while squeezing",          "her boobs"     , .nude_level = 0u, .sexy_level = 3u,   }, /* 12  */
 
-     {  "{$} loses 1 item of"     ,   "clothing"                  ,   NULL,  .nude_level = 1u, .sexy_level = 0u,    }, /* 9  */
-     {  "{$} loses 1 item of"     ,   "clothing"                  ,   NULL,  .nude_level = 1u, .sexy_level = 0u,    }, /* 10  */
-     {  "{$} loses 2 items"       ,   "clothing"                  ,   NULL,  .nude_level = 2u, .sexy_level = 0u,    }, /* 11  */
-     {  "{$} loses 2 items"       ,   "clothing"                  ,   NULL,  .nude_level = 2u, .sexy_level = 0u,    }, /* 12  */
-     {  "{$} confiscates"         ,   "1 item of clothing"        ,   NULL,  .nude_level = 1u, .sexy_level = 0u,    }, /* 13  */
-     {  "{$} confiscates"         ,   "2 items of clothing"       ,   NULL,  .nude_level = 2u, .sexy_level = 0u,    }, /* 14  */
+     {  "{$} loses 1 item of"     ,   "clothing"                  ,   NULL,  .nude_level = 1u, .sexy_level = 0u,    }, /* 13  */
+     {  "{$} loses 1 item of"     ,   "clothing"                  ,   NULL,  .nude_level = 1u, .sexy_level = 0u,    }, /* 14  */
+     {  "{$} loses 2 items"       ,   "clothing"                  ,   NULL,  .nude_level = 2u, .sexy_level = 0u,    }, /* 15  */
+     {  "{$} loses 2 items"       ,   "clothing"                  ,   NULL,  .nude_level = 2u, .sexy_level = 0u,    }, /* 16  */
+     {  "{$} confiscates"         ,   "1 item of clothing"        ,   NULL,  .nude_level = 1u, .sexy_level = 0u,    }, /* 17  */
+     {  "{$} confiscates"         ,   "2 items of clothing"       ,   NULL,  .nude_level = 2u, .sexy_level = 0u,    }, /* 18  */
 };
 Private U8 priv_TextArrayMigurLevel4_counter[NUMBER_OF_ITEMS(priv_TextArrayMigurLevel4)];
 
