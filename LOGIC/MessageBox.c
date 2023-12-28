@@ -195,8 +195,8 @@ Private void drawMessageBox(const char * text, MsgBox_Type type)
             drawButton("Ok", DISPLAY_CENTER);
             break;
         case TYPE_OK_CANCEL:
-            drawButton("Ok", DISPLAY_CENTER - 30u);
-            drawButton("Cancel", DISPLAY_CENTER + 10u);
+            drawButton("Ok", DISPLAY_CENTER - 31u);
+            drawButton("Cancel", DISPLAY_CENTER + 13u);
             break;
         case TYPE_TEXT:
         default:
@@ -207,7 +207,7 @@ Private void drawMessageBox(const char * text, MsgBox_Type type)
 
 Private void drawButton(const char * text, U8 xloc)
 {
-    display_drawStringCenter(text, xloc, (priv_msg_box.location.y + priv_msg_box.size.height) - BUTTON_MARGIN, MSGBOX_FONT, TRUE);
+    display_drawStringCenter(text, xloc, (priv_msg_box.location.y + priv_msg_box.size.height) - BUTTON_MARGIN, FONT_ARIAL_16_BOLD, TRUE);
 }
 
 

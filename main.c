@@ -121,13 +121,11 @@ Private SelectionMenu StartMenu =
 
 void main(void)
 {
+    /* Set up all low level peripherals. */
     hwmain_init();
 
-	/* Test sequence for TFT display. */
+	/* Setup the TFT display. */
 	display_init();
-
-    //Set backlight to 60 percent.
-    backlight_set_level(60);
 
 	timer_delay_msec(1000u);
     /* Initialize the SD Card reader*/
@@ -141,6 +139,8 @@ void main(void)
     //Set up the configuration
     configuration_start();
     ColorScheme_start();
+
+    backlight_set_level(configuration_getItem(CONFIG_ITEM_BRIGHTNESS));
 
     //Start all scheduler task
     Scheduler_StartTasks();
