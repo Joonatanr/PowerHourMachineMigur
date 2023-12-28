@@ -18,10 +18,11 @@
 #include "buttons.h"
 #include "misc.h"
 #include "configuration.h"
+#include "MessageBox.h"
 
 #define ENABLE_BORDERS
 
-#define DISABLE_BUZZER_FOR_TESTING
+//#define DISABLE_BUZZER_FOR_TESTING
 //#define PSEUDORANDOM_NUMBER_TEST
 
 #define CLOCK_X_OFFSET 3u
@@ -162,6 +163,8 @@ Private void HandleUpButton(void);
 Private void HandleDownButton(void);
 Private void HandleRightButton(void);
 Private void HandleLeftButton(void);
+
+Private void handleMessageBoxResponse(MsgBox_Response resp);
 
 /*****************************************************************************************************
  *
@@ -874,12 +877,36 @@ Private void HandleDownButton(void)
 Private void HandleRightButton(void)
 {
     /* This will open up a message box that will allow the user to cancel the game. */
-    //MessageBox_SetResponseHandler(handleMessageBoxResponse);
-    //MessageBox_ShowWithOkCancel("Quit game?");
-    /* TODO : Implement message boxes and then add the ability to quit the game.*/
+    MessageBox_SetResponseHandler(handleMessageBoxResponse);
+    MessageBox_ShowWithOkCancel("Quit game?");
 }
 
 Private void HandleLeftButton(void)
 {
     /* Placeholder. */
+}
+
+
+/* MessageBox Handler. */
+Private void handleMessageBoxResponse(MsgBox_Response resp)
+{
+    /* In reality this is the only type of response that we can get. */
+    /* This is really just for testing right now... */
+    if (resp == RESPONSE_OK)
+    {
+        /* We quit the game. */
+        priv_state = CONTROLLER_EXITING;
+    }
+    else if (resp == RESPONSE_CANCEL)
+    {
+        /* We resume the game. */
+        /* Re subscribe the button handlers. */
+        subscribeButtonHandlers();
+        redrawBackground();
+        drawBeerShotLevel(priv_beershot_counter);
+    }
+    else
+    {
+        /* Should not really happen. */
+    }
 }

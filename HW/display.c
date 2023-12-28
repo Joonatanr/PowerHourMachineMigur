@@ -254,6 +254,14 @@ Public void display_fillRectangle(U8 x, U8 y, U8 width, U8 height, U16 color)
     ports_setOutput(1, PORTS_DISP_CS);
 }
 
+Public void display_drawRectangle(U8 x, U8 y, U8 width, U8 height, U8 line_width, U16 color)
+{
+    display_fillRectangle(x,                       y,                        width,      line_width, color);
+    display_fillRectangle(x,                       y,                        line_width, height,     color);
+    display_fillRectangle(x,                       y + height - line_width,  width,      line_width, color);
+    display_fillRectangle(x + width - line_width,  y,                        line_width, height,     color);
+}
+
 Public U16 * display_get_frame_buffer(void)
 {
     return &priv_frame_buf[0][0];

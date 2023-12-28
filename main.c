@@ -29,7 +29,7 @@
 
 Private U8 priv_50msec_flag = 0u;
 Private U16 priv_msec_counter = 0u;
-Private const char priv_version_string[] = "Machine 4.0";
+Private const char priv_version_string[] = "Machine 4.1";
 
 #ifdef STR_TEST
 Private void ReplaceStringEscapeChars(const char * str, char * dest);
@@ -210,13 +210,13 @@ Private void showStartScreen(void)
 
     BitmapHandler_LoadBitmap("/Migurid/Migurid1.bmp", display_get_frame_buffer());
     display_flushBuffer(0u, 0u, 162u, 132u);
-    timer_delay_msec(5000u);
+    timer_delay_msec(3000u);
 
     LcdWriter_drawStringCenter("Power Hour", (DISPLAY_WIDTH / 2u) + 4u, 40u, FONT_ARIAL_16_BOLD, disp_text_color, disp_background_color);
     LcdWriter_drawStringCenter(priv_version_string, (DISPLAY_WIDTH / 2u) + 4u, 60u, FONT_ARIAL_16_BOLD, disp_text_color, disp_background_color);
     LcdWriter_drawStringCenter("Migur Edition", (DISPLAY_WIDTH / 2u) + 4u, 80u, FONT_COURIER_14, disp_text_color, disp_background_color);
 
-    timer_delay_msec(4000);
+    timer_delay_msec(3000);
     display_flushBuffer(0u, 0u, 162u, 132u);
 }
 

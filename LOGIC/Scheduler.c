@@ -12,7 +12,7 @@
 #include "LcdWriter.h"
 #include "display.h"
 #include "BitmapHandler.h"
-
+#include "MessageBox.h"
 #include "PowerHourMain.h"
 
 /* NB! Current implementation assumes that only 1 task is active at any time, but this can be changed ofcourse. */
@@ -49,6 +49,7 @@ Private const Scheduler_LogicTask priv_tasks[NUMBER_OF_SCHEDULER_TASKS] =
      { .period = 2u,  .init_fptr = buzzer_init,       .start_fptr = NULL,               .cyclic_fptr = buzzer_cyclic100msec,     .stop_fptr = NULL  }, /* Buzzer task.       */
      { .period = 2u,  .init_fptr = buttons_init,      .start_fptr = NULL,               .cyclic_fptr = buttons_cyclic100msec,    .stop_fptr = NULL  }, /* Buttons task       */
      { .period = 2u,  .init_fptr = BitmapHandler_init,.start_fptr = BitmapHandler_start,.cyclic_fptr = BitmapLoaderCyclic100ms,  .stop_fptr = NULL  }, /* Bitmap loader task */
+     { .period = 2u,  .init_fptr = MessageBox_init,   .start_fptr = NULL,               .cyclic_fptr = MessageBox_cyclic100msec, .stop_fptr = NULL  }, /* Messagebox task   */
 };
 
 
