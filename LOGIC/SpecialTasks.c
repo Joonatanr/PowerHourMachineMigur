@@ -257,10 +257,10 @@ Private const Task_T priv_TextArrayMigurLevel1[] =
      {  "{$} loses"           , "one item of",             "clothing"       , .nude_level = 3u, .sexy_level = 0u,   }, /* 10 */
      {  "{$} takes the"       , "the shirts of",       "all the guys"       , .nude_level = 3u, .sexy_level = 0u,   }, /* 11 */
 
-     {  "{$} chooses 2 guys"  , "who either make out",  "or drink vodka"    , .nude_level = 0u, .sexy_level = 3u,   },
-     {  "{$} chooses 2 girls" , "who either make out",  "or drink vodka"    , .nude_level = 0u, .sexy_level = 3u,   },
-     {  "{$} must tell"       , "two lies",             "and one truth"     , .nude_level = 0u, .sexy_level = 0u,   }, /* 7  */
-     {  "{$} must say a"      , "rhyme in 30 seconds",  "or drink vodka"    , .nude_level = 0u, .sexy_level = 0u,   }, /* 7  */
+     {  "{$} chooses 2 guys"  , "who either make out",  "or drink vodka"    , .nude_level = 0u, .sexy_level = 3u,   }, /* 12    */
+     {  "{$} chooses 2 girls" , "who either make out",  "or drink vodka"    , .nude_level = 0u, .sexy_level = 3u,   }, /* 13    */
+     {  "{$} must tell"       , "two lies",             "and one truth"     , .nude_level = 0u, .sexy_level = 0u,   }, /* 14    */
+     {  "{$} must say a"      , "rhyme in 30 seconds",  "or drink vodka"    , .nude_level = 0u, .sexy_level = 0u,   }, /* 15    */
 
 
 };
@@ -392,32 +392,34 @@ Private const Task_T priv_TextArrayMigurLevel2[] =
      {  "Tallest Migur"        , "takes a",               "vodka shot"      , .nude_level = 0u, .sexy_level = 0u   }, /* 2  */
      {  "Migurs must make"      , "a toast to",            "sisterhood!"    , .nude_level = 0u, .sexy_level = 0u   }, /* 3  */
      {  "All female Migurs"     , "drink 3x",                       NULL    , .nude_level = 0u, .sexy_level = 0u   }, /* 4  */
+     {  "All blonde Migurs"     , "drink 3x",                       NULL    , .nude_level = 0u, .sexy_level = 0u   }, /* 5  */
+     {  "All brunette Migurs"   , "drink 3x",                       NULL    , .nude_level = 0u, .sexy_level = 0u   }, /* 6  */
 
-     {  "{$} must use a cheesy" , "pickup line on", "somebody in the room"  , .nude_level = 0u, .sexy_level = 1u,  }, /* 5  */
-     {  "{$} must distribute"   , "6x beershots"  , "among the players"     , .nude_level = 0u, .sexy_level = 1u,  }, /* 6  */
-     {  "{$} must drink"        , "without using"  , "her hands"            , .nude_level = 0u, .sexy_level = 0u,  }, /* 7  */
-     {  "Whoever is closest"    , "makes a selfie" , "with {$}"             , .nude_level = 0u, .sexy_level = 0u,  }, /* 8  */
-     {  "Whoever is closest"    , "must make {$}"  , "laugh, or take 1 vodka",.nude_level = 0u, .sexy_level = 0u,  }, /* 9  */
-     {  "All Migurs who are"    , "in KT"  ,         "drink 3x"              ,.nude_level = 0u, .sexy_level = 0u,  }, /* 10  */
-     {  "Last Migur with "    , "finger on her nose"  ,         "drinks vodka",.nude_level = 0u, .sexy_level = 0u,  },/* 11  */
-     {  "Last Migur with "    , "finger on her nose"  ,"gives the other vodka",.nude_level = 0u, .sexy_level = 0u,  },/* 12  */
+     {  "{$} must use a cheesy" , "pickup line on", "somebody in the room"  , .nude_level = 0u, .sexy_level = 1u,  }, /* 7  */
+     {  "{$} must distribute"   , "6x beershots"  , "among the players"     , .nude_level = 0u, .sexy_level = 1u,  }, /* 8  */
+     {  "{$} must drink"        , "without using"  , "her hands"            , .nude_level = 0u, .sexy_level = 0u,  }, /* 9  */
+     {  "Whoever is closest"    , "makes a selfie" , "with {$}"             , .nude_level = 0u, .sexy_level = 0u,  }, /* 10  */
+     {  "Whoever is closest"    , "must make {$}"  , "laugh, or take 1 vodka",.nude_level = 0u, .sexy_level = 0u,  }, /* 11  */
+     {  "All Migurs who are"    , "in KT"  ,         "drink 3x"              ,.nude_level = 0u, .sexy_level = 0u,  }, /* 12  */
+     {  "Last Migur with "    , "finger on her nose"  ,         "drinks vodka",.nude_level = 0u, .sexy_level = 0u,  },/* 13  */
+     {  "Last Migur with "    , "finger on her nose"  ,"gives the other vodka",.nude_level = 0u, .sexy_level = 0u,  },/* 14  */
 
-     {  "{$} must increase"  , "one slider difficulty", "or vodka for all"  ,.nude_level = 0u, .sexy_level = 0u   }, /* 13  */
-     {  "Increase nudity slider", "or drink vodka",                NULL     ,.nude_level = 0u, .sexy_level = 0u   }, /* 14 */
+     {  "{$} must increase"  , "one slider difficulty", "or vodka for all"  ,.nude_level = 0u, .sexy_level = 0u   }, /* 15  */
+     {  "Increase nudity slider", "or drink vodka",                NULL     ,.nude_level = 0u, .sexy_level = 0u   }, /* 16 */
 
-     {  "{$} commands 1 person" , "to do his or her best"  , "Jack Sparrow imitation", .nude_level = 0u, .sexy_level = 0u,  }, /* 15  */
+     {  "{$} commands 1 person" , "to do his or her best"  , "Jack Sparrow imitation", .nude_level = 0u, .sexy_level = 0u,  }, /* 17  */
 
-     {  "{$} loses 1"          , "item of",                  "clothing"     , .nude_level = 1u, .sexy_level = 0u   }, /* 16  */
-     {  "{$} loses 2"          , "items of",                 "clothing"     , .nude_level = 3u, .sexy_level = 0u   }, /* 17  */
+     {  "{$} loses 1"          , "item of",                  "clothing"     , .nude_level = 1u, .sexy_level = 0u   }, /* 18  */
+     {  "{$} loses 2"          , "items of",                 "clothing"     , .nude_level = 3u, .sexy_level = 0u   }, /* 19  */
 
-     {  "{$} switches"         , "2 items of clothing",      "with 1 person", .nude_level = 2u, .sexy_level = 0u   }, /* 18  */
-     {  "{$} switches"         , "3 items of clothing",      "with 1 person", .nude_level = 2u, .sexy_level = 0u   }, /* 19  */
+     {  "{$} switches"         , "2 items of clothing",      "with 1 person", .nude_level = 2u, .sexy_level = 0u   }, /* 20  */
+     {  "{$} switches"         , "3 items of clothing",      "with 1 person", .nude_level = 2u, .sexy_level = 0u   }, /* 21  */
 
-     {  "{$} drinks one"       , "shot of the strongest",    "liquor in the room", .nude_level = 0u, .sexy_level = 0u   }, /* 20  */
+     {  "{$} drinks one"       , "shot of the strongest",    "liquor in the room", .nude_level = 0u, .sexy_level = 0u   }, /* 22  */
 
-     {  "{$} confiscates 1"    , "item of",                  "clothing"     , .nude_level = 1u, .sexy_level = 0u   }, /* 21  */
-     {  "{$} confiscates 2"    , "items of",                 "clothing"     , .nude_level = 2u, .sexy_level = 0u   }, /* 22  */
-     {  "Migurs must do"       , "combined 20 squats", "or drink vodka"     , .nude_level = 0u, .sexy_level = 0u,   }, /* 7  */
+     {  "{$} confiscates 1"    , "item of",                  "clothing"     , .nude_level = 1u, .sexy_level = 0u   }, /* 23  */
+     {  "{$} confiscates 2"    , "items of",                 "clothing"     , .nude_level = 2u, .sexy_level = 0u   }, /* 24  */
+     {  "Migurs must do"       , "combined 20 squats", "or drink vodka"     , .nude_level = 0u, .sexy_level = 0u,   },/* 25  */
 
 };
 Private U8 priv_TextArrayMigurLevel2_counter[NUMBER_OF_ITEMS(priv_TextArrayMigurLevel2)];
@@ -463,26 +465,27 @@ Private const Task_T priv_TextArrayGuysLevel3[] =
      {  "1 guy must",            "drink while"     ,    "upside down"        ,  .nude_level = 0u, .sexy_level = 0u  }, /* 2 */
      {  "All guys must",         "drink under",         "the table"          ,  .nude_level = 0u, .sexy_level = 0u  }, /* 3 */
      {  "Army guys",             "do 20 pushups,", "civilians 10 pushups"    ,  .nude_level = 0u, .sexy_level = 0u  }, /* 4 */
-     {  "One guy must",          "make a split,",  "or vodka round for all"  ,  .nude_level = 0u, .sexy_level = 1u  }, /* 4 */
-     {  "Guys must drink",       "pretending they",  "are finns in sauna"    ,  .nude_level = 0u, .sexy_level = 1u  }, /* 4 */
+     {  "One guy must",          "make a split,",  "or vodka round for all"  ,  .nude_level = 0u, .sexy_level = 1u  }, /* 5 */
+     {  "Guys must drink",       "pretending they",  "are finns in sauna"    ,  .nude_level = 0u, .sexy_level = 1u  }, /* 6 */
+     {  "Guys who have",         "large cocks",         "drink vodka"        ,  .nude_level = 0u, .sexy_level = 1u  }, /* 6 */
 
  /* Tasks that need criteria. */
-     {  "Guys must"            , "do a ",                      "sexy dance"  ,      .nude_level = 0u, .sexy_level = 2u  }, /* 5  */
-     {  "Most naked"           , "guy drinks ",                "2x"          ,      .nude_level = 1u, .sexy_level = 0u  }, /* 6  */
-     {  "All guys lose"        , "two items of ",         "clothing"         ,      .nude_level = 2u, .sexy_level = 0u  }, /* 7  */
-     {  "Guys with"            , ">5 flags&numbers",      "drink 3x"         ,      .nude_level = 0u, .sexy_level = 1u  }, /* 8  */
-     {  "Guys who want to"     , "sleep with 1 of",       "the players drink",      .nude_level = 0u, .sexy_level = 1u  }, /* 9  */
-     {  "Guys do"              , "bodyshots!!!",                     NULL    ,      .nude_level = 0u, .sexy_level = 2u  }, /* 10 */
-     {  "All Guys"             , "with a boner",          "drink 3x"         ,      .nude_level = 0u, .sexy_level = 2u  }, /* 11 */
-     {  "The last guy"         , "to finish shot"  ,    "loses 2 clothing"   ,      .nude_level = 2u, .sexy_level = 0u  }, /* 12 */
-     {  "All guys drink"       , "while doing"     ,    "pushups"            ,      .nude_level = 0u, .sexy_level = 1u  }, /* 13 */
-     {  "For each inch",         "of his D length",     "guys drink 1 shot"  ,      .nude_level = 0u, .sexy_level = 1u  }, /* 14 */
-     {  "All guys that",         "saw boobs today",     "drink vodka"        ,      .nude_level = 0u, .sexy_level = 1u  }, /* 15 */
-     {  "All guys lose",         "their shirts",        NULL                 ,      .nude_level = 2u, .sexy_level = 0u  }, /* 16 */
-     {  "All guys must" ,        "drink while",          "twerking"          ,      .nude_level = 0u, .sexy_level = 2u  }, /* 17 */
-     {  "Before guys drink they","must demonstrate their","tongue skills on shot" , .nude_level = 0u, .sexy_level = 2u  }, /* 18 */
-     {  "Before guys drink they","must toast their",     "favorite pornstar" ,      .nude_level = 0u, .sexy_level = 1u  }, /* 19 */
-     {  "All guys who have"     ,"fingered a girl",      "today, drink 3"    ,      .nude_level = 0u, .sexy_level = 2u  }, /* 20 */
+     {  "Guys must"            , "do a ",                      "sexy dance"  ,      .nude_level = 0u, .sexy_level = 2u  }, /* 7  */
+     {  "Most naked"           , "guy drinks ",                "2x"          ,      .nude_level = 1u, .sexy_level = 0u  }, /* 8  */
+     {  "All guys lose"        , "two items of ",         "clothing"         ,      .nude_level = 2u, .sexy_level = 0u  }, /* 9  */
+     {  "Guys with"            , ">5 flags&numbers",      "drink 3x"         ,      .nude_level = 0u, .sexy_level = 1u  }, /* 10 */
+     {  "Guys who want to"     , "sleep with 1 of",       "the players drink",      .nude_level = 0u, .sexy_level = 1u  }, /* 11 */
+     {  "Guys do"              , "bodyshots!!!",                     NULL    ,      .nude_level = 0u, .sexy_level = 2u  }, /* 12 */
+     {  "All Guys"             , "with a boner",          "drink 3x"         ,      .nude_level = 0u, .sexy_level = 2u  }, /* 13 */
+     {  "The last guy"         , "to finish shot"  ,    "loses 2 clothing"   ,      .nude_level = 2u, .sexy_level = 0u  }, /* 14 */
+     {  "All guys drink"       , "while doing"     ,    "pushups"            ,      .nude_level = 0u, .sexy_level = 1u  }, /* 15 */
+     {  "For each inch",         "of his D length",     "guys drink 1 shot"  ,      .nude_level = 0u, .sexy_level = 1u  }, /* 16 */
+     {  "All guys that",         "saw boobs today",     "drink vodka"        ,      .nude_level = 0u, .sexy_level = 1u  }, /* 17 */
+     {  "All guys lose",         "their shirts",        NULL                 ,      .nude_level = 2u, .sexy_level = 0u  }, /* 18 */
+     {  "All guys must" ,        "drink while",          "twerking"          ,      .nude_level = 0u, .sexy_level = 2u  }, /* 19 */
+     {  "Before guys drink they","must demonstrate their","tongue skills on shot" , .nude_level = 0u, .sexy_level = 2u  }, /* 20 */
+     {  "Before guys drink they","must toast their",     "favorite pornstar" ,      .nude_level = 0u, .sexy_level = 1u  }, /* 21 */
+     {  "All guys who have"     ,"fingered a girl",      "today, drink 3"    ,      .nude_level = 0u, .sexy_level = 2u  }, /* 22 */
 
 };
 Private U8 priv_TextArrayGuysLevel3_counter[NUMBER_OF_ITEMS(priv_TextArrayGuysLevel3)];
@@ -498,7 +501,6 @@ Private const Task_T priv_TextArrayAllLevel3[] =
      {  "Increase sexy slider"  , "or drink vodka",                NULL       ,     .nude_level = 0u, .sexy_level = 0u   }, /* 5  */
      {  "Increase nudity slider", "or drink vodka",                NULL       ,     .nude_level = 0u, .sexy_level = 0u   }, /* 6  */
 
-
      /* Tasks that need criteria. */
      {  "Everybody takes off"   , "2 items of Clothing", "or drinks vodka"  ,       .nude_level = 1u, .sexy_level = 0u  }, /* 7  */
      {  "Everybody takes off"   , "1 item of Clothing",          NULL       ,       .nude_level = 2u, .sexy_level = 0u  }, /* 8  */
@@ -513,9 +515,9 @@ Private const Task_T priv_TextArrayAllLevel3[] =
      {  "Everybody drinks"      , "with their hands",     "on their chest"    ,     .nude_level = 0u, .sexy_level = 2u  }, /* 15  */
      {  "Everybody drinks"      , "with their hands",     "behind their back" ,     .nude_level = 0u, .sexy_level = 1u  }, /* 16  */
      {  "Everybody drinks"      , "with their hands",     "on their head"     ,     .nude_level = 0u, .sexy_level = 0u  }, /* 17  */
-     {  "Everybody who has"     , "had sex today",                "drinks 3x" ,    .nude_level = 0u, .sexy_level = 1u }, /* 18  */
-     {  "Everybody who is"      , "sitting in their phone",       "drinks 3x" ,    .nude_level = 0u, .sexy_level = 0u }, /* 19  */
-     {  "Everybody who is"      , "sitting in their phone",     "loses pants" ,    .nude_level = 2u, .sexy_level = 0u }, /* 20  */
+     {  "Everybody who has"     , "had sex today",                "drinks 3x" ,     .nude_level = 0u, .sexy_level = 1u  }, /* 18  */
+     {  "Everybody who is"      , "sitting in their phone",       "drinks 3x" ,     .nude_level = 0u, .sexy_level = 0u  }, /* 19  */
+     {  "Everybody who is"      , "sitting in their phone",     "loses pants" ,     .nude_level = 2u, .sexy_level = 0u  }, /* 20  */
 
      {  "Everybody who has"     , "done butt-stuff",     "drinks vodka"       ,     .nude_level = 0u, .sexy_level = 2u  }, /* 21  */
 
@@ -530,35 +532,35 @@ Private const Task_T priv_TextArrayMigurLevel3[] =
      {  NULL                    , "{$} drinks 2x",               NULL       ,       .nude_level = 0u, .sexy_level = 0u   }, /* 1  */
      {  "{$} must take"         , "vodka shot",                  NULL       ,       .nude_level = 0u, .sexy_level = 0u   }, /* 2  */
      {  "Tallest Migur"         , "takes a",               "vodka shot"     ,       .nude_level = 0u, .sexy_level = 0u   }, /* 3  */
-     {  "Youngest Migur"        , "takes a",               "vodka shot"     ,       .nude_level = 0u, .sexy_level = 0u   }, /* 3  */
-     {  "The Migur wearing"     , "the most clothes",  " drinks vodka shot" ,       .nude_level = 0u, .sexy_level = 0u   }, /* 4  */
-     {  "The most Migur"        , "does the most",     " Migur thing"       ,       .nude_level = 0u, .sexy_level = 0u   }, /* 5  */
-     {  "For the next 5 minutes", "{$} can only talk", " while singing"     ,       .nude_level = 0u, .sexy_level = 0u   }, /* 5  */
-     {  "{$} can distribute",     "three shots",             "of vodka"     ,       .nude_level = 0u, .sexy_level = 0u   }, /* 5  */
+     {  "Youngest Migur"        , "takes a",               "vodka shot"     ,       .nude_level = 0u, .sexy_level = 0u   }, /* 4  */
+     {  "The Migur wearing"     , "the most clothes",  " drinks vodka shot" ,       .nude_level = 0u, .sexy_level = 0u   }, /* 5  */
+     {  "The most Migur"        , "does the most",     " Migur thing"       ,       .nude_level = 0u, .sexy_level = 0u   }, /* 6  */
+     {  "For the next 5 minutes", "{$} can only talk", " while singing"     ,       .nude_level = 0u, .sexy_level = 0u   }, /* 7  */
+     {  "{$} can distribute",     "three shots",             "of vodka"     ,       .nude_level = 0u, .sexy_level = 0u   }, /* 8  */
 
-     {  "The Migur with"        , "the largest boobs",     " drinks 3x"     ,     .nude_level = 0u, .sexy_level = 1u   }, /* 6  */
-     {  "The Migur showing"     , "the least cleavage",    " drinks 3x"     ,     .nude_level = 0u, .sexy_level = 1u   }, /* 7  */
+     {  "The Migur with"        , "the largest boobs",     " drinks 3x"     ,     .nude_level = 0u, .sexy_level = 1u   }, /* 9  */
+     {  "The Migur showing"     , "the least cleavage",    " drinks 3x"     ,     .nude_level = 0u, .sexy_level = 1u   }, /* 10  */
 
-     {  "One Migur gets a"     , "a shot of water, ", "the other vodka"     ,       .nude_level = 0u, .sexy_level = 0u   }, /* 8  */
-     {  "{$} must moan",        "between shots"       ,"and drink 3x"       ,       .nude_level = 0u, .sexy_level = 2u,  }, /* 9  */
-     {  "The 3rd person to ", "{$}'s right must"  ,"ask 1 question from her",       .nude_level = 0u, .sexy_level = 2u,  }, /* 10  */
-     {  "{$} must drink"    ,   "while twerking"       ,               NULL,        .nude_level = 0u, .sexy_level = 2u,  }, /* 11  */
+     {  "One Migur gets a"     , "a shot of water, ", "the other vodka"     ,       .nude_level = 0u, .sexy_level = 0u   }, /* 11  */
+     {  "{$} must moan",        "between shots"       ,"and drink 3x"       ,       .nude_level = 0u, .sexy_level = 2u,  }, /* 12  */
+     {  "The 3rd person to ", "{$}'s right must"  ,"ask 1 question from her",       .nude_level = 0u, .sexy_level = 2u,  }, /* 13  */
+     {  "{$} must drink"    ,   "while twerking"       ,               NULL,        .nude_level = 0u, .sexy_level = 2u,  }, /* 14  */
 
-     {  "{$} must do",        "a TikTok dance"       ,"while drinking"      ,       .nude_level = 0u, .sexy_level = 1u,  }, /* 12  */
+     {  "{$} must do",        "a TikTok dance"       ,"while drinking"      ,       .nude_level = 0u, .sexy_level = 1u,  }, /* 15  */
 
-     {  "Everybody who has"     , "seen {$} naked",             "drinks 3x" ,       .nude_level = 0u, .sexy_level = 2u,  }, /* 13  */
-     {  "All the boyfriends"    , "of Migurs",             "drink vodka" ,          .nude_level = 0u, .sexy_level = 1u,  }, /* 14  */
-     {  "{$} shall get"         , "a Truth or Dare from",  "person next to her" ,   .nude_level = 0u, .sexy_level = 1u,  }, /* 15  */
-     {  "{$} gets to make"      , "a dare for",            "all the guys" ,         .nude_level = 0u, .sexy_level = 1u,  }, /* 16  */
+     {  "Everybody who has"     , "seen {$} naked",             "drinks 3x" ,       .nude_level = 0u, .sexy_level = 2u,  }, /* 16  */
+     {  "All the boyfriends"    , "of Migurs",             "drink vodka" ,          .nude_level = 0u, .sexy_level = 1u,  }, /* 17  */
+     {  "{$} shall get"         , "a Truth or Dare from",  "person next to her" ,   .nude_level = 0u, .sexy_level = 1u,  }, /* 18  */
+     {  "{$} gets to make"      , "a dare for",            "all the guys" ,         .nude_level = 0u, .sexy_level = 1u,  }, /* 19  */
 
-     {  "{$} must remove"     , "1 item of clothing",            NULL       ,       .nude_level = 2u, .sexy_level = 0u,  }, /* 17 */
-     {  "{$} must remove"     , "1 item of clothing",            NULL       ,       .nude_level = 2u, .sexy_level = 0u,  }, /* 18 */
-     {  "{$} must remove"     , "1 item of clothing",            NULL       ,       .nude_level = 2u, .sexy_level = 0u,  }, /* 19 */
-     {  "{$} can confiscate"  , "1 item of clothing",            NULL       ,       .nude_level = 2u, .sexy_level = 1u,  }, /* 20 */
-     {  "{$} can confiscate"  , "1 item of clothing",            NULL       ,       .nude_level = 2u, .sexy_level = 1u,  }, /* 21 */
-     {  "{$} can confiscate"  , "1 item of clothing",            NULL       ,       .nude_level = 2u, .sexy_level = 1u,  }, /* 22 */
+     {  "{$} must remove"     , "1 item of clothing",            NULL       ,       .nude_level = 2u, .sexy_level = 0u,  }, /* 20 */
+     {  "{$} must remove"     , "1 item of clothing",            NULL       ,       .nude_level = 2u, .sexy_level = 0u,  }, /* 21 */
+     {  "{$} must remove"     , "1 item of clothing",            NULL       ,       .nude_level = 2u, .sexy_level = 0u,  }, /* 22 */
+     {  "{$} can confiscate"  , "1 item of clothing",            NULL       ,       .nude_level = 2u, .sexy_level = 1u,  }, /* 23 */
+     {  "{$} can confiscate"  , "1 item of clothing",            NULL       ,       .nude_level = 2u, .sexy_level = 1u,  }, /* 24 */
+     {  "{$} can confiscate"  , "1 item of clothing",            NULL       ,       .nude_level = 2u, .sexy_level = 1u,  }, /* 25 */
 
-     {  "3 guys compete in",   "pickup lines for {$}",  "Losers drink vodka",       .nude_level = 0u, .sexy_level = 1u,  }, /* 23 */
+     {  "3 guys compete in",   "pickup lines for {$}",  "Losers drink vodka",       .nude_level = 0u, .sexy_level = 1u,  }, /* 26 */
 
 };
 Private U8 priv_TextArrayMigurLevel3_counter[NUMBER_OF_ITEMS(priv_TextArrayMigurLevel3)];
@@ -713,39 +715,39 @@ Private const Task_T priv_TextArrayMigurLevel4[] =
 {
      {  NULL                    , "{$} drinks 2x",               NULL       , .nude_level = 0u, .sexy_level = 0u    }, /* 1  */
      {  "{$} must take"         , "vodka shot",                  NULL       , .nude_level = 0u, .sexy_level = 0u    }, /* 2  */
-     {  "All Migurs who are"    , "virgins drink water", "rest drink vodka" , .nude_level = 0u, .sexy_level = 1u    }, /* 2  */
-     {  "{$} must swear"        , "like a trooper",    "and drink 3x"       , .nude_level = 0u, .sexy_level = 0u    }, /* 3  */
-     {  "Shortest Migur"        , "takes a",               "vodka shot"     , .nude_level = 0u, .sexy_level = 0u    }, /* 4  */
-     {  "{$} can spank"         , "a player",                  NULL         , .nude_level = 0u, .sexy_level = 2u    }, /* 5  */
-     {  "If {$} has been a"     , "good girl today",   "she drinks vodka"   , .nude_level = 0u, .sexy_level = 2u    }, /* 6  */
-     {  "If {$} has been a"     , "bad girl today",    "she drinks vodka"   , .nude_level = 0u, .sexy_level = 2u    }, /* 7  */
+     {  "All Migurs who are"    , "virgins drink water", "rest drink vodka" , .nude_level = 0u, .sexy_level = 1u    }, /* 3  */
+     {  "{$} must swear"        , "like a trooper",    "and drink 3x"       , .nude_level = 0u, .sexy_level = 0u    }, /* 4  */
+     {  "Shortest Migur"        , "takes a",               "vodka shot"     , .nude_level = 0u, .sexy_level = 0u    }, /* 5  */
+     {  "{$} can spank"         , "a player",                  NULL         , .nude_level = 0u, .sexy_level = 2u    }, /* 6  */
+     {  "If {$} has been a"     , "good girl today",   "she drinks vodka"   , .nude_level = 0u, .sexy_level = 2u    }, /* 7  */
+     {  "If {$} has been a"     , "bad girl today",    "she drinks vodka"   , .nude_level = 0u, .sexy_level = 2u    }, /* 8  */
 
-     {  "{$} must spin the"   , "bottle",                        NULL       , .nude_level = 0u, .sexy_level = 1u,   }, /* 8  */
-     {  "{$} must spin the"   , "bottle",                        NULL       , .nude_level = 0u, .sexy_level = 2u,   }, /* 9  */
+     {  "{$} must spin the"   , "bottle",                        NULL       , .nude_level = 0u, .sexy_level = 1u,   }, /* 9  */
+     {  "{$} must spin the"   , "bottle",                        NULL       , .nude_level = 0u, .sexy_level = 2u,   }, /* 10  */
 
-     {  "{$} must choose"     , "a male player",            "to slap"       ,  .nude_level = 0u, .sexy_level = 2u,  }, /* 10  */
-     {  "{$} must choose"     , "a female player",          "to slap"       ,  .nude_level = 0u, .sexy_level = 2u,  }, /* 11  */
-     {  "{$} gives vodka to"  , "the player she believes",  "has largest penis", .nude_level = 0u, .sexy_level = 2u,}, /* 12  */
-     {  "{$} must name"       , "10 sex positions",         NULL            ,  .nude_level = 0u, .sexy_level = 1u,  }, /* 13  */
+     {  "{$} must choose"     , "a male player",            "to slap"       ,  .nude_level = 0u, .sexy_level = 2u,  }, /* 11  */
+     {  "{$} must choose"     , "a female player",          "to slap"       ,  .nude_level = 0u, .sexy_level = 2u,  }, /* 12  */
+     {  "{$} gives vodka to"  , "the player she believes",  "has largest penis", .nude_level = 0u, .sexy_level = 2u,}, /* 13  */
+     {  "{$} must name"       , "10 sex positions",         NULL            ,  .nude_level = 0u, .sexy_level = 1u,  }, /* 14  */
 
-     {  "{$} must drink"      , "while squeezing",          "her boobs"     , .nude_level = 0u, .sexy_level = 3u,   }, /* 14  */
-     {  "{$} must name"       , "3 sex positions she",  " would like to try" , .nude_level = 0u, .sexy_level = 3u,   }, /* 15  */
-     {  "Person to the right" , " of {$} must do",      "a bodyshot off of her" , .nude_level = 0u, .sexy_level = 3u,   }, /* 16  */
-     {  "{$} can order"       , " 1 person to do",      "a bodyshot"         , .nude_level = 0u, .sexy_level = 3u,   }, /* 17  */
-     {  "{$} must choose"     , " a girl and",          "french-kiss her"    , .nude_level = 0u, .sexy_level = 3u,   }, /* 18  */
-     {  "{$} must choose"     , " 2 guys and have them","kiss or drink vodka"   , .nude_level = 0u, .sexy_level = 3u,   }, /* 18  */
+     {  "{$} must drink"      , "while squeezing",          "her boobs"     , .nude_level = 0u, .sexy_level = 3u,   }, /* 15  */
+     {  "{$} must name"       , "3 sex positions she",  " would like to try" , .nude_level = 0u, .sexy_level = 3u,   }, /* 16  */
+     {  "Person to the right" , " of {$} must do",      "a bodyshot off of her" , .nude_level = 0u, .sexy_level = 3u,   }, /* 17  */
+     {  "{$} can order"       , " 1 person to do",      "a bodyshot"         , .nude_level = 0u, .sexy_level = 3u,   }, /* 18  */
+     {  "{$} must choose"     , " a girl and",          "french-kiss her"    , .nude_level = 0u, .sexy_level = 3u,   }, /* 19  */
+     {  "{$} must choose"     , " 2 guys and have them","kiss or drink vodka"   , .nude_level = 0u, .sexy_level = 3u,   }, /* 20  */
 
-     {  "{$} loses 1 item of"     ,   "clothing"                  ,   NULL,  .nude_level = 1u, .sexy_level = 0u,    }, /* 19  */
      {  "{$} loses 1 item of"     ,   "clothing"                  ,   NULL,  .nude_level = 1u, .sexy_level = 0u,    }, /* 20  */
-     {  "{$} loses 2 items"       ,   "clothing"                  ,   NULL,  .nude_level = 2u, .sexy_level = 0u,    }, /* 21  */
-     {  "{$} loses her"           ,   "bra or drinks"     ,"2 vodka shots",  .nude_level = 3u, .sexy_level = 2u,    }, /* 22  */
-     {  "{$} loses 2 items"       ,   "clothing"                  ,   NULL,  .nude_level = 2u, .sexy_level = 0u,    }, /* 23  */
-     {  "{$} confiscates"         ,   "1 item of clothing"        ,   NULL,  .nude_level = 1u, .sexy_level = 0u,    }, /* 24  */
-     {  "{$} confiscates"         ,   "2 items of clothing"       ,   NULL,  .nude_level = 2u, .sexy_level = 0u,    }, /* 25  */
+     {  "{$} loses 1 item of"     ,   "clothing"                  ,   NULL,  .nude_level = 1u, .sexy_level = 0u,    }, /* 21  */
+     {  "{$} loses 2 items"       ,   "clothing"                  ,   NULL,  .nude_level = 2u, .sexy_level = 0u,    }, /* 22  */
+     {  "{$} loses her"           ,   "bra or drinks"     ,"2 vodka shots",  .nude_level = 3u, .sexy_level = 2u,    }, /* 23  */
+     {  "{$} loses 2 items"       ,   "clothing"                  ,   NULL,  .nude_level = 2u, .sexy_level = 0u,    }, /* 24  */
+     {  "{$} confiscates"         ,   "1 item of clothing"        ,   NULL,  .nude_level = 1u, .sexy_level = 0u,    }, /* 25  */
      {  "{$} confiscates"         ,   "2 items of clothing"       ,   NULL,  .nude_level = 2u, .sexy_level = 0u,    }, /* 26  */
-     {  "{$} must moan",               "between shots"    ,"and drink 3x",   .nude_level = 0u, .sexy_level = 2u,    }, /* 27  */
+     {  "{$} confiscates"         ,   "2 items of clothing"       ,   NULL,  .nude_level = 2u, .sexy_level = 0u,    }, /* 27  */
+     {  "{$} must moan",               "between shots"    ,"and drink 3x",   .nude_level = 0u, .sexy_level = 2u,    }, /* 28  */
 
-     {  "{$} can order",               "1 guy to get"    ,"naked",           .nude_level = 3u, .sexy_level = 2u,    }, /* 28  */
+     {  "{$} can order",               "1 guy to get"    ,"naked",           .nude_level = 3u, .sexy_level = 2u,    }, /* 29  */
 };
 Private U8 priv_TextArrayMigurLevel4_counter[NUMBER_OF_ITEMS(priv_TextArrayMigurLevel4)];
 
