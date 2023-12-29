@@ -615,6 +615,18 @@ Private const Task_T priv_TextArrayGirlsLevel4[] =
      { "In 60 seconds",       "all girls must kiss ",  "every single player", .nude_level = 0u, .sexy_level = 3u },  /* 38   */
      { "In 60 seconds",       "all girls must kiss ",  "every single guy"  ,  .nude_level = 0u, .sexy_level = 3u },  /* 39   */
 
+     { "All girls",           "lose 1 item",  "of clothing"  ,  .nude_level = 1u, .sexy_level = 0u },  /* 39   */
+     { "All girls",           "lose 1 item",  "of clothing"  ,  .nude_level = 1u, .sexy_level = 0u },  /* 39   */
+     { "All girls",           "lose 1 item",  "of clothing"  ,  .nude_level = 1u, .sexy_level = 0u },  /* 39   */
+     { "All girls",           "lose 1 item",  "of clothing"  ,  .nude_level = 1u, .sexy_level = 0u },  /* 39   */
+     { "All girls",           "lose 1 item",  "of clothing"  ,  .nude_level = 1u, .sexy_level = 0u },  /* 39   */
+
+     { "All girls",           "lose 2 items",  "of clothing"  ,  .nude_level = 2u, .sexy_level = 0u },  /* 39   */
+     { "All girls",           "lose 2 items",  "of clothing"  ,  .nude_level = 2u, .sexy_level = 0u },  /* 39   */
+     { "All girls",           "lose 2 items",  "of clothing"  ,  .nude_level = 2u, .sexy_level = 0u },  /* 39   */
+     { "All girls",           "lose 2 items",  "of clothing"  ,  .nude_level = 2u, .sexy_level = 0u },  /* 39   */
+     { "All girls",           "lose 2 items",  "of clothing"  ,  .nude_level = 2u, .sexy_level = 0u },  /* 39   */
+
 };
 Private U8 priv_TextArrayGirlsLevel4_counter[NUMBER_OF_ITEMS(priv_TextArrayGirlsLevel4)];
 
