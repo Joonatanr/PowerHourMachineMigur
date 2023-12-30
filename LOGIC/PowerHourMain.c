@@ -524,8 +524,9 @@ Private void setupStartOfMinute(void)
 Private void doFinalAction(void)
 {
     display_clear();
-    display_drawString("Game Over!", 20u, 15u, FONT_LARGE_FONT, FALSE);
-    display_drawString("  Congratulations! \n You are now drunk", 5u, 37u, FONT_MEDIUM_FONT, FALSE);
+    display_drawStringCenter("Game Over!", DISPLAY_CENTER, 15u, FONT_LARGE_FONT, FALSE);
+    display_drawStringCenter("Congratulations! ",DISPLAY_CENTER, 37u, FONT_LARGE_FONT, FALSE);
+    display_drawStringCenter("You are now drunk ",DISPLAY_CENTER, 57u, FONT_LARGE_FONT, FALSE);
 }
 
 
