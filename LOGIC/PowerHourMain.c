@@ -607,7 +607,7 @@ Private Boolean MigurSpecialIntro(U8 sec)
     sequence.text_str = "Round for Migurs!";
 
     sequence.text_x = DISPLAY_CENTER;
-    sequence.text_y = 7u;
+    sequence.text_y = DISPLAY_HEIGHT - 25u;
 
     return genericIntroFunction(&sequence, sec);
 }
