@@ -381,6 +381,8 @@ Public void powerHour_cyclic1000msec(void)
     if (priv_curr_minute == 60u)
     {
         doFinalAction();
+        /* Increment so that we do not get stuck here. */
+        priv_curr_minute++;
         priv_state = CONTROLLER_FINAL;
     }
 
@@ -897,25 +899,45 @@ Private void subscribeButtonHandlers(void)
 
 Private void HandleUpButton(void)
 {
-    /* Placeholder. */
+    if (priv_state == CONTROLLER_FINAL)
+    {
+        /* We quit the game. */
+        priv_state = CONTROLLER_EXITING;
+    }
 }
 
 Private void HandleDownButton(void)
 {
-    /* Placeholder. */
+    if (priv_state == CONTROLLER_FINAL)
+    {
+        /* We quit the game. */
+        priv_state = CONTROLLER_EXITING;
+    }
 }
 
 
 Private void HandleRightButton(void)
 {
-    /* This will open up a message box that will allow the user to cancel the game. */
-    MessageBox_SetResponseHandler(handleMessageBoxResponse);
-    MessageBox_ShowWithOkCancel("Quit game?");
+    if (priv_state == CONTROLLER_FINAL)
+    {
+        /* We quit the game. */
+        priv_state = CONTROLLER_EXITING;
+    }
+    else
+    {
+        /* This will open up a message box that will allow the user to cancel the game. */
+        MessageBox_SetResponseHandler(handleMessageBoxResponse);
+        MessageBox_ShowWithOkCancel("Quit game?");
+    }
 }
 
 Private void HandleLeftButton(void)
 {
-    /* Placeholder. */
+    if (priv_state == CONTROLLER_FINAL)
+    {
+        /* We quit the game. */
+        priv_state = CONTROLLER_EXITING;
+    }
 }
 
 
