@@ -313,6 +313,8 @@ Public void powerHour_start(void)
     priv_state = CONTROLLER_INIT;
     priv_task_frequency = configuration_getItem(CONFIG_ITEM_TASK_FREQ);
 
+    regenerate_random_number_seed();
+
 #ifdef PSEUDORANDOM_NUMBER_TEST
     int number = generate_random_number(30u);
 

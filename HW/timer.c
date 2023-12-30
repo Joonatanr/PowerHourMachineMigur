@@ -11,6 +11,9 @@
 #include "pot.h"
 #include "buttons.h"
 #include <stdlib.h>
+#include "MSPIO.h"
+
+//#define RANDOM_SEED_DEBUG
 
 /*****************************************************************************************************
  *
@@ -86,16 +89,22 @@ Public U16 generate_random_number_rng(U16 min, U16 max)
     return res;
 }
 
+Private U16 priv_seed = 0u;
+
+Public void regenerate_random_number_seed(void)
+{
+    priv_seed = TA0R ^ TA1R;
+    /* We initialize the pseudo random number generator. */
+    srand(priv_seed);
+}
+
 
 Public U16 generate_random_number(U16 max)
 {
-    static U16 priv_seed = 0u;
     U16 res;
     if (priv_seed == 0u)
     {
-        priv_seed = TA0R ^ TA1R;
-        /* We initialize the pseudo random number generator. */
-        srand(priv_seed);
+        regenerate_random_number_seed();
     }
 
     /* Max might actually be legitimately 0 in some calculations. */
@@ -107,6 +116,10 @@ Public U16 generate_random_number(U16 max)
     {
         res =  rand() % (max + 1u);
     }
+
+#ifdef RANDOM_SEED_DEBUG
+        MSPrintf(EUSCI_A0_BASE, "Random seed : %d, Random Number : %d, (%d max)\n", priv_seed, res, max);
+#endif
 
     return res;
 }

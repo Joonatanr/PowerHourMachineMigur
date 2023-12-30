@@ -161,6 +161,8 @@ void main(void)
     Scheduler_StartTasks();
     timer_delay_msec(100);
 
+
+
 #ifdef POT_TEST
     timer_delay_msec(200u);
     pot_test();
