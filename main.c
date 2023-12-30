@@ -19,6 +19,7 @@
 
 #include "Menus/Menu.h"
 #include "PowerHourMain.h"
+#include "SpecialTasks.h"
 
 /**
  * main.c
@@ -233,7 +234,7 @@ Private void showStartScreen(void)
 
     LcdWriter_drawStringCenter("Power Hour", (DISPLAY_WIDTH / 2u) + 4u, 40u, FONT_ARIAL_16_BOLD, disp_text_color, disp_background_color);
     LcdWriter_drawStringCenter(priv_version_string, (DISPLAY_WIDTH / 2u) + 4u, 60u, FONT_ARIAL_16_BOLD, disp_text_color, disp_background_color);
-    LcdWriter_drawStringCenter("Migur Edition", (DISPLAY_WIDTH / 2u) + 4u, 80u, FONT_COURIER_14, disp_text_color, disp_background_color);
+    LcdWriter_drawStringCenter("Migur Edition", (DISPLAY_WIDTH / 2u) + 4u, 80u, FONT_ARIAL_14_BOLD, disp_text_color, disp_background_color);
 
     timer_delay_msec(3000);
     display_flushBuffer(0u, 0u, 162u, 132u);

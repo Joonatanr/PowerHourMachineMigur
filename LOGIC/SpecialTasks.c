@@ -28,7 +28,8 @@
 #define SMALL_SHOT_Y 32u
 #define SMALL_SHOT_INTERVAL 20u
 
-#define SPECIALTASK_FONT FONT_ARIAL_12
+#define SPECIALTASK_FONT FONT_ARIAL_14_BOLD
+#define SPECIALTASK_SMALL_FONT FONT_ARIAL_12
 
 
 /*****************************************************************************************************
@@ -890,7 +891,7 @@ Private Boolean isStringFitForDisplay(const char * str, U16 * length_dest)
 {
     Boolean res = TRUE;
     ReplaceStringEscapeChars(str, priv_str_buf);
-    *length_dest = LcdWriter_getStringWidth(priv_str_buf, SPECIALTASK_FONT);
+    *length_dest = LcdWriter_getStringWidth(priv_str_buf, SPECIALTASK_SMALL_FONT);
     if (*length_dest > DISPLAY_WIDTH)
     {
         res = FALSE;
@@ -1173,7 +1174,14 @@ Private Boolean SpecialTaskWithRandomText(U8 sec, SpecialTaskType type)
                 if (priv_task_str_ptr->upper_text != NULL)
                 {
                     ReplaceStringEscapeChars(priv_task_str_ptr->upper_text, priv_str_buf);
-                    display_drawStringCenter(priv_str_buf, DISPLAY_CENTER, 30u, SPECIALTASK_FONT, FALSE);
+                    if (LcdWriter_getStringWidth(priv_str_buf, SPECIALTASK_FONT) <= DISPLAY_WIDTH)
+                    {
+                        display_drawStringCenter(priv_str_buf, DISPLAY_CENTER, 30u, SPECIALTASK_FONT, FALSE);
+                    }
+                    else
+                    {
+                        display_drawStringCenter(priv_str_buf, DISPLAY_CENTER, 30u, SPECIALTASK_SMALL_FONT, FALSE);
+                    }
                 }
             }
             break;
@@ -1182,7 +1190,14 @@ Private Boolean SpecialTaskWithRandomText(U8 sec, SpecialTaskType type)
                 if (priv_task_str_ptr->middle_text != NULL)
                 {
                     ReplaceStringEscapeChars(priv_task_str_ptr->middle_text, priv_str_buf);
-                    display_drawStringCenter(priv_str_buf, DISPLAY_CENTER, 60u, SPECIALTASK_FONT, FALSE);
+                    if (LcdWriter_getStringWidth(priv_str_buf, SPECIALTASK_FONT) <= DISPLAY_WIDTH)
+                    {
+                        display_drawStringCenter(priv_str_buf, DISPLAY_CENTER, 60u, SPECIALTASK_FONT, FALSE);
+                    }
+                    else
+                    {
+                        display_drawStringCenter(priv_str_buf, DISPLAY_CENTER, 60u, SPECIALTASK_SMALL_FONT, FALSE);
+                    }
                 }
             }
             break;
@@ -1191,7 +1206,14 @@ Private Boolean SpecialTaskWithRandomText(U8 sec, SpecialTaskType type)
                 if (priv_task_str_ptr->lower_text != NULL)
                 {
                     ReplaceStringEscapeChars(priv_task_str_ptr->lower_text, priv_str_buf);
-                    display_drawStringCenter(priv_str_buf, DISPLAY_CENTER, 90u, SPECIALTASK_FONT, FALSE);
+                    if (LcdWriter_getStringWidth(priv_str_buf, SPECIALTASK_FONT) <= DISPLAY_WIDTH)
+                    {
+                        display_drawStringCenter(priv_str_buf, DISPLAY_CENTER, 90u, SPECIALTASK_FONT, FALSE);
+                    }
+                    else
+                    {
+                        display_drawStringCenter(priv_str_buf, DISPLAY_CENTER, 90u, SPECIALTASK_SMALL_FONT, FALSE);
+                    }
                 }
             }
             break;

@@ -36,7 +36,7 @@ typedef enum
 {
     FONT_SMALL_FONT_12,
     FONT_ARIAL_12,
-    FONT_COURIER_14,
+    FONT_ARIAL_14_BOLD,
     FONT_ARIAL_16_BOLD,
     FONT_TNR_HUGE_NUMBERS,
 
@@ -47,7 +47,7 @@ typedef enum
 #define FONT_MEDIUM_FONT FONT_ARIAL_12
 #define FONT_LARGE_FONT FONT_ARIAL_16_BOLD
 
-extern const tFont PowerHourFont;
+extern const tFont Arial14Bold;
 extern const tFont FontLargeText;
 extern const tFont ClockFont;
 extern const tFont FontSmall12;
