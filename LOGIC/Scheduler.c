@@ -208,31 +208,31 @@ Private Boolean priv_is_dedication_screen_exit = FALSE;
 /* Dedication screen functions*/
 Private void dedication_start(void)
 {
-    /* TODO.... */
+    U8 yCoord = 0u;
+    const U8 line_height = 16u;
 
     priv_is_dedication_screen_exit = FALSE;
 
     display_fill(COLOR_RED);
-    //display_clear();
 
-    display_drawString("This Power Hour Machine",           0u, 2u,  FONT_COURIER_14, FALSE);
+    display_drawString("This Power Hour Machine",           0u, yCoord,  FONT_ARIAL_12, FALSE);
+    yCoord += line_height;
+    display_drawString("was built for Diana, the SOC",      0u, yCoord,  FONT_ARIAL_12, FALSE);
+    yCoord += line_height;
+    display_drawString("responsible for GA2024 and",      0u, yCoord,  FONT_ARIAL_12, FALSE);
+    yCoord += line_height;
+    display_drawString("Chairwoman of KT, and also", 0u, yCoord,  FONT_ARIAL_12, FALSE);
+    yCoord += line_height;
+    display_drawString("for her clone duplicate Mirtel.",          0u, yCoord,  FONT_ARIAL_12, FALSE);
+    yCoord += line_height;
+    display_drawString(" ",          0u, yCoord,  FONT_ARIAL_12, FALSE);
+
+    yCoord += line_height;
+    display_drawString("May you have an EPIC GA!",          0u, yCoord,  FONT_ARIAL_12, FALSE);
+    yCoord += line_height;
+    display_drawString("-Urmet,Jorx,Kristel,Joonatan",   0u, yCoord,  FONT_ARIAL_12, FALSE);
 
 
-
-    /**
-     *
-     * Üks masin BESTi rahval sinitaeva all
-       Üks seisab kuskil Hellis maa külmis kivikambreis
-       Üks on loodud Kaisale, kel lõunamandril vald
-       Üks kuulub Esinaisele, ja kloonile, kelle võim on kangeim
-       Külmkapi Töögrupis, meie lipu all.
-
-       Üks masin juhib neid, üks leiab üles,
-       Üks masin toob nad kokku Migurite süles
-       Külmkapi Töögrupis, meie lipu all.
-     *
-     *
-     */
 
     /* Basically we wait for ANY key to be pressed. */
     buttons_subscribeListener(UP_BUTTON,    dedicationExitListener);

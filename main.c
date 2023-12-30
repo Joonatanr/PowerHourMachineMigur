@@ -29,7 +29,7 @@
 
 Private U8 priv_50msec_flag = 0u;
 Private U16 priv_msec_counter = 0u;
-Private const char priv_version_string[] = "Machine 4.1";
+Private const char priv_version_string[] = "Machine 4.2";
 
 #ifdef STR_TEST
 Private void ReplaceStringEscapeChars(const char * str, char * dest);
@@ -47,13 +47,10 @@ Private void pot_test(void);
 Private void str_test(void);
 #endif
 
-
 Private void timer_50msec_callback(void);
 Private void showStartScreen(void);
 Private void showDedicationText(void);
 Private void startGameHandler(void);
-Private void startSnakeGame(void);
-
 
 
 #ifdef STR_TEST
@@ -101,7 +98,6 @@ Private SelectionMenu SettingsMenu =
 Private const MenuItem StartMenuItemArray[] =
 {
    { .text = "Start Game",  .Action = MENU_ACTION_FUNCTION    , .ActionArg.function_ptr =   startGameHandler        },
-   { .text = "Play Snake",  .Action = MENU_ACTION_FUNCTION    , .ActionArg.function_ptr =   startSnakeGame          },
    { .text = "Settings",    .Action = MENU_ACTION_SUBMENU     , .ActionArg.subMenu_ptr  =   &SettingsMenu           },
    { .text = "About",       .Action = MENU_ACTION_FUNCTION    , .ActionArg.function_ptr =   &showDedicationText     },
 };
@@ -301,13 +297,7 @@ Private void startGameHandler(void)
     Scheduler_SetActiveApplication(APPLICATION_POWER_HOUR);
 }
 
-/* Starts the snake game. */
-Private void startSnakeGame(void)
-{
-    //Scheduler_SetActiveApplication(APPLICATION_SNAKE);
-}
 
-/* TODO */
 Private void showDedicationText(void)
 {
     /* Turns out we can't do this without making this into a dummy application for some reason. */

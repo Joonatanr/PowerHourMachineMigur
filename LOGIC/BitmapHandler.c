@@ -84,10 +84,13 @@ typedef struct
 
 BitmapFilesCategory priv_file_list[NUMBER_OF_FILE_CATEGORIES] =
 {
-     {.directoryName = "/Men",       .fileNames = NULL, .number_of_files = 0u },
-     {.directoryName = "/Women",     .fileNames = NULL, .number_of_files = 0u },
-     {.directoryName = "/Everybody", .fileNames = NULL, .number_of_files = 0u },
-     {.directoryName = "/Migurid",   .fileNames = NULL, .number_of_files = 0u },
+     {.directoryName = "/Men",          .fileNames = NULL, .number_of_files = 0u },
+     {.directoryName = "/Women",        .fileNames = NULL, .number_of_files = 0u },
+     {.directoryName = "/Everybody",    .fileNames = NULL, .number_of_files = 0u },
+     {.directoryName = "/Migurid",      .fileNames = NULL, .number_of_files = 0u },
+     {.directoryName = "/Men_Spicy",    .fileNames = NULL, .number_of_files = 0u },
+     {.directoryName = "/Women_Spicy",  .fileNames = NULL, .number_of_files = 0u },
+     {.directoryName = "/All_Spicy",    .fileNames = NULL, .number_of_files = 0u },
 };
 
 

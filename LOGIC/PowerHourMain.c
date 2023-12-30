@@ -19,6 +19,7 @@
 #include "misc.h"
 #include "configuration.h"
 #include "MessageBox.h"
+#include "pot.h"
 
 #define ENABLE_BORDERS
 
@@ -110,6 +111,7 @@ typedef struct
     U8                        event_cnt;
 
     BitmapHandler_FileCategory_t bitmap_category; /* Specifies which random bitmap should be pre-loaded to be used for the intro sequence. */
+    BitmapHandler_FileCategory_t bitmap_spicy;
 } SchedulerTaskConf_T;
 
 typedef struct
@@ -200,42 +202,42 @@ Private U8 priv_task_frequency = 3u; /* Default value is a task every 2 minutes.
 
 Private const ControllerEvent priv_normal_minute_events[] =
 {
-     { .second = 7u,  .upperText = "",              .lowerText = "",        .shot_action = BEERSHOT_EMPTY            , .func = NULL },
-     { .second = 21u, .upperText = "Fill shots",    .lowerText = NULL,      .shot_action = BEERSHOT_BEGIN_FILLING    , .func = NULL },
-     { .second = 45u, .upperText = "Ready",         .lowerText = NULL,      .shot_action = BEERSHOT_FULL             , .func = NULL },
-     { .second = 59u, .upperText = "Proosit!",      .lowerText = "Cheers!", .shot_action = BEERSHOT_BEGIN_EMPTYING   , .func = NULL },
+     { .second = 7u,  .upperText = "",                      .lowerText = "",        .shot_action = BEERSHOT_EMPTY            , .func = NULL },
+     { .second = 21u, .upperText = "Fill shots",            .lowerText = NULL,      .shot_action = BEERSHOT_BEGIN_FILLING    , .func = NULL },
+     { .second = 45u, .upperText = "Ready",                 .lowerText = NULL,      .shot_action = BEERSHOT_FULL             , .func = NULL },
+     { .second = 59u, .upperText = "Proosit!",              .lowerText = "Cheers!", .shot_action = BEERSHOT_BEGIN_EMPTYING   , .func = NULL },
 };
 
 Private const ControllerEvent priv_guys_drink_events[] =
 {
-     { .second = 7u,  .upperText = "",              .lowerText = "",                    .shot_action = OVERRIDE_FUNCTION         , .func = &guysSpecialIntro   },
-     { .second = 21u, .upperText = "Fill shots",    .lowerText = "Guys' round",         .shot_action = BEERSHOT_BEGIN_FILLING    , .func = NULL },
-     { .second = 45u, .upperText = "Ready",         .lowerText = NULL,                  .shot_action = BEERSHOT_FULL             , .func = NULL },
-     { .second = 59u, .upperText = "Proosit!",      .lowerText = "Cheers guys!",        .shot_action = OVERRIDE_FUNCTION         , .func = &guysSpecialTask    },
+     { .second = 7u,  .upperText = "",                      .lowerText = "",                            .shot_action = OVERRIDE_FUNCTION         , .func = &guysSpecialIntro   },
+     { .second = 21u, .upperText = "At the end of round",   .lowerText = "there is a task for guys",    .shot_action = BEERSHOT_BEGIN_FILLING    , .func = NULL },
+     { .second = 45u, .upperText = "Ready guys!",           .lowerText = "Task for guys coming up",     .shot_action = BEERSHOT_FULL             , .func = NULL },
+     { .second = 59u, .upperText = "Proosit!",              .lowerText = "Cheers guys!",                .shot_action = OVERRIDE_FUNCTION         , .func = &guysSpecialTask    },
 };
 
 Private const ControllerEvent priv_girls_drink_events[] =
 {
-     { .second = 7u,  .upperText = "",              .lowerText = "",                    .shot_action = OVERRIDE_FUNCTION         , .func = &girlsSpecialIntro   },
-     { .second = 21u, .upperText = "Fill shots",    .lowerText = "Girls' round",        .shot_action = BEERSHOT_BEGIN_FILLING    , .func = NULL },
-     { .second = 45u, .upperText = "Ready",         .lowerText = NULL,                  .shot_action = BEERSHOT_FULL             , .func = NULL },
-     { .second = 59u, .upperText = "Proosit!",      .lowerText = "Cheers girls!",       .shot_action = OVERRIDE_FUNCTION         , .func = &girlsSpecialTask    },
+     { .second = 7u,  .upperText = "",                      .lowerText = "",                            .shot_action = OVERRIDE_FUNCTION         , .func = &girlsSpecialIntro   },
+     { .second = 21u, .upperText = "At the end of round",   .lowerText = "there is a task for girls",   .shot_action = BEERSHOT_BEGIN_FILLING    , .func = NULL },
+     { .second = 45u, .upperText = "Ready girls!",          .lowerText = "Task for girls coming up",    .shot_action = BEERSHOT_FULL             , .func = NULL },
+     { .second = 59u, .upperText = "Proosit!",              .lowerText = "Cheers girls!",               .shot_action = OVERRIDE_FUNCTION         , .func = &girlsSpecialTask    },
 };
 
 Private const ControllerEvent priv_everybody_drink_events[] =
 {
-     { .second = 7u,  .upperText = "",              .lowerText = "",                    .shot_action = OVERRIDE_FUNCTION         , .func = &EverybodySpecialIntro   },
-     { .second = 21u, .upperText = "Fill shots",    .lowerText = "Task for all",        .shot_action = BEERSHOT_BEGIN_FILLING    , .func = NULL },
-     { .second = 45u, .upperText = "Ready",         .lowerText = NULL,                  .shot_action = BEERSHOT_FULL             , .func = NULL },
-     { .second = 59u, .upperText = "Proosit!",      .lowerText = "Cheers!",             .shot_action = OVERRIDE_FUNCTION         , .func = &everybodySpecialTask    },
+     { .second = 7u,  .upperText = "",                      .lowerText = "",                        .shot_action = OVERRIDE_FUNCTION         , .func = &EverybodySpecialIntro   },
+     { .second = 21u, .upperText = "At the end of round",   .lowerText = "a task for everybody",    .shot_action = BEERSHOT_BEGIN_FILLING    , .func = NULL },
+     { .second = 45u, .upperText = "Ready!",                .lowerText = "Task for all coming up",  .shot_action = BEERSHOT_FULL             , .func = NULL },
+     { .second = 59u, .upperText = "Proosit!",              .lowerText = "Cheers!",             .shot_action = OVERRIDE_FUNCTION         , .func = &everybodySpecialTask    },
 };
 
 Private const ControllerEvent priv_migur_drink_events[] =
 {
-     { .second = 7u,  .upperText = "",              .lowerText = "",                    .shot_action = OVERRIDE_FUNCTION         , .func = &MigurSpecialIntro       },
-     { .second = 21u, .upperText = "Fill shots",    .lowerText = "Task for Migur!",     .shot_action = BEERSHOT_BEGIN_FILLING    , .func = NULL                     },
-     { .second = 45u, .upperText = "Ready",         .lowerText = NULL,                  .shot_action = BEERSHOT_FULL             , .func = NULL                     },
-     { .second = 59u, .upperText = "Proosit!",      .lowerText = "Cheers!",             .shot_action = OVERRIDE_FUNCTION         , .func = &MigurSpecialTask        },
+     { .second = 7u,  .upperText = "",                      .lowerText = "",                                      .shot_action = OVERRIDE_FUNCTION         , .func = &MigurSpecialIntro       },
+     { .second = 21u, .upperText = "At the end of round a task",   .lowerText = "for one (or all) of Migurs",     .shot_action = BEERSHOT_BEGIN_FILLING    , .func = NULL                     },
+     { .second = 45u, .upperText = "Ready",                 .lowerText = "Task for Migur(s) coming up",           .shot_action = BEERSHOT_FULL             , .func = NULL                     },
+     { .second = 59u, .upperText = "Proosit!",              .lowerText = "Cheers!",                               .shot_action = OVERRIDE_FUNCTION         , .func = &MigurSpecialTask        },
 };
 
 
@@ -244,10 +246,10 @@ Private const ControllerEvent priv_migur_drink_events[] =
  * as links to their respective actions. */
 Private const SchedulerTaskConf_T priv_scheduler_conf[NUMBER_OF_TASK_TYPES] =
 {
-     {  .event_array = priv_girls_drink_events,     .event_cnt = NUMBER_OF_ITEMS(priv_girls_drink_events),      .bitmap_category = FILES_WOMEN     },  /*   TASK_FOR_GIRLS        */
-     {  .event_array = priv_guys_drink_events,      .event_cnt = NUMBER_OF_ITEMS(priv_guys_drink_events),       .bitmap_category = FILES_MEN       },  /*   TASK_FOR_GUYS         */
-     {  .event_array = priv_everybody_drink_events, .event_cnt = NUMBER_OF_ITEMS(priv_everybody_drink_events),  .bitmap_category = FILES_EVERYBODY },  /*   TASK_FOR_EVERYONE     */
-     {  .event_array = priv_migur_drink_events,     .event_cnt = NUMBER_OF_ITEMS(priv_migur_drink_events),      .bitmap_category = FILES_MIGUR     },  /*   TASK_FOR_MIGUR        */
+     {  .event_array = priv_girls_drink_events,     .event_cnt = NUMBER_OF_ITEMS(priv_girls_drink_events),      .bitmap_category = FILES_WOMEN     ,.bitmap_spicy = FILES_WOMEN_HOT },  /*   TASK_FOR_GIRLS        */
+     {  .event_array = priv_guys_drink_events,      .event_cnt = NUMBER_OF_ITEMS(priv_guys_drink_events),       .bitmap_category = FILES_MEN       ,.bitmap_spicy = FILES_MEN_HOT   },  /*   TASK_FOR_GUYS         */
+     {  .event_array = priv_everybody_drink_events, .event_cnt = NUMBER_OF_ITEMS(priv_everybody_drink_events),  .bitmap_category = FILES_EVERYBODY ,.bitmap_spicy = FILES_ALL_HOT   },  /*   TASK_FOR_EVERYONE     */
+     {  .event_array = priv_migur_drink_events,     .event_cnt = NUMBER_OF_ITEMS(priv_migur_drink_events),      .bitmap_category = FILES_MIGUR     ,.bitmap_spicy = FILES_MIGUR     },  /*   TASK_FOR_MIGUR        */
 };
 
 
@@ -289,6 +291,8 @@ Public void powerHour_init(void)
     priv_beershot_counter = 0u;
 
     priv_state = CONTROLLER_INIT;
+
+    SpecialTasks_init();
 }
 
 
@@ -530,10 +534,10 @@ Private Boolean guysSpecialIntro(U8 sec)
     IntroSequence sequence;
 
     sequence.isInverted = FALSE;
-    sequence.text_font = FONT_MEDIUM_FONT;
-    sequence.text_str = "Round for the Guys!";
-    sequence.text_x = 5u;
-    sequence.text_y = 5u;
+    sequence.text_font = FONT_LARGE_FONT;
+    sequence.text_str = "Round for Guys!";
+    sequence.text_x = DISPLAY_CENTER;
+    sequence.text_y = 7u;
 
     return genericIntroFunction(&sequence, sec);
 }
@@ -544,10 +548,10 @@ Private Boolean girlsSpecialIntro(U8 sec)
     IntroSequence sequence;
 
     sequence.isInverted = FALSE;
-    sequence.text_font = FONT_MEDIUM_FONT;
-    sequence.text_str = "Round for the Girls!";
-    sequence.text_x = 5u;
-    sequence.text_y = 5u;
+    sequence.text_font = FONT_LARGE_FONT;
+    sequence.text_str = "Round for Girls!";
+    sequence.text_x = DISPLAY_CENTER;
+    sequence.text_y = 7u;
 
     return genericIntroFunction(&sequence, sec);
 }
@@ -558,10 +562,10 @@ Private Boolean EverybodySpecialIntro(U8 sec)
     IntroSequence sequence;
 
     sequence.isInverted = FALSE;
-    sequence.text_font = FONT_MEDIUM_FONT;
+    sequence.text_font = FONT_LARGE_FONT;
     sequence.text_str = "Round for Everybody!";
-    sequence.text_x = 5u;
-    sequence.text_y = 5u;
+    sequence.text_x = DISPLAY_CENTER;
+    sequence.text_y = 7u;
 
     return genericIntroFunction(&sequence, sec);
 }
@@ -573,13 +577,13 @@ Private Boolean MigurSpecialIntro(U8 sec)
     IntroSequence sequence;
 
     sequence.isInverted = FALSE;
-    sequence.text_font = FONT_MEDIUM_FONT;
+    sequence.text_font = FONT_LARGE_FONT;
 
     /* Could be a task for both of them, so lets not reveal the selection yet. */
-    sequence.text_str = "Round for the Migurs!";
+    sequence.text_str = "Round for Migurs!";
 
-    sequence.text_x = 5u;
-    sequence.text_y = 5u;
+    sequence.text_x = DISPLAY_CENTER;
+    sequence.text_y = 7u;
 
     return genericIntroFunction(&sequence, sec);
 }
@@ -604,7 +608,7 @@ Private Boolean genericIntroFunction(const IntroSequence * intro_ptr, U8 sec)
         }
         break;
     case(3u):
-        LcdWriter_drawColoredString(intro_ptr->text_str, intro_ptr->text_x, intro_ptr->text_y, intro_ptr->text_font, disp_ph_prompt_text_color, disp_highlight_color);
+        LcdWriter_drawStringCenter(intro_ptr->text_str, intro_ptr->text_x, intro_ptr->text_y, intro_ptr->text_font, disp_ph_prompt_text_color, disp_highlight_color);
         break;
     case(12u):
         res = TRUE;
@@ -628,8 +632,14 @@ Private U8 getScheduledSpecialTask(const ControllerEvent ** event_ptr)
         ix = selectRandomTaskIndex();
         *event_ptr = priv_scheduler_conf[ix].event_array;
         res = priv_scheduler_conf[ix].event_cnt;
-        priv_file_type_to_load = priv_scheduler_conf[ix].bitmap_category;
-
+        if ((pot_getSelectedRange(POTENTIOMETER_SEXY_LEVEL) == 3u) || (pot_getSelectedRange(POTENTIOMETER_NUDE_LEVEL) == 3u))
+        {
+            priv_file_type_to_load = priv_scheduler_conf[ix].bitmap_spicy;
+        }
+        else
+        {
+            priv_file_type_to_load = priv_scheduler_conf[ix].bitmap_category;
+        }
     }
     else
     {
@@ -715,13 +725,11 @@ Private void drawEventText(const ControllerEvent* event)
 {
     if (event->upperText != NULL)
     {
-        //setUpperText(event_ptr->upperText);
         drawTextOnLine(event->upperText, 0u);
     }
 
     if (event->lowerText != NULL)
     {
-        //setLowerText(event_ptr->lowerText);
         drawTextOnLine(event->lowerText, 1u);
     }
 }

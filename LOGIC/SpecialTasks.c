@@ -806,6 +806,7 @@ Private char priv_str_buf[128];
 Private SpecialTaskFunc priv_selected_task_ptr;
 
 Private Migur_T priv_selected_migur = NUMBER_OF_SISTERS;
+Private Boolean priv_is_migur_pot_reversed = FALSE;
 
 /*****************************************************************/
 
@@ -818,6 +819,33 @@ Private Migur_T priv_selected_migur = NUMBER_OF_SISTERS;
 Public void SpecialTasks_init(void)
 {
     memset(priv_TextArrayGirlsLevel1_counter, 0u, NUMBER_OF_ITEMS(priv_TextArrayGirlsLevel1));
+    memset(priv_TextArrayGirlsLevel1_counter, 0u, NUMBER_OF_ITEMS(priv_TextArrayGirlsLevel2));
+    memset(priv_TextArrayGirlsLevel1_counter, 0u, NUMBER_OF_ITEMS(priv_TextArrayGirlsLevel3));
+    memset(priv_TextArrayGirlsLevel1_counter, 0u, NUMBER_OF_ITEMS(priv_TextArrayGirlsLevel4));
+
+    memset(priv_TextArrayGirlsLevel1_counter, 0u, NUMBER_OF_ITEMS(priv_TextArrayGuysLevel1));
+    memset(priv_TextArrayGirlsLevel1_counter, 0u, NUMBER_OF_ITEMS(priv_TextArrayGuysLevel2));
+    memset(priv_TextArrayGirlsLevel1_counter, 0u, NUMBER_OF_ITEMS(priv_TextArrayGuysLevel3));
+    memset(priv_TextArrayGirlsLevel1_counter, 0u, NUMBER_OF_ITEMS(priv_TextArrayGuysLevel4));
+
+    memset(priv_TextArrayGirlsLevel1_counter, 0u, NUMBER_OF_ITEMS(priv_TextArrayAllLevel1));
+    memset(priv_TextArrayGirlsLevel1_counter, 0u, NUMBER_OF_ITEMS(priv_TextArrayAllLevel2));
+    memset(priv_TextArrayGirlsLevel1_counter, 0u, NUMBER_OF_ITEMS(priv_TextArrayAllLevel3));
+    memset(priv_TextArrayGirlsLevel1_counter, 0u, NUMBER_OF_ITEMS(priv_TextArrayAllLevel4));
+
+    memset(priv_TextArrayGirlsLevel1_counter, 0u, NUMBER_OF_ITEMS(priv_TextArrayMigurLevel1));
+    memset(priv_TextArrayGirlsLevel1_counter, 0u, NUMBER_OF_ITEMS(priv_TextArrayMigurLevel2));
+    memset(priv_TextArrayGirlsLevel1_counter, 0u, NUMBER_OF_ITEMS(priv_TextArrayMigurLevel3));
+    memset(priv_TextArrayGirlsLevel1_counter, 0u, NUMBER_OF_ITEMS(priv_TextArrayMigurLevel4));
+
+    if (generate_random_number(1u) == 1u)
+    {
+        priv_is_migur_pot_reversed = TRUE;
+    }
+    else
+    {
+        priv_is_migur_pot_reversed = FALSE;
+    }
 }
 
 
@@ -1040,14 +1068,27 @@ Private Boolean SpecialTaskWithRandomText(U8 sec, SpecialTaskType type)
             taskLevel = (pot_getSelectedRange(POTENTIOMETER_GIRLS) + pot_getSelectedRange(POTENTIOMETER_GUYS)) / 2; /* We just take the average here... */
             break;
         case TASK_FOR_MIGUR:
-            /* TODO : Randomize the potentiometers for this one. */
             if(priv_selected_migur == DIANA)
             {
-                taskLevel = pot_getSelectedRange(POTENTIOMETER_MIGUR1);
+                if(priv_is_migur_pot_reversed)
+                {
+                    taskLevel = pot_getSelectedRange(POTENTIOMETER_MIGUR1);
+                }
+                else
+                {
+                    taskLevel = pot_getSelectedRange(POTENTIOMETER_MIGUR2);
+                }
             }
             else
             {
-                taskLevel = pot_getSelectedRange(POTENTIOMETER_MIGUR2);
+                if(priv_is_migur_pot_reversed)
+                {
+                    taskLevel = pot_getSelectedRange(POTENTIOMETER_MIGUR2);
+                }
+                else
+                {
+                    taskLevel = pot_getSelectedRange(POTENTIOMETER_MIGUR1);
+                }
             }
             break;
         default:
@@ -1055,7 +1096,6 @@ Private Boolean SpecialTaskWithRandomText(U8 sec, SpecialTaskType type)
             taskLevel = -1;
             break;
     }
-
 
     if (taskLevel < 0)
     {
