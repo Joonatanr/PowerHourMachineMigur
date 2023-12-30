@@ -25,6 +25,7 @@ typedef Boolean (*OverrideFunc)(U8 sec); //Returns TRUE, if done with override.
 typedef Boolean (*SpecialTaskFunc)(U8 sec, SpecialTaskType type);
 
 extern void SpecialTasks_init(void);
+extern void SpecialTask_StringLengthSanityTest(void);
 
 extern Boolean girlsSpecialTask(U8 sec);
 extern Boolean guysSpecialTask(U8 sec);

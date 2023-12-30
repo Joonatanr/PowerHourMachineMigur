@@ -81,6 +81,7 @@ void MSPrintf(uint32_t UART, const char *fs, ...)
                 s = va_arg(valist, char*);
                 PrintString(UART, s);
                 break;
+            case 'd':
             case 'i':
                 i = va_arg(valist, int);
                 PrintInteger(UART, i);

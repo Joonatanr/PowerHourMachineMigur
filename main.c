@@ -27,6 +27,7 @@
 //#define DISPLAY_TEST
 //#define POT_TEST
 //#define STR_TEST
+//#define STR_LENGTH_TEST
 
 Private U8 priv_50msec_flag = 0u;
 Private U16 priv_msec_counter = 0u;
@@ -167,6 +168,11 @@ void main(void)
 #ifdef STR_TEST
     str_test();
     timer_delay_msec(10000);
+#endif
+
+#ifdef STR_LENGTH_TEST
+    SpecialTask_StringLengthSanityTest();
+    timer_delay_msec(5000);
 #endif
 
     //We show the initial start screen for a while.

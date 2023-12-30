@@ -15,6 +15,9 @@
 #include "timer.h"
 #include "misc.h"
 
+#include "UART_Driver.h"
+#include "MSPIO.h"
+
 /*****************************************************************************************************
  *
  * Private defines
@@ -25,7 +28,7 @@
 #define SMALL_SHOT_Y 32u
 #define SMALL_SHOT_INTERVAL 20u
 
-#define SPECIALTASK_FONT FONT_LARGE_FONT
+#define SPECIALTASK_FONT FONT_ARIAL_12
 
 
 /*****************************************************************************************************
@@ -77,6 +80,7 @@ Private Boolean SpecialTaskWithRandomTextMirtel(U8 sec, SpecialTaskType type);
 Private Boolean SpecialTaskWithRandomTextDiana(U8 sec, SpecialTaskType type);
 
 Private void ReplaceStringEscapeChars(const char * str, char * dest);
+Private Boolean isStringFitForDisplay(const char * str, U16 * length_dest);
 
 /*****************************************************************************************************
  *
@@ -407,7 +411,7 @@ Private const Task_T priv_TextArrayMigurLevel2[] =
      {  "{$} must increase"  , "one slider difficulty", "or vodka for all"  ,.nude_level = 0u, .sexy_level = 0u   }, /* 15  */
      {  "Increase nudity slider", "or drink vodka",                NULL     ,.nude_level = 0u, .sexy_level = 0u   }, /* 16 */
 
-     {  "{$} commands 1 person" , "to do his or her best"  , "Jack Sparrow imitation", .nude_level = 0u, .sexy_level = 0u,  }, /* 17  */
+     {  "{$} chooses 1 person" , "to do his or her best"  , "Jack Sparrow imitation", .nude_level = 0u, .sexy_level = 0u,  }, /* 17  */
 
      {  "{$} loses 1"          , "item of",                  "clothing"     , .nude_level = 1u, .sexy_level = 0u   }, /* 18  */
      {  "{$} loses 2"          , "items of",                 "clothing"     , .nude_level = 3u, .sexy_level = 0u   }, /* 19  */
@@ -433,7 +437,7 @@ Private const Task_T priv_TextArrayGirlsLevel3[] =
      {  "Girl showing the"     ,   "least cleavage"  ,           "drinks 3x"   ,  .nude_level = 0u, .sexy_level = 0u }, /* 2  */
      {  "Girls can"            ,   "slap one of"  ,              "the guys"    ,  .nude_level = 0u, .sexy_level = 0u }, /* 3  */
      {  "All girls must",          "drink under",                "the table"   ,  .nude_level = 0u, .sexy_level = 0u }, /* 4  */
-     {  "Girls must drink",       "pretending they are",          "latinas"    ,  .nude_level = 0u, .sexy_level = 1u }, /* 5 */
+     {  "Girls must drink",       "while pretending",       "to be latinas"    ,  .nude_level = 0u, .sexy_level = 1u }, /* 5 */
      {  "Girls must do a",        "dance-off",         "losers drink vodka"    ,  .nude_level = 0u, .sexy_level = 1u }, /* 6 */
 
  /* Tasks that need criteria. */
@@ -446,7 +450,7 @@ Private const Task_T priv_TextArrayGirlsLevel3[] =
      {  "The last girl"        ,   "to finish shot"  ,    "loses 1 clothing"   ,  .nude_level = 2u, .sexy_level = 0u }, /* 13   */
      {  "The last girl"        ,   "to finish shot"  ,    "loses 1 clothing"   ,  .nude_level = 2u, .sexy_level = 0u }, /* 14   */
      {  "Girl showing the"     ,   "most cleavage"  ,           "drinks 3x"    ,  .nude_level = 1u, .sexy_level = 1u }, /* 15   */
-     {  "Girls: 1 shot for"    ,   "each guy they slept"  , "with this year"   ,  .nude_level = 0u, .sexy_level = 2u }, /* 16   */
+     {  "Girls: 1 shot for"    ,   "each guy you slept"  , "with this year"   ,  .nude_level = 0u, .sexy_level = 2u }, /* 16   */
      {  "All girls with"       ,   "black underwear"      , "drink vodka"      ,  .nude_level = 0u, .sexy_level = 1u }, /* 17   */
      { " Girls must make"      ,   "a naughty"   ,                "toast"      ,  .nude_level = 0u, .sexy_level = 1u }, /* 18   */
      { " Girls must make"      ,   "a kinky"   ,                  "toast"      ,  .nude_level = 0u, .sexy_level = 1u }, /* 19   */
@@ -848,6 +852,52 @@ Public void SpecialTasks_init(void)
     }
 }
 
+
+Public void SpecialTask_StringLengthSanityTest(void)
+{
+    U8 ix;
+    U8 task_ix;
+    U8 category;
+    U16 length;
+
+    for(category = 0u; category < NUMBER_OF_TASK_TYPES; category++)
+    {
+        for (ix = 0u; ix < 4u; ix++)
+        {
+            for(task_ix = 0u; task_ix < priv_task_array_desc[category][ix].number_of_array_items; task_ix++)
+            {
+                if (!isStringFitForDisplay(priv_task_array_desc[category][ix].task_array[task_ix].lower_text, &length))
+                {
+                    MSPrintf(EUSCI_A0_BASE, "WARNING! String {%s} at index %d, difficulty %d for type %d is too large for display (%d pixels)\n", priv_task_array_desc[category][ix].task_array[task_ix].lower_text, task_ix, ix, category, length);
+                }
+
+                if (!isStringFitForDisplay(priv_task_array_desc[category][ix].task_array[task_ix].middle_text, &length))
+                {
+                    MSPrintf(EUSCI_A0_BASE, "WARNING! String {%s} at index %d, difficulty %d for type %d is too large for display (%d pixels)\n", priv_task_array_desc[category][ix].task_array[task_ix].middle_text, task_ix, ix, category, length);
+                }
+
+                if (!isStringFitForDisplay(priv_task_array_desc[category][ix].task_array[task_ix].upper_text, &length))
+                {
+                    MSPrintf(EUSCI_A0_BASE, "WARNING! String {%s} at index %d, difficulty %d for type %d is too large for display (%d pixels)\n", priv_task_array_desc[category][ix].task_array[task_ix].upper_text, task_ix, ix, category, length);
+                }
+
+            }
+        }
+    }
+}
+
+Private Boolean isStringFitForDisplay(const char * str, U16 * length_dest)
+{
+    Boolean res = TRUE;
+    ReplaceStringEscapeChars(str, priv_str_buf);
+    *length_dest = LcdWriter_getStringWidth(priv_str_buf, SPECIALTASK_FONT);
+    if (*length_dest > DISPLAY_WIDTH)
+    {
+        res = FALSE;
+    }
+
+    return res;
+}
 
 Public Boolean girlsSpecialTask(U8 sec)
 {

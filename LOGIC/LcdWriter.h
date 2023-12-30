@@ -21,5 +21,6 @@ extern void LcdWriter_drawStringCenter(const char * str, U8 centerPoint, U8 yloc
 
 extern void display_drawStringCenter(const char * str, U8 centerPoint, U8 yloc, FontType_t font, Boolean isInverted);
 extern void display_drawString(const char * str, U8 x, U8 y, FontType_t font, Boolean isInverted);
+extern U16 LcdWriter_getStringWidth(const char * str, FontType_t font);
 
 #endif /* LOGIC_LCDWRITER_H_ */

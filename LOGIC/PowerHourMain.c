@@ -585,7 +585,7 @@ Private Boolean EverybodySpecialIntro(U8 sec)
 
     sequence.isInverted = FALSE;
     sequence.text_font = FONT_LARGE_FONT;
-    sequence.text_str = "Round for Everybody!";
+    sequence.text_str = "Round for All!";
     sequence.text_x = DISPLAY_CENTER;
     sequence.text_y = 7u;
 
