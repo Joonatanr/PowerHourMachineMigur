@@ -582,7 +582,8 @@ Private const Task_T priv_TextArrayGirlsLevel4[] =
      { "Girls that still"  ,"have shirts on"      , "must drink 3x"     ,  .nude_level = 0u, .sexy_level = 0u    }, /*  5   */
      { "Girls who are "    ,"wearing black lingerie" ,"must drink 3x"   ,  .nude_level = 0u, .sexy_level = 0u    }, /*  6   */
      { "Girls wearing strings " ,"must drink 3x " ,"or remove strings"   , .nude_level = 0u, .sexy_level = 0u    }, /*  7   */
-     { "One girl must",     "make a split or,"    , "vodka round for all" ,.nude_level = 0u, .sexy_level = 1u    }, /*  8 */
+     { "One girl must",     "make a split or,"    , "vodka round for all" ,.nude_level = 0u, .sexy_level = 1u    }, /*  8   */
+     { "Girls, if the carpet","does not match the", "drapes, drink vodka" ,.nude_level = 0u, .sexy_level = 2u    }, /*  8   */
 
  /* Tasks that need criteria. */
      { "1 girl must",       "do a lapdance"       , "to one guy"        , .nude_level = 0u, .sexy_level = 3u     }, /*  9  */
