@@ -18,6 +18,7 @@
 #include "misc.h"
 
 #include "Menus/Menu.h"
+#include "PowerHourMain.h"
 
 /**
  * main.c
@@ -66,6 +67,12 @@ Private const MenuItem ColorMenuItemArray[] =
      { .text = "Scheme 4",    .Action = MENU_ACTION_SELECT  , .ActionArg.function_set_u16_ptr = setSelectedColorSchemeIndex  },
 };
 
+Private const MenuItem BuzzerMenuItemArray[] =
+{
+     { .text = "Disabled",    .Action = MENU_ACTION_SELECT  , .ActionArg.function_set_u16_ptr = setBuzzerEnable  },
+     { .text = "Enabled",   .Action = MENU_ACTION_SELECT    , .ActionArg.function_set_u16_ptr = setBuzzerEnable  },
+};
+
 Private SelectionMenu ColorMenu =
 {
      .items = ColorMenuItemArray,
@@ -76,11 +83,22 @@ Private SelectionMenu ColorMenu =
      .isTransparentMenu = FALSE,
 };
 
+Private SelectionMenu BuzzerMenu =
+{
+     .items = BuzzerMenuItemArray,
+     .number_of_items = NUMBER_OF_ITEMS(BuzzerMenuItemArray),
+     .selected_item = 0u,
+     .initial_select_func = isBuzzerEnabled,
+     .isCheckedMenu = TRUE,
+     .isTransparentMenu = FALSE,
+};
+
 Private const MenuItem SettingsMenuItemArray[] =
 {
    { .text = "Brightness",    .Action = MENU_ACTION_WIDGET  , .ActionArg.bargraph_ptr = &BRIGHTNESS_BARGRAPH        },
    { .text = "Task frequency",.Action = MENU_ACTION_WIDGET  , .ActionArg.bargraph_ptr = &TASK_FREQUENCY_BARGRAPH    },
-   { .text = "Color scheme"  ,.Action = MENU_ACTION_SUBMENU , .ActionArg.subMenu_ptr =  &ColorMenu                  }
+   { .text = "Color scheme"  ,.Action = MENU_ACTION_SUBMENU , .ActionArg.subMenu_ptr =  &ColorMenu                  },
+   { .text = "Buzzer"        ,.Action = MENU_ACTION_SUBMENU , .ActionArg.subMenu_ptr =  &BuzzerMenu                 }
 };
 
 Private SelectionMenu SettingsMenu =
@@ -127,16 +145,15 @@ void main(void)
     /* Initialize the SD Card reader*/
     SdCardHandlerInit();
 
+    //Set up the configuration
+    configuration_start();
+    ColorScheme_start();
+    backlight_set_level(configuration_getItem(CONFIG_ITEM_BRIGHTNESS));
+
     /* Initialize the main scheduler. */
     Scheduler_initTasks();
 
     timer_delay_msec(100);
-
-    //Set up the configuration
-    configuration_start();
-    ColorScheme_start();
-
-    backlight_set_level(configuration_getItem(CONFIG_ITEM_BRIGHTNESS));
 
     //Start all scheduler task
     Scheduler_StartTasks();

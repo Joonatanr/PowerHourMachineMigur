@@ -199,6 +199,7 @@ Private U16 priv_curr_second;
 
 Private controllerState priv_state;
 Private U8 priv_task_frequency = 3u; /* Default value is a task every 2 minutes. */
+Private Boolean priv_is_buzzer_enabled = TRUE;
 
 Private const ControllerEvent priv_normal_minute_events[] =
 {
@@ -291,6 +292,7 @@ Public void powerHour_init(void)
     priv_beershot_counter = 0u;
 
     priv_state = CONTROLLER_INIT;
+    priv_is_buzzer_enabled = configuration_getItem(CONFIG_ITEM_BUZZER);
 
     SpecialTasks_init();
 }
@@ -367,7 +369,7 @@ Public void powerHour_cyclic1000msec(void)
     beerShotAction action = BEERSHOT_NO_ACTION;
 
 #ifndef DISABLE_BUZZER_FOR_TESTING
-    if (priv_curr_second == 59u)
+    if (priv_is_buzzer_enabled && (priv_curr_second == 59u))
     {
         buzzer_playBeeps(3u);
     }
@@ -482,6 +484,25 @@ Public U16 powerHour_getTaskFrequency(void)
     return priv_task_frequency;
 }
 
+Public void setBuzzerEnable(U16 enable)
+{
+    if (enable == 0u)
+    {
+        priv_is_buzzer_enabled = FALSE;
+    }
+    else
+    {
+        priv_is_buzzer_enabled = TRUE;
+    }
+
+    configuration_setItem(priv_is_buzzer_enabled, CONFIG_ITEM_BUZZER);
+}
+
+
+Public U16 isBuzzerEnabled(void)
+{
+    return priv_is_buzzer_enabled;
+}
 
 /*****************************************************************************************************
  *

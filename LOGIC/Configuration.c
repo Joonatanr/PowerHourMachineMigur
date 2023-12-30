@@ -20,9 +20,10 @@ typedef struct
     U8 task_frequency;
     U8 selected_color_scheme;
     U8 brightness;
+    U8 buzzer;
 
     /* TODO : Add more items, at the very least custom color schemes etc. */
-    U8 unused[CONFIG_SIZE - 3u];
+    U8 unused[CONFIG_SIZE - 4u];
 } Configuration_T;
 
 typedef union
@@ -64,6 +65,8 @@ Public U32 configuration_getItem(Configuration_Item item)
             return priv_conf.conf.selected_color_scheme;
         case CONFIG_ITEM_BRIGHTNESS:
             return priv_conf.conf.brightness;
+        case CONFIG_ITEM_BUZZER:
+            return priv_conf.conf.buzzer;
         default:
             return 0u;
     }
@@ -96,6 +99,13 @@ Public void configuration_setItem(U32 value, Configuration_Item item)
                 isDirty = TRUE;
             }
             break;
+        case CONFIG_ITEM_BUZZER:
+            if (priv_conf.conf.buzzer != value)
+            {
+                priv_conf.conf.buzzer = value;
+                isDirty = TRUE;
+            }
+            break;
         default:
             break;
     }
@@ -114,7 +124,6 @@ Private Boolean verifyConfig(void)
     /* Returns true if we need to modify the config (because of incorrect values etc. ) */
     Boolean res = FALSE;
 
-    /* TODO : Somehow we should limit these values with defines and connect them to the menu settings... */
     if (priv_conf.conf.task_frequency <= 1u || priv_conf.conf.task_frequency > 6u)
     {
         /* Revert to default. */
@@ -131,6 +140,12 @@ Private Boolean verifyConfig(void)
     if (priv_conf.conf.brightness > 100u)
     {
         priv_conf.conf.brightness = 60u;
+        res = TRUE;
+    }
+
+    if (priv_conf.conf.buzzer > 1u)
+    {
+        priv_conf.conf.buzzer = 1u;
         res = TRUE;
     }
 
