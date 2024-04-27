@@ -825,24 +825,24 @@ Private Boolean priv_is_migur_pot_reversed = FALSE;
 Public void SpecialTasks_init(void)
 {
     memset(priv_TextArrayGirlsLevel1_counter, 0u, NUMBER_OF_ITEMS(priv_TextArrayGirlsLevel1));
-    memset(priv_TextArrayGirlsLevel1_counter, 0u, NUMBER_OF_ITEMS(priv_TextArrayGirlsLevel2));
-    memset(priv_TextArrayGirlsLevel1_counter, 0u, NUMBER_OF_ITEMS(priv_TextArrayGirlsLevel3));
-    memset(priv_TextArrayGirlsLevel1_counter, 0u, NUMBER_OF_ITEMS(priv_TextArrayGirlsLevel4));
+    memset(priv_TextArrayGirlsLevel2_counter, 0u, NUMBER_OF_ITEMS(priv_TextArrayGirlsLevel2));
+    memset(priv_TextArrayGirlsLevel3_counter, 0u, NUMBER_OF_ITEMS(priv_TextArrayGirlsLevel3));
+    memset(priv_TextArrayGirlsLevel4_counter, 0u, NUMBER_OF_ITEMS(priv_TextArrayGirlsLevel4));
 
-    memset(priv_TextArrayGirlsLevel1_counter, 0u, NUMBER_OF_ITEMS(priv_TextArrayGuysLevel1));
-    memset(priv_TextArrayGirlsLevel1_counter, 0u, NUMBER_OF_ITEMS(priv_TextArrayGuysLevel2));
-    memset(priv_TextArrayGirlsLevel1_counter, 0u, NUMBER_OF_ITEMS(priv_TextArrayGuysLevel3));
-    memset(priv_TextArrayGirlsLevel1_counter, 0u, NUMBER_OF_ITEMS(priv_TextArrayGuysLevel4));
+    memset(priv_TextArrayGuysLevel1_counter, 0u, NUMBER_OF_ITEMS(priv_TextArrayGuysLevel1));
+    memset(priv_TextArrayGuysLevel2_counter, 0u, NUMBER_OF_ITEMS(priv_TextArrayGuysLevel2));
+    memset(priv_TextArrayGuysLevel3_counter, 0u, NUMBER_OF_ITEMS(priv_TextArrayGuysLevel3));
+    memset(priv_TextArrayGuysLevel4_counter, 0u, NUMBER_OF_ITEMS(priv_TextArrayGuysLevel4));
 
-    memset(priv_TextArrayGirlsLevel1_counter, 0u, NUMBER_OF_ITEMS(priv_TextArrayAllLevel1));
-    memset(priv_TextArrayGirlsLevel1_counter, 0u, NUMBER_OF_ITEMS(priv_TextArrayAllLevel2));
-    memset(priv_TextArrayGirlsLevel1_counter, 0u, NUMBER_OF_ITEMS(priv_TextArrayAllLevel3));
-    memset(priv_TextArrayGirlsLevel1_counter, 0u, NUMBER_OF_ITEMS(priv_TextArrayAllLevel4));
+    memset(priv_TextArrayAllLevel1_counter, 0u, NUMBER_OF_ITEMS(priv_TextArrayAllLevel1));
+    memset(priv_TextArrayAllLevel2_counter, 0u, NUMBER_OF_ITEMS(priv_TextArrayAllLevel2));
+    memset(priv_TextArrayAllLevel3_counter, 0u, NUMBER_OF_ITEMS(priv_TextArrayAllLevel3));
+    memset(priv_TextArrayAllLevel4_counter, 0u, NUMBER_OF_ITEMS(priv_TextArrayAllLevel4));
 
-    memset(priv_TextArrayGirlsLevel1_counter, 0u, NUMBER_OF_ITEMS(priv_TextArrayMigurLevel1));
-    memset(priv_TextArrayGirlsLevel1_counter, 0u, NUMBER_OF_ITEMS(priv_TextArrayMigurLevel2));
-    memset(priv_TextArrayGirlsLevel1_counter, 0u, NUMBER_OF_ITEMS(priv_TextArrayMigurLevel3));
-    memset(priv_TextArrayGirlsLevel1_counter, 0u, NUMBER_OF_ITEMS(priv_TextArrayMigurLevel4));
+    memset(priv_TextArrayMigurLevel1_counter, 0u, NUMBER_OF_ITEMS(priv_TextArrayMigurLevel1));
+    memset(priv_TextArrayMigurLevel2_counter, 0u, NUMBER_OF_ITEMS(priv_TextArrayMigurLevel2));
+    memset(priv_TextArrayMigurLevel3_counter, 0u, NUMBER_OF_ITEMS(priv_TextArrayMigurLevel3));
+    memset(priv_TextArrayMigurLevel4_counter, 0u, NUMBER_OF_ITEMS(priv_TextArrayMigurLevel4));
 
     if (generate_random_number(1u) == 1u)
     {
